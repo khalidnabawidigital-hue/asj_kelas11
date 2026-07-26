@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bab 1 – Mengenal Administrasi Sistem Jaringan | ASJ Kelas XI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        dark: '#0f172a',
+                        darker: '#020617',
+                        primary: '#10b981',
+                        secondary: '#3b82f6',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #020617; color: #e2e8f0; }
+        .bg-grid {
+            background-image: linear-gradient(to right, #1e293b 1px, transparent 1px),
+                              linear-gradient(to bottom, #1e293b 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #10b981; border-radius: 5px; }
+
+        .quiz-option {
+            transition: all .2s ease;
+        }
+        .quiz-option:hover {
+            border-color: #10b981;
+        }
+        .quiz-option.selected {
+            border-color: #10b981;
+            background-color: rgba(16, 185, 129, 0.1);
+        }
+        .quiz-option.correct-answer {
+            border-color: #10b981 !important;
+            background-color: rgba(16, 185, 129, 0.15) !important;
+        }
+        .quiz-option.wrong-answer {
+            border-color: #ef4444 !important;
+            background-color: rgba(239, 68, 68, 0.1) !important;
+        }
+        .quiz-option.locked {
+            pointer-events: none;
+        }
+        details.jawaban-box summary { cursor: pointer; }
+        details.jawaban-box[open] summary { color: #10b981; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Navbar -->
+    <nav class="bg-dark border-b border-gray-800 py-4 sticky top-0 z-30">
+        <div class="container mx-auto px-6 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-2 text-gray-300 hover:text-primary transition-colors">
+                <i class="fas fa-arrow-left"></i>
+                <span class="font-semibold hidden sm:inline">Kembali ke Roadmap</span>
+            </a>
+            <div class="flex items-center gap-2 text-sm text-gray-400 font-mono">
+                <i class="fas fa-server text-primary"></i>
+                <span>Bab 1 / 18</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="bg-grid relative overflow-hidden py-16 border-b border-gray-800">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-darker"></div>
+        <div class="container mx-auto px-6 relative z-10 max-w-4xl text-center">
+            <span class="bg-primary/20 text-primary py-1 px-4 rounded-full text-sm font-bold tracking-wider mb-4 inline-block">SEMESTER GANJIL &bull; BAB 1</span>
+            <h1 class="text-3xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+                Mengenal Administrasi Sistem Jaringan
+            </h1>
+            <p class="text-gray-400 text-lg">Output: Siswa memahami dunia kerja seorang administrator sistem.</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 max-w-4xl py-16 space-y-16">
+
+        <!-- 1. PENDAHULUAN -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-flag-checkered"></i></div>
+                <h2 class="text-2xl font-bold text-white">1. Pendahuluan</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-4 text-gray-300 leading-relaxed">
+                <p>Coba bayangkan sehari tanpa internet. Tidak bisa buka WhatsApp, tidak bisa nonton YouTube, tidak bisa scroll Instagram, aplikasi sekolah untuk absensi online juga error. Rasanya dunia serasa berhenti, bukan? Nah, semua layanan digital yang kamu pakai setiap hari itu bisa berjalan karena ada "dapur" di baliknya yang disebut <strong class="text-white">server</strong>, dan ada orang yang menjaga dapur itu tetap menyala, bersih, dan aman — dialah <strong class="text-white">System Administrator</strong>.</p>
+                <p>Di Bab 1 ini, kamu akan mulai berkenalan dengan dunia Administrasi Sistem Jaringan. Materi ini adalah fondasi dari seluruh perjalananmu belajar di jurusan Teknik Jaringan Komputer dan Telekomunikasi (TJKT). Sebelum kamu bisa memasang server sungguhan, kamu perlu paham dulu: apa itu server, siapa yang mengurusnya, dan kenapa pekerjaan ini sangat dibutuhkan dunia kerja.</p>
+                <div class="bg-gray-800/50 p-4 rounded-lg border-l-4 border-primary">
+                    <p class="text-sm"><strong class="text-primary">Kenapa ini penting untuk kariermu?</strong> Hampir setiap perusahaan modern — mulai dari warung online, sekolah, rumah sakit, sampai perusahaan multinasional — butuh orang yang bisa mengelola server dan jaringan. Ini artinya, begitu kamu menguasai skill di bab-bab berikutnya, peluang kerjamu terbuka lebar, baik sebagai karyawan maupun freelancer.</p>
+                </div>
+                <p>Jangan khawatir kalau kamu belum pernah pegang server sama sekali. Materi ini dirancang dari nol, dengan banyak analogi kehidupan sehari-hari, supaya kamu bisa mengikuti pelan-pelan tanpa merasa tertinggal. Anggap saja kamu sedang belajar menjadi "koki" di balik layar internet — siap memulai?</p>
+            </div>
+        </section>
+
+        <!-- 2. APA ITU ADMINISTRASI SISTEM JARINGAN -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-sitemap"></i></div>
+                <h2 class="text-2xl font-bold text-white">2. Apa itu Administrasi Sistem Jaringan?</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-4 text-gray-300 leading-relaxed">
+                <p><strong class="text-white">Administrasi Sistem Jaringan</strong> adalah kegiatan mengelola, mengatur, memelihara, dan mengamankan komputer server serta jaringan komputer agar semua layanan di dalamnya bisa berjalan lancar, aman, dan bisa diandalkan oleh penggunanya.</p>
+                <p>Coba bayangkan sebuah sekolah. Ada gedung, ada kelas, ada guru, ada siswa. Supaya sekolah berjalan lancar, dibutuhkan seorang <strong class="text-white">kepala sekolah</strong> dan <strong class="text-white">tata usaha</strong> yang mengatur jadwal, memastikan listrik menyala, memastikan data siswa aman, dan menyelesaikan masalah ketika ada yang error. Administrasi sistem jaringan bekerja dengan cara yang sama, hanya saja objeknya adalah komputer server dan jaringan, bukan gedung sekolah.</p>
+                <div class="bg-gray-800/50 p-4 rounded-lg border-l-4 border-primary">
+                    <p class="text-sm"><strong class="text-primary">Analogi:</strong> Server itu seperti dapur restoran, client (pengguna) itu seperti pelanggan yang memesan makanan, dan administrator adalah koki sekaligus manajer dapur — mengatur bahan baku (data), menjaga kebersihan (keamanan), dan memastikan semua pesanan (permintaan) dilayani tepat waktu.</p>
+                </div>
+                <p class="font-semibold text-white mt-2">Tujuan utama administrasi sistem jaringan:</p>
+                <ul class="space-y-2 list-none">
+                    <li class="flex items-start gap-3"><i class="fas fa-check-circle text-primary mt-1"></i><span>Memastikan layanan (website, email, aplikasi) selalu bisa diakses (<em>availability</em>).</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check-circle text-primary mt-1"></i><span>Menjaga data tetap aman dari kerusakan, kehilangan, atau pencurian (<em>security</em>).</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check-circle text-primary mt-1"></i><span>Menjaga performa sistem tetap cepat dan efisien (<em>performance</em>).</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check-circle text-primary mt-1"></i><span>Mempermudah pengelolaan banyak pengguna dan perangkat sekaligus (<em>manageability</em>).</span></li>
+                </ul>
+                <p class="font-semibold text-white mt-2">Mengapa perusahaan membutuhkan administrator?</p>
+                <p>Karena hampir seluruh proses bisnis modern bergantung pada sistem digital. Jika server toko online down 10 menit saja, perusahaan bisa kehilangan jutaan rupiah dari transaksi yang gagal. Administrator adalah "penjaga gawang" yang mencegah hal itu terjadi, dan bertindak cepat ketika masalah muncul.</p>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-2">
+                    <div class="bg-gray-800/50 p-3 rounded-lg text-sm"><i class="fas fa-school text-secondary mr-2"></i><strong class="text-white">Di sekolah:</strong> menjaga server absensi, e-learning, dan Wi-Fi tetap menyala setiap hari.</div>
+                    <div class="bg-gray-800/50 p-3 rounded-lg text-sm"><i class="fas fa-building text-secondary mr-2"></i><strong class="text-white">Di kantor:</strong> mengelola email karyawan, file bersama, dan sistem absensi digital.</div>
+                    <div class="bg-gray-800/50 p-3 rounded-lg text-sm"><i class="fas fa-industry text-secondary mr-2"></i><strong class="text-white">Di perusahaan besar:</strong> menjaga ribuan server yang melayani jutaan pengguna aplikasi setiap detik.</div>
+                </div>
+                <p class="font-semibold text-white mt-2">Tanggung jawab utama seorang administrator:</p>
+                <p>Memasang dan mengatur sistem, memantau performa, menjaga keamanan, melakukan backup data, memperbaiki masalah, serta mendokumentasikan semua pekerjaan agar bisa dipahami tim lain.</p>
+            </div>
+        </section>
+
+        <!-- 3. APA ITU SERVER -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-server"></i></div>
+                <h2 class="text-2xl font-bold text-white">3. Apa itu Server?</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-4 text-gray-300 leading-relaxed">
+                <p>Server adalah sebuah komputer atau perangkat lunak yang tugasnya melayani permintaan dari komputer lain, yang biasa disebut <strong class="text-white">client</strong>. Bayangkan server seperti seorang pelayan di restoran: client "memesan" sesuatu (misalnya membuka halaman web atau meminta file), dan server yang menyiapkan serta mengirimkan apa yang diminta.</p>
+                <p>Berbeda dengan komputer biasa yang dipakai untuk kerja sehari-hari, server dirancang untuk menyala dan bekerja hampir 24 jam nonstop, melayani banyak client sekaligus. Karena itu server biasanya punya spesifikasi khusus (RAM besar, prosesor kuat, penyimpanan yang tahan lama) agar sanggup bekerja terus-menerus tanpa gampang rusak.</p>
+                <div class="bg-gray-800/50 p-4 rounded-lg border-l-4 border-primary">
+                    <p class="text-sm"><strong class="text-primary">Contoh sehari-hari:</strong> Saat kamu membuka YouTube, HP kamu (client) mengirim permintaan ke server milik Google. Server itu lalu mencari video yang kamu minta dan mengirimkannya kembali ke layar HP-mu — semuanya terjadi dalam hitungan detik.</p>
+                </div>
+
+                <p class="font-semibold text-white mt-4 mb-2">Jenis-jenis Server yang Wajib Kamu Kenal</p>
+
+                <div class="space-y-3">
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold"><i class="fas fa-globe text-secondary mr-2"></i>Web Server</p>
+                        <p class="text-sm mt-1">Bertugas menyimpan dan menyajikan halaman website ke pengunjung. Contoh: saat kamu buka <span class="font-mono text-xs">www.sekolahku.sch.id</span>, web server-lah yang mengirim halaman itu ke browsermu. Ibarat papan pengumuman digital yang bisa diakses siapa saja, kapan saja.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold"><i class="fas fa-database text-secondary mr-2"></i>Database Server</p>
+                        <p class="text-sm mt-1">Menyimpan data dalam jumlah besar secara terstruktur, seperti data siswa, produk toko online, atau transaksi bank. Ibarat lemari arsip raksasa yang bisa dicari isinya dalam sepersekian detik.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold"><i class="fas fa-folder-open text-secondary mr-2"></i>File Server</p>
+                        <p class="text-sm mt-1">Menyimpan dan membagikan file (dokumen, foto, video) ke banyak pengguna dalam satu jaringan, mirip Google Drive tapi dikelola sendiri oleh sekolah/kantor.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold"><i class="fas fa-network-wired text-secondary mr-2"></i>DHCP Server</p>
+                        <p class="text-sm mt-1">Membagikan alamat IP secara otomatis ke setiap perangkat yang terhubung ke jaringan, seperti resepsionis hotel yang memberi nomor kamar ke setiap tamu yang datang, tanpa tamu perlu memilih sendiri.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold"><i class="fas fa-address-book text-secondary mr-2"></i>DNS Server</p>
+                        <p class="text-sm mt-1">Menerjemahkan nama domain (misalnya <span class="font-mono text-xs">google.com</span>) menjadi alamat IP yang dimengerti komputer. Ibarat buku telepon raksasa: kamu cukup ingat nama, DNS yang mencarikan nomornya.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold"><i class="fas fa-envelope text-secondary mr-2"></i>Mail Server</p>
+                        <p class="text-sm mt-1">Mengatur pengiriman dan penerimaan email, seperti kantor pos digital yang memastikan surat elektronikmu sampai ke alamat yang benar.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold"><i class="fas fa-upload text-secondary mr-2"></i>FTP Server</p>
+                        <p class="text-sm mt-1">Digunakan khusus untuk mengunggah (upload) dan mengunduh (download) file besar antar komputer, sering dipakai developer web untuk memindahkan file website ke server produksi.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold"><i class="fas fa-print text-secondary mr-2"></i>Print Server</p>
+                        <p class="text-sm mt-1">Menghubungkan satu printer agar bisa dipakai bersama oleh banyak komputer dalam satu jaringan kantor, jadi tidak perlu satu printer per komputer.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold"><i class="fas fa-cubes text-secondary mr-2"></i>Application Server</p>
+                        <p class="text-sm mt-1">Menjalankan logika/proses dari sebuah aplikasi, misalnya memproses pembayaran di aplikasi e-commerce sebelum hasilnya disimpan ke database server.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. CARA KERJA SERVER -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-arrows-left-right"></i></div>
+                <h2 class="text-2xl font-bold text-white">4. Cara Kerja Server</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-4 text-gray-300 leading-relaxed">
+                <p>Secara sederhana, semua layanan digital bekerja dengan pola yang sama, disebut model <strong class="text-white">Client–Server</strong>:</p>
+                <div class="bg-gray-800/50 p-5 rounded-lg text-center font-mono text-sm space-y-2">
+                    <p class="text-secondary font-bold">CLIENT</p>
+                    <p class="text-gray-500">↓ mengirim REQUEST (permintaan)</p>
+                    <p class="text-primary font-bold">SERVER</p>
+                    <p class="text-gray-500">↓ mengirim RESPONSE (balasan)</p>
+                    <p class="text-secondary font-bold">CLIENT menerima hasil</p>
+                </div>
+                <p>Client adalah perangkat yang kamu pakai (HP, laptop, komputer sekolah), sedangkan server adalah komputer yang melayani permintaan tersebut. Prosesnya biasanya hanya makan waktu ratusan milidetik, walau melibatkan perjalanan data yang cukup jauh melewati banyak jaringan.</p>
+                <p class="font-semibold text-white mt-2">Contoh alur ini terjadi di mana saja:</p>
+                <ul class="space-y-2 list-none">
+                    <li class="flex items-start gap-3"><i class="fas fa-window-maximize text-secondary mt-1"></i><span><strong class="text-white">Website:</strong> Browser mengirim request ke web server → server mencari file HTML → dikirim balik sebagai halaman yang kamu lihat.</span></li>
+                    <li class="flex items-start gap-3"><i class="fab fa-google text-secondary mt-1"></i><span><strong class="text-white">Google:</strong> Kamu mengetik kata kunci → request dikirim ke server Google → server mencari dari miliaran halaman → hasil pencarian dikirim balik dalam hitungan detik.</span></li>
+                    <li class="flex items-start gap-3"><i class="fab fa-instagram text-secondary mt-1"></i><span><strong class="text-white">Instagram:</strong> Kamu scroll feed → aplikasi meminta foto/video terbaru ke server → server mengirim konten sesuai algoritma.</span></li>
+                    <li class="flex items-start gap-3"><i class="fab fa-whatsapp text-secondary mt-1"></i><span><strong class="text-white">WhatsApp:</strong> Pesan yang kamu kirim tidak langsung ke HP temanmu, tapi melalui server WhatsApp dulu, baru diteruskan ke penerima.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-gamepad text-secondary mt-1"></i><span><strong class="text-white">Game Online:</strong> Setiap gerakanmu dikirim ke server game agar bisa disinkronkan secara real-time dengan pemain lain di seluruh dunia.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-school text-secondary mt-1"></i><span><strong class="text-white">Sekolah:</strong> Saat kamu absen lewat aplikasi, data dikirim ke server sekolah dan langsung tersimpan di database, bisa dilihat guru atau wali kelas.</span></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 5. PERAN SYSTEM ADMINISTRATOR -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-user-cog"></i></div>
+                <h2 class="text-2xl font-bold text-white">5. Peran System Administrator</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-4 text-gray-300 leading-relaxed">
+                <p><strong class="text-white">System Administrator (sysadmin)</strong> adalah orang yang bertanggung jawab menjaga agar server dan sistem jaringan sebuah perusahaan atau sekolah tetap berjalan dengan baik, aman, dan bisa diandalkan.</p>
+                <ul class="space-y-3">
+                    <li class="flex items-start gap-3"><i class="fas fa-check-circle text-primary mt-1"></i><span><strong class="text-white">Instalasi & konfigurasi</strong> — memasang sistem operasi server dan mengatur layanan yang dibutuhkan (web, database, email, dll).</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check-circle text-primary mt-1"></i><span><strong class="text-white">Update sistem</strong> — memasang pembaruan software agar celah keamanan tertutup dan fitur tetap up-to-date.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check-circle text-primary mt-1"></i><span><strong class="text-white">Backup</strong> — mencadangkan data secara rutin agar tidak hilang jika terjadi kerusakan.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check-circle text-primary mt-1"></i><span><strong class="text-white">Monitoring</strong> — memantau kondisi server agar tidak down, kehabisan storage, atau kelebihan beban.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check-circle text-primary mt-1"></i><span><strong class="text-white">Troubleshooting</strong> — mencari dan memperbaiki penyebab error ketika sistem bermasalah.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check-circle text-primary mt-1"></i><span><strong class="text-white">Keamanan</strong> — mengatur firewall, hak akses, dan mencegah serangan dari luar.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check-circle text-primary mt-1"></i><span><strong class="text-white">Manajemen user</strong> — membuat, menghapus, dan mengatur hak akses akun pengguna.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check-circle text-primary mt-1"></i><span><strong class="text-white">Remote server</strong> — mengakses dan mengelola server dari jarak jauh, bahkan dari rumah, lewat koneksi aman seperti SSH.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check-circle text-primary mt-1"></i><span><strong class="text-white">Dokumentasi</strong> — mencatat setiap perubahan sistem agar tim lain bisa memahami dan melanjutkan pekerjaan.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check-circle text-primary mt-1"></i><span><strong class="text-white">Monitoring log</strong> — memeriksa catatan aktivitas sistem untuk mendeteksi masalah atau serangan sejak dini.</span></li>
+                </ul>
+                <div class="bg-gray-800/50 p-4 rounded-lg border-l-4 border-secondary mt-2">
+                    <p class="font-semibold text-white text-sm mb-2"><i class="fas fa-clock mr-2 text-secondary"></i>Simulasi Sehari Seorang Sysadmin</p>
+                    <p class="text-sm"><strong class="text-secondary">07.30</strong> — Cek dashboard monitoring, memastikan semua server "hijau" (normal) semalaman.<br>
+                    <strong class="text-secondary">09.00</strong> — Memasang update keamanan pada server web.<br>
+                    <strong class="text-secondary">10.30</strong> — Menerima laporan dari tim: aplikasi lambat. Cek log, ternyata database kelebihan beban, lalu dioptimalkan.<br>
+                    <strong class="text-secondary">13.00</strong> — Menambahkan akun karyawan baru dan mengatur hak aksesnya.<br>
+                    <strong class="text-secondary">15.00</strong> — Menjalankan backup harian dan mengecek hasilnya.<br>
+                    <strong class="text-secondary">16.30</strong> — Menulis dokumentasi perubahan hari ini agar tim shift malam paham kondisi terbaru.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. PELUANG KARIER -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-briefcase"></i></div>
+                <h2 class="text-2xl font-bold text-white">6. Peluang Karier Bidang IT</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-5 text-gray-300 leading-relaxed">
+                <p>Kemampuan administrasi sistem jaringan membuka banyak jalur karier. Berikut gambaran masing-masing profesi (catatan: kisaran gaji berikut adalah acuan umum pasar Indonesia yang bisa berbeda tergantung lokasi, pengalaman, dan perusahaan):</p>
+
+                <div class="bg-gray-800/40 p-4 rounded-lg space-y-1">
+                    <p class="text-white font-semibold"><i class="fas fa-server text-secondary mr-2"></i>System Administrator</p>
+                    <p class="text-sm">Tugas: mengelola server, backup, keamanan, dan ketersediaan sistem sehari-hari.</p>
+                    <p class="text-sm">Skill: Linux/Windows Server, scripting, jaringan dasar, troubleshooting.</p>
+                    <p class="text-sm">Perangkat: terminal/CLI, server monitoring tools, virtualisasi.</p>
+                    <p class="text-sm">Jenjang karier: Junior → Senior Sysadmin → IT Infrastructure Lead.</p>
+                    <p class="text-sm">Sertifikasi: CompTIA Linux+, RHCSA, Microsoft Certified: Windows Server.</p>
+                    <p class="text-sm">Kisaran gaji: ± Rp 5–10 juta (junior) hingga Rp 16–25 juta+ (senior).</p>
+                </div>
+                <div class="bg-gray-800/40 p-4 rounded-lg space-y-1">
+                    <p class="text-white font-semibold"><i class="fab fa-linux text-secondary mr-2"></i>Linux Administrator</p>
+                    <p class="text-sm">Tugas: mengelola server berbasis Linux (Ubuntu, Debian, RHEL), termasuk instalasi, keamanan, dan automasi.</p>
+                    <p class="text-sm">Skill: command line, shell scripting, manajemen paket, permission user.</p>
+                    <p class="text-sm">Perangkat: terminal, SSH, Ansible.</p>
+                    <p class="text-sm">Jenjang karier: Junior Linux Admin → DevOps → Infrastructure Architect.</p>
+                    <p class="text-sm">Sertifikasi: RHCSA, RHCE, LFCS (Linux Foundation).</p>
+                    <p class="text-sm">Kisaran gaji: ± Rp 6–12 juta hingga Rp 20 juta+ untuk level senior.</p>
+                </div>
+                <div class="bg-gray-800/40 p-4 rounded-lg space-y-1">
+                    <p class="text-white font-semibold"><i class="fab fa-windows text-secondary mr-2"></i>Windows Administrator</p>
+                    <p class="text-sm">Tugas: mengelola Windows Server, Active Directory, dan layanan berbasis Microsoft.</p>
+                    <p class="text-sm">Skill: Active Directory, Group Policy, PowerShell.</p>
+                    <p class="text-sm">Perangkat: Windows Server Manager, PowerShell, Azure AD.</p>
+                    <p class="text-sm">Jenjang karier: Junior → Senior Windows Admin → IT Manager.</p>
+                    <p class="text-sm">Sertifikasi: Microsoft Certified: Windows Server Hybrid Administrator.</p>
+                    <p class="text-sm">Kisaran gaji: ± Rp 5–10 juta hingga Rp 18 juta+ untuk level senior.</p>
+                </div>
+                <div class="bg-gray-800/40 p-4 rounded-lg space-y-1">
+                    <p class="text-white font-semibold"><i class="fas fa-cloud text-secondary mr-2"></i>Cloud Engineer</p>
+                    <p class="text-sm">Tugas: membangun dan mengelola infrastruktur di layanan cloud seperti AWS, Azure, atau Google Cloud.</p>
+                    <p class="text-sm">Skill: cloud computing, jaringan virtual, infrastructure as code.</p>
+                    <p class="text-sm">Perangkat: AWS/Azure/GCP Console, Terraform.</p>
+                    <p class="text-sm">Jenjang karier: Junior Cloud Engineer → Cloud Architect.</p>
+                    <p class="text-sm">Sertifikasi: AWS Certified Solutions Architect, Microsoft Azure Fundamentals.</p>
+                    <p class="text-sm">Kisaran gaji: ± Rp 8–15 juta hingga Rp 25 juta+ untuk level senior.</p>
+                </div>
+                <div class="bg-gray-800/40 p-4 rounded-lg space-y-1">
+                    <p class="text-white font-semibold"><i class="fas fa-infinity text-secondary mr-2"></i>DevOps Engineer</p>
+                    <p class="text-sm">Tugas: menjembatani tim development dan operasional, mengotomatiskan proses deployment aplikasi.</p>
+                    <p class="text-sm">Skill: CI/CD, containerization (Docker/Kubernetes), scripting.</p>
+                    <p class="text-sm">Perangkat: Jenkins, Docker, GitLab CI, Kubernetes.</p>
+                    <p class="text-sm">Jenjang karier: DevOps Engineer → Senior DevOps → Platform Engineer.</p>
+                    <p class="text-sm">Sertifikasi: Certified Kubernetes Administrator (CKA), AWS DevOps Engineer.</p>
+                    <p class="text-sm">Kisaran gaji: ± Rp 10–18 juta hingga Rp 30 juta+ untuk level senior.</p>
+                </div>
+                <div class="bg-gray-800/40 p-4 rounded-lg space-y-1">
+                    <p class="text-white font-semibold"><i class="fas fa-network-wired text-secondary mr-2"></i>Network Engineer</p>
+                    <p class="text-sm">Tugas: merancang, memasang, dan memelihara infrastruktur jaringan (router, switch, firewall).</p>
+                    <p class="text-sm">Skill: routing & switching, subnetting, keamanan jaringan.</p>
+                    <p class="text-sm">Perangkat: Cisco/MikroTik devices, network monitoring tools.</p>
+                    <p class="text-sm">Jenjang karier: Junior → Network Engineer → Network Architect.</p>
+                    <p class="text-sm">Sertifikasi: CCNA, CCNP, MikroTik Certified Network Associate (MTCNA).</p>
+                    <p class="text-sm">Kisaran gaji: ± Rp 6–12 juta hingga Rp 20 juta+ untuk level senior.</p>
+                </div>
+                <div class="bg-gray-800/40 p-4 rounded-lg space-y-1">
+                    <p class="text-white font-semibold"><i class="fas fa-shield-halved text-secondary mr-2"></i>Cyber Security</p>
+                    <p class="text-sm">Tugas: melindungi sistem dari serangan siber, melakukan audit keamanan dan penetration testing.</p>
+                    <p class="text-sm">Skill: keamanan jaringan, ethical hacking, analisis kerentanan.</p>
+                    <p class="text-sm">Perangkat: firewall, SIEM tools, Kali Linux.</p>
+                    <p class="text-sm">Jenjang karier: Security Analyst → Security Engineer → CISO.</p>
+                    <p class="text-sm">Sertifikasi: CompTIA Security+, CEH, CISSP.</p>
+                    <p class="text-sm">Kisaran gaji: ± Rp 8–15 juta hingga Rp 30 juta+ untuk level senior.</p>
+                </div>
+                <div class="bg-gray-800/40 p-4 rounded-lg space-y-1">
+                    <p class="text-white font-semibold"><i class="fas fa-headset text-secondary mr-2"></i>IT Support</p>
+                    <p class="text-sm">Tugas: membantu pengguna mengatasi masalah perangkat dan software sehari-hari.</p>
+                    <p class="text-sm">Skill: troubleshooting dasar, komunikasi, pengetahuan hardware/software.</p>
+                    <p class="text-sm">Perangkat: remote desktop tools, ticketing system.</p>
+                    <p class="text-sm">Jenjang karier: IT Support → IT Support Senior → System Administrator.</p>
+                    <p class="text-sm">Sertifikasi: CompTIA A+, ITIL Foundation.</p>
+                    <p class="text-sm">Kisaran gaji: ± Rp 4–7 juta hingga Rp 10 juta+ untuk level senior.</p>
+                </div>
+                <div class="bg-gray-800/40 p-4 rounded-lg space-y-1">
+                    <p class="text-white font-semibold"><i class="fas fa-warehouse text-secondary mr-2"></i>Data Center Engineer</p>
+                    <p class="text-sm">Tugas: memastikan seluruh infrastruktur fisik data center (server, pendingin, listrik) berjalan optimal.</p>
+                    <p class="text-sm">Skill: hardware server, sistem pendingin, manajemen kabel, keselamatan kerja.</p>
+                    <p class="text-sm">Perangkat: rack server, monitoring lingkungan (suhu/kelembapan), UPS.</p>
+                    <p class="text-sm">Jenjang karier: Data Center Technician → Data Center Engineer → Data Center Manager.</p>
+                    <p class="text-sm">Sertifikasi: Data Center Certified Associate (DCCA), Uptime Institute ATD.</p>
+                    <p class="text-sm">Kisaran gaji: ± Rp 6–12 juta hingga Rp 20 juta+ untuk level senior.</p>
+                </div>
+                <div class="bg-gray-800/40 p-4 rounded-lg space-y-1">
+                    <p class="text-white font-semibold"><i class="fas fa-cloud-arrow-up text-secondary mr-2"></i>Cloud Administrator</p>
+                    <p class="text-sm">Tugas: mengelola operasional harian layanan cloud yang sudah dibangun (user, biaya, resource).</p>
+                    <p class="text-sm">Skill: manajemen layanan cloud, monitoring biaya, keamanan cloud dasar.</p>
+                    <p class="text-sm">Perangkat: dashboard cloud provider, billing tools.</p>
+                    <p class="text-sm">Jenjang karier: Cloud Administrator → Cloud Engineer → Cloud Architect.</p>
+                    <p class="text-sm">Sertifikasi: AWS Cloud Practitioner, Google Associate Cloud Engineer.</p>
+                    <p class="text-sm">Kisaran gaji: ± Rp 7–13 juta hingga Rp 22 juta+ untuk level senior.</p>
+                </div>
+                <div class="bg-gray-800/40 p-4 rounded-lg space-y-1">
+                    <p class="text-white font-semibold"><i class="fas fa-gears text-secondary mr-2"></i>Site Reliability Engineer (SRE)</p>
+                    <p class="text-sm">Tugas: menjaga keandalan dan performa sistem berskala besar dengan pendekatan otomatisasi dan engineering.</p>
+                    <p class="text-sm">Skill: coding/scripting, monitoring skala besar, incident response.</p>
+                    <p class="text-sm">Perangkat: Kubernetes, Prometheus/Grafana, Terraform.</p>
+                    <p class="text-sm">Jenjang karier: SRE → Senior SRE → Head of Engineering/Infrastructure.</p>
+                    <p class="text-sm">Sertifikasi: CKA, Google Cloud Professional SRE.</p>
+                    <p class="text-sm">Kisaran gaji: ± Rp 12–20 juta hingga Rp 35 juta+ untuk level senior.</p>
+                </div>
+                <div class="bg-gray-800/50 p-4 rounded-lg border-l-4 border-yellow-500">
+                    <p class="text-sm"><i class="fas fa-info-circle text-yellow-500 mr-2"></i>Catatan: seluruh kisaran gaji di atas adalah gambaran umum pasar kerja Indonesia dan bisa berbeda cukup jauh tergantung kota, skala perusahaan, sektor industri, dan pengalaman kerja.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. SOFT SKILL -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-comments"></i></div>
+                <h2 class="text-2xl font-bold text-white">7. Soft Skill Administrator</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-4 text-gray-300 leading-relaxed">
+                <p>Skill teknis (hard skill) memang penting, tapi seorang administrator yang hebat juga butuh soft skill. Kenapa? Karena administrator sering bekerja dalam tim, berhadapan dengan tekanan waktu, dan harus mengambil keputusan cepat saat sistem bermasalah.</p>
+                <ul class="space-y-3">
+                    <li class="flex items-start gap-3"><i class="fas fa-message text-primary mt-1"></i><span><strong class="text-white">Komunikasi</strong> — menjelaskan masalah teknis dengan bahasa yang mudah dipahami rekan non-IT. Contoh: menjelaskan ke guru kenapa Wi-Fi sekolah lambat tanpa istilah rumit.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-people-group text-primary mt-1"></i><span><strong class="text-white">Kerja Tim</strong> — sistem besar biasanya dikelola banyak orang; kerja sama yang baik mencegah kesalahan fatal.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-puzzle-piece text-primary mt-1"></i><span><strong class="text-white">Problem Solving</strong> — mampu mencari akar masalah, bukan sekadar menutupi gejalanya.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-brain text-primary mt-1"></i><span><strong class="text-white">Critical Thinking</strong> — menganalisis situasi sebelum mengambil tindakan, terutama saat sistem produksi sedang bermasalah.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-clock text-primary mt-1"></i><span><strong class="text-white">Manajemen Waktu</strong> — banyak tugas rutin (update, backup) harus dijadwalkan agar tidak mengganggu jam sibuk pengguna.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-list-check text-primary mt-1"></i><span><strong class="text-white">Disiplin</strong> — konsisten menjalankan prosedur, misalnya selalu backup sebelum melakukan perubahan besar.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-hand-holding-heart text-primary mt-1"></i><span><strong class="text-white">Tanggung Jawab</strong> — berani mengakui kesalahan dan segera memperbaikinya, bukan menyembunyikannya.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-book-open text-primary mt-1"></i><span><strong class="text-white">Belajar Mandiri</strong> — teknologi terus berubah, jadi administrator harus terbiasa belajar hal baru sendiri lewat dokumentasi atau kursus online.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-magnifying-glass text-primary mt-1"></i><span><strong class="text-white">Rasa Ingin Tahu</strong> — selalu penasaran "kenapa ini bisa terjadi?" adalah modal utama menjadi troubleshooter yang baik.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-shield-halved text-primary mt-1"></i><span><strong class="text-white">Etika Digital</strong> — menggunakan akses dan data secara bertanggung jawab, tidak untuk kepentingan pribadi.</span></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 8. ETIKA PROFESI -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-balance-scale"></i></div>
+                <h2 class="text-2xl font-bold text-white">8. Etika Profesi</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-4 text-gray-300 leading-relaxed">
+                <p>Seorang administrator biasanya punya akses penuh ke data dan sistem orang lain — mulai dari data pribadi siswa, gaji karyawan, sampai rahasia dagang perusahaan. Akses sebesar itu harus dipakai dengan penuh tanggung jawab, karena kepercayaan adalah modal utama profesi ini.</p>
+                <ul class="space-y-3">
+                    <li class="flex items-start gap-3"><i class="fas fa-user-shield text-yellow-500 mt-1"></i><span>Tidak membuka atau melihat data orang lain tanpa keperluan dan izin yang jelas.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-user-shield text-yellow-500 mt-1"></i><span>Tidak menyebarkan password atau kredensial akses ke pihak yang tidak berwenang.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-user-shield text-yellow-500 mt-1"></i><span>Tidak mengubah data sembarangan tanpa prosedur dan izin yang sah.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-user-shield text-yellow-500 mt-1"></i><span>Tidak menyalahgunakan akses untuk kepentingan pribadi atau merugikan orang lain.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-user-shield text-yellow-500 mt-1"></i><span>Tidak merusak sistem, baik sengaja maupun karena kecerobohan yang bisa dicegah.</span></li>
+                </ul>
+                <div class="bg-gray-800/50 p-4 rounded-lg border-l-4 border-yellow-500 mt-4">
+                    <p class="font-semibold text-white text-sm mb-1"><i class="fas fa-scale-balanced mr-2 text-yellow-500"></i>Studi Kasus Singkat</p>
+                    <p class="text-sm">Seorang admin penasaran dengan isi email pribadi rekan kerjanya dan membukanya menggunakan akses admin yang ia miliki, walau tidak ada kaitan dengan pekerjaan. Tindakan ini melanggar etika profesi karena menyalahgunakan akses untuk hal di luar tugas, meskipun secara teknis ia "mampu" melakukannya. Kemampuan teknis tidak pernah menjadi alasan sah untuk melanggar privasi orang lain.</p>
+                </div>
+                <div class="bg-gray-800/50 p-4 rounded-lg border-l-4 border-primary">
+                    <p class="text-sm text-gray-300">Ingat pesan dari Bapak Khalid: gunakan jaringan sekolah untuk belajar, bukan untuk hal-hal negatif.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 9. KESELAMATAN KERJA -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-helmet-safety"></i></div>
+                <h2 class="text-2xl font-bold text-white">9. Keselamatan Kerja</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-3 text-gray-300 leading-relaxed">
+                <p>Bekerja dengan server dan perangkat jaringan bukan cuma soal software — ada risiko fisik yang harus dipahami sejak dini.</p>
+                <ul class="space-y-3">
+                    <li class="flex items-start gap-3"><i class="fas fa-bolt text-primary mt-1"></i><span><strong class="text-white">Keselamatan listrik</strong> — server menggunakan daya besar; kabel dan stop kontak harus sesuai standar agar tidak korsleting.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-plug-circle-bolt text-primary mt-1"></i><span><strong class="text-white">Grounding</strong> — sistem pentanahan yang mengalirkan arus bocor ke tanah agar perangkat dan penggunanya aman dari sengatan listrik.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-battery-full text-primary mt-1"></i><span><strong class="text-white">UPS (Uninterruptible Power Supply)</strong> — baterai cadangan yang menjaga server tetap menyala saat listrik padam mendadak, memberi waktu untuk mematikan sistem dengan aman.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-hand-sparkles text-primary mt-1"></i><span><strong class="text-white">ESD (Electrostatic Discharge)</strong> — muatan listrik statis dari tubuh yang bisa merusak komponen elektronik; gunakan gelang anti-statis saat memegang komponen server.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-ethernet text-primary mt-1"></i><span><strong class="text-white">Penataan kabel</strong> — kabel yang rapi mencegah tersandung, memudahkan troubleshooting, dan menjaga sirkulasi udara di rak server.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-chair text-primary mt-1"></i><span><strong class="text-white">Posisi kerja</strong> — postur duduk dan berdiri yang benar saat bekerja lama di depan komputer mencegah cedera jangka panjang.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-door-closed text-primary mt-1"></i><span><strong class="text-white">Keamanan ruang server</strong> — akses fisik ke ruang server harus dibatasi hanya untuk orang berwenang, biasanya dengan kunci atau kartu akses.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-snowflake text-primary mt-1"></i><span><strong class="text-white">Pendingin ruangan</strong> — server menghasilkan panas besar; suhu ruangan harus dijaga (biasanya 18–27°C) agar perangkat tidak overheat.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-fire-extinguisher text-primary mt-1"></i><span><strong class="text-white">APAR</strong> — Alat Pemadam Api Ringan wajib tersedia dekat ruang server, jenis khusus (bukan air) agar aman untuk perangkat elektronik.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-clone text-primary mt-1"></i><span><strong class="text-white">Backup data</strong> — salinan data yang disimpan terpisah dari server utama sebagai jaring pengaman jika terjadi kerusakan.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-house-fire text-primary mt-1"></i><span><strong class="text-white">Disaster Recovery</strong> — rencana pemulihan sistem setelah bencana besar (kebakaran, banjir, gempa) agar layanan bisa kembali normal secepat mungkin.</span></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 10. FUN FACT -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-lightbulb"></i></div>
+                <h2 class="text-2xl font-bold text-white">10. Fun Fact</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 text-gray-300 leading-relaxed">
+                <ol class="space-y-3 list-decimal list-inside">
+                    <li>Google mengoperasikan jutaan server yang tersebar di banyak negara, dan lokasi pasti sebagian besar data center-nya dirahasiakan demi keamanan.</li>
+                    <li>Beberapa data center besar didinginkan menggunakan air laut atau air danau agar lebih hemat energi dibanding AC biasa.</li>
+                    <li>Istilah "bug" (kesalahan program) konon berasal dari kejadian nyata seekor ngengat yang tersangkut di relai komputer pada tahun 1947.</li>
+                    <li>Sistem operasi Linux, yang banyak dipakai di server dunia, awalnya dikembangkan oleh mahasiswa bernama Linus Torvalds sebagai proyek pribadi pada 1991.</li>
+                    <li>Sebagian besar website terbesar di dunia — termasuk Google, Facebook, dan Amazon — menjalankan server mereka di atas sistem operasi berbasis Linux.</li>
+                    <li>1 detik downtime pada layanan e-commerce raksasa bisa berarti kehilangan pendapatan hingga miliaran rupiah, karena itu sysadmin sangat menjaga uptime.</li>
+                    <li>UPS pertama kali dikembangkan pada awal abad ke-20 dan sekarang menjadi perangkat wajib di hampir semua ruang server modern.</li>
+                    <li>Beberapa perusahaan teknologi menenggelamkan server mereka ke dasar laut untuk menghemat pendinginan — proyek ini pernah diuji coba oleh Microsoft.</li>
+                    <li>Istilah "cloud" pada cloud computing sebenarnya merujuk pada simbol awan yang biasa dipakai untuk menggambarkan internet pada diagram jaringan lama.</li>
+                    <li>Alamat IP versi 4 (IPv4) sudah hampir habis dipakai di seluruh dunia, itulah sebabnya IPv6 mulai digunakan secara bertahap.</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- 11. TAHUKAH KAMU -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-circle-question"></i></div>
+                <h2 class="text-2xl font-bold text-white">11. Tahukah Kamu?</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 text-gray-300 leading-relaxed">
+                <ol class="space-y-3 list-decimal list-inside">
+                    <li>Server tidak selalu berbentuk komputer besar dengan layar — banyak server modern hanya berupa kotak tipis (rack server) tanpa monitor sama sekali, dikendalikan sepenuhnya dari jarak jauh.</li>
+                    <li>Satu server fisik bisa "dipecah" menjadi puluhan server virtual sekaligus menggunakan teknologi virtualisasi, sehingga lebih hemat biaya dan ruang.</li>
+                    <li>Protokol HTTP yang kamu pakai membuka website setiap hari pertama kali diciptakan oleh Tim Berners-Lee pada 1989–1991 di CERN.</li>
+                    <li>DNS bisa dianggap sebagai salah satu sistem paling kritikal di internet — jika DNS besar down, jutaan orang bisa gagal mengakses website favoritnya walau server aslinya baik-baik saja.</li>
+                    <li>Firewall bukan hanya software, tapi juga bisa berupa perangkat keras khusus yang ditempatkan di jalur masuk jaringan perusahaan.</li>
+                    <li>Istilah "root" pada sistem Linux merujuk pada akun dengan akses tertinggi yang bisa melakukan apa saja di sistem — karena itu akses root harus dijaga ketat.</li>
+                    <li>Sebuah server bisa melayani ribuan hingga jutaan permintaan per detik tergantung kapasitasnya, berkat teknik load balancing yang membagi beban ke banyak server sekaligus.</li>
+                    <li>Beberapa perusahaan besar memiliki tim sysadmin yang bekerja bergiliran 24 jam (shift) karena server tidak boleh "tidur".</li>
+                    <li>Sertifikasi IT internasional seperti CCNA atau CompTIA bisa diambil sejak SMK, dan sering menjadi nilai tambah besar saat melamar kerja di bidang jaringan.</li>
+                    <li>Banyak perusahaan startup teknologi justru dimulai dari server kecil di kamar kos, sebelum akhirnya berkembang menggunakan layanan cloud besar seperti AWS atau Google Cloud.</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- 12. STUDI KASUS -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-magnifying-glass-chart"></i></div>
+                <h2 class="text-2xl font-bold text-white">12. Studi Kasus</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-4 text-gray-300 leading-relaxed">
+                <div class="bg-gray-800/40 p-4 rounded-lg">
+                    <p class="text-white font-semibold mb-1">Kasus 1 — Server Sekolah Mati Mendadak</p>
+                    <p class="text-sm">Saat jam pelajaran, server absensi sekolah tiba-tiba mati dan seluruh siswa tidak bisa melakukan absensi digital. Apa yang harus dilakukan administrator pertama kali, dan bagaimana mencegah kejadian ini terulang?</p>
+                </div>
+                <div class="bg-gray-800/40 p-4 rounded-lg">
+                    <p class="text-white font-semibold mb-1">Kasus 2 — Website Toko Online Lambat Saat Promo</p>
+                    <p class="text-sm">Sebuah toko online mengadakan flash sale, dan tiba-tiba website menjadi sangat lambat karena lonjakan pengunjung. Apa penyebab yang mungkin terjadi, dan solusi teknis apa yang bisa diterapkan administrator?</p>
+                </div>
+                <div class="bg-gray-800/40 p-4 rounded-lg">
+                    <p class="text-white font-semibold mb-1">Kasus 3 — Karyawan Lupa Password dan Mendesak</p>
+                    <p class="text-sm">Seorang karyawan lupa password akunnya dan mendesak admin untuk memberitahukan password lama miliknya secara langsung. Bagaimana administrator seharusnya menyikapi permintaan ini sesuai etika profesi?</p>
+                </div>
+                <div class="bg-gray-800/40 p-4 rounded-lg">
+                    <p class="text-white font-semibold mb-1">Kasus 4 — Data Penting Terhapus Tidak Sengaja</p>
+                    <p class="text-sm">File penting perusahaan terhapus secara tidak sengaja oleh salah satu staf. Apa langkah yang bisa dilakukan administrator jika ada backup, dan apa risikonya jika ternyata tidak ada backup?</p>
+                </div>
+                <div class="bg-gray-800/40 p-4 rounded-lg">
+                    <p class="text-white font-semibold mb-1">Kasus 5 — Percobaan Serangan ke Server</p>
+                    <p class="text-sm">Administrator melihat banyak percobaan login yang gagal berulang kali dalam waktu singkat pada log server. Apa jenis ancaman yang mungkin sedang terjadi, dan langkah pencegahan apa yang perlu diambil?</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 13. PRAKTIKUM 1 -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-flask"></i></div>
+                <h2 class="text-2xl font-bold text-white">13. Praktikum 1 — Mengenal Berbagai Jenis Server</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-3 text-gray-300 leading-relaxed">
+                <p><strong class="text-white">Tujuan:</strong> Siswa mampu mengidentifikasi jenis server yang bekerja di balik layanan digital yang biasa mereka pakai sehari-hari.</p>
+                <p><strong class="text-white">Alat:</strong> Laptop/HP dengan koneksi internet, browser, aplikasi command prompt/terminal.</p>
+                <p class="font-semibold text-white">Langkah Praktikum:</p>
+                <ol class="list-decimal list-inside space-y-2 text-sm">
+                    <li>Buka aplikasi terminal atau command prompt di laptop.</li>
+                    <li>Ketik perintah <span class="font-mono bg-gray-800 px-2 py-0.5 rounded">nslookup google.com</span> lalu tekan Enter, amati alamat IP yang muncul — ini menunjukkan DNS server bekerja menerjemahkan nama domain.</li>
+                    <li>Buka 3 website berbeda (misalnya sekolah, toko online, dan media sosial), lalu catat jenis layanan yang mungkin dijalankan (web server, database server, dsb).</li>
+                    <li>Coba unduh sebuah file dari internet, lalu diskusikan server jenis apa yang kemungkinan melayani proses unduhan tersebut.</li>
+                    <li>Buat tabel sederhana berisi: nama layanan, jenis server yang terlibat, dan fungsinya.</li>
+                </ol>
+                <p><strong class="text-white">Hasil yang Diharapkan:</strong> Siswa dapat menjelaskan minimal 3 jenis server berbeda beserta contoh penggunaannya dalam kehidupan sehari-hari, dan memahami bahwa satu layanan digital bisa melibatkan lebih dari satu jenis server sekaligus.</p>
+            </div>
+        </section>
+
+        <!-- 14. PRAKTIKUM 2 -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-flask-vial"></i></div>
+                <h2 class="text-2xl font-bold text-white">14. Praktikum 2 — Mengamati Pekerjaan Administrator</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-3 text-gray-300 leading-relaxed">
+                <p><strong class="text-white">Tujuan:</strong> Siswa memahami gambaran nyata aktivitas harian seorang administrator melalui simulasi peran.</p>
+                <p class="font-semibold text-white">Simulasi:</p>
+                <ol class="list-decimal list-inside space-y-2 text-sm">
+                    <li>Bagi kelas menjadi beberapa kelompok kecil (3-4 siswa).</li>
+                    <li>Setiap kelompok mendapat satu "skenario masalah" (misalnya: server sekolah down, ada laporan Wi-Fi lambat, user lupa password).</li>
+                    <li>Diskusikan dalam kelompok: langkah apa yang akan diambil seorang administrator, mulai dari mengecek masalah, mencari penyebab, hingga mendokumentasikan solusinya.</li>
+                    <li>Setiap kelompok menuliskan alur penyelesaian masalah dalam bentuk poin-poin sederhana (mirip laporan tiket IT support).</li>
+                    <li>Presentasikan hasil diskusi secara singkat di depan kelas.</li>
+                </ol>
+                <p><strong class="text-white">Hasil yang Diharapkan:</strong> Siswa dapat menggambarkan alur berpikir seorang administrator dalam menghadapi masalah nyata, mulai dari identifikasi hingga dokumentasi solusi.</p>
+            </div>
+        </section>
+
+        <!-- 15. RINGKASAN -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-list-check"></i></div>
+                <h2 class="text-2xl font-bold text-white">15. Ringkasan</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 text-gray-300 leading-relaxed">
+                <ul class="space-y-2 list-none">
+                    <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i><span>Administrasi sistem jaringan adalah kegiatan mengelola, memelihara, dan mengamankan server serta jaringan agar layanan digital berjalan lancar.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i><span>Server adalah komputer/software yang melayani permintaan client, dengan berbagai jenis seperti web, database, file, DHCP, DNS, mail, FTP, print, dan application server.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i><span>Model client–server bekerja lewat alur request dan response, terjadi di hampir semua layanan digital yang kita pakai sehari-hari.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i><span>System Administrator bertanggung jawab atas instalasi, monitoring, keamanan, backup, troubleshooting, hingga dokumentasi sistem.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i><span>Bidang administrasi sistem jaringan membuka banyak peluang karier, mulai dari Sysadmin, Network Engineer, Cloud Engineer, hingga DevOps dan SRE.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i><span>Soft skill seperti komunikasi, problem solving, dan disiplin sama pentingnya dengan skill teknis.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i><span>Etika profesi menuntut administrator menjaga kepercayaan, tidak menyalahgunakan akses terhadap data orang lain.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i><span>Keselamatan kerja fisik (listrik, ESD, pendinginan, APAR) tidak kalah penting dari keamanan digital.</span></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 16. REFLEKSI -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-comment-dots"></i></div>
+                <h2 class="text-2xl font-bold text-white">16. Refleksi</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 text-gray-300 leading-relaxed">
+                <ol class="space-y-2 list-decimal list-inside text-sm">
+                    <li>Apa perbedaan mendasar yang kamu pahami antara komputer biasa dan server?</li>
+                    <li>Menurutmu, bagian mana dari pekerjaan sysadmin yang paling menantang? Kenapa?</li>
+                    <li>Ceritakan satu contoh layanan digital yang kamu pakai hari ini dan analisis alur client-server-nya.</li>
+                    <li>Mengapa etika profesi sangat penting dalam pekerjaan yang memiliki akses penuh ke data orang lain?</li>
+                    <li>Soft skill apa yang menurutmu paling perlu kamu latih sejak sekarang? Mengapa?</li>
+                    <li>Jika kamu jadi administrator dan server tiba-tiba mati saat jam sibuk, apa langkah pertama yang akan kamu ambil?</li>
+                    <li>Apa risiko yang bisa terjadi jika sebuah perusahaan tidak memiliki backup data sama sekali?</li>
+                    <li>Menurutmu, kenapa perusahaan lebih memilih pakai server sendiri dibanding cloud, atau sebaliknya?</li>
+                    <li>Profesi IT mana dari Bab 1 yang membuatmu paling penasaran untuk dipelajari lebih dalam?</li>
+                    <li>Apa satu hal baru yang paling mengejutkan buatmu dari materi Bab 1 ini?</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- QUIZ SECTION -->
+        <section id="quiz-section">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-secondary/20 text-secondary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-clipboard-question"></i></div>
+                <h2 class="text-2xl font-bold text-white">17. Kuis Bab 1</h2>
+            </div>
+
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 mb-6">
+                <label class="block text-sm text-gray-400 mb-2">Nama Siswa</label>
+                <input id="nama-siswa" type="text" placeholder="Tulis nama lengkap kamu di sini..." class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary">
+            </div>
+
+            <form id="quiz-form" class="space-y-6">
+
+                <!-- Q1 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">1. Apa fungsi utama sebuah server dalam jaringan komputer?</p>
+                    <div class="space-y-2" data-question="1" data-correct="b">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q1" value="a" class="accent-primary"> <span>Bermain game secara online</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q1" value="b" class="accent-primary"> <span>Melayani permintaan dari komputer client</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q1" value="c" class="accent-primary"> <span>Mengedit foto dan video</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q1" value="d" class="accent-primary"> <span>Mencetak dokumen</span></label>
+                    </div>
+                </div>
+
+                <!-- Q2 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">2. Layanan server yang bertugas membagikan IP address secara otomatis ke client disebut...</p>
+                    <div class="space-y-2" data-question="2" data-correct="c">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q2" value="a" class="accent-primary"> <span>Web Server</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q2" value="b" class="accent-primary"> <span>DNS Server</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q2" value="c" class="accent-primary"> <span>DHCP Server</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q2" value="d" class="accent-primary"> <span>FTP Server</span></label>
+                    </div>
+                </div>
+
+                <!-- Q3 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">3. Berikut ini yang BUKAN termasuk tugas seorang System Administrator adalah...</p>
+                    <div class="space-y-2" data-question="3" data-correct="d">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q3" value="a" class="accent-primary"> <span>Melakukan backup data</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q3" value="b" class="accent-primary"> <span>Memantau (monitoring) kondisi server</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q3" value="c" class="accent-primary"> <span>Mengatur hak akses dan keamanan user</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q3" value="d" class="accent-primary"> <span>Mendesain logo perusahaan</span></label>
+                    </div>
+                </div>
+
+                <!-- Q4 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">4. Profesi berikut yang berkaitan langsung dengan administrasi sistem jaringan adalah...</p>
+                    <div class="space-y-2" data-question="4" data-correct="a">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q4" value="a" class="accent-primary"> <span>Cloud Engineer</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q4" value="b" class="accent-primary"> <span>Fotografer</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q4" value="c" class="accent-primary"> <span>Akuntan</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q4" value="d" class="accent-primary"> <span>Koki</span></label>
+                    </div>
+                </div>
+
+                <!-- Q5 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">5. Sikap yang mencerminkan etika seorang administrator yang baik adalah...</p>
+                    <div class="space-y-2" data-question="5" data-correct="b">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q5" value="a" class="accent-primary"> <span>Membagikan password server ke teman untuk pamer</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q5" value="b" class="accent-primary"> <span>Menjaga kerahasiaan data pengguna dan tidak menyalahgunakan akses</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q5" value="c" class="accent-primary"> <span>Mengakses data orang lain tanpa izin karena penasaran</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q5" value="d" class="accent-primary"> <span>Menyembunyikan kesalahan agar tidak dimarahi</span></label>
+                    </div>
+                </div>
+
+                <!-- Q6 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">6. Client adalah istilah untuk...</p>
+                    <div class="space-y-2" data-question="6" data-correct="a">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q6" value="a" class="accent-primary"> <span>Perangkat yang meminta layanan ke server</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q6" value="b" class="accent-primary"> <span>Perangkat yang menyimpan seluruh internet</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q6" value="c" class="accent-primary"> <span>Kabel yang menghubungkan dua kota</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q6" value="d" class="accent-primary"> <span>Nama lain dari router</span></label>
+                    </div>
+                </div>
+
+                <!-- Q7 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">7. Server yang bertugas menyimpan dan menyajikan halaman website disebut...</p>
+                    <div class="space-y-2" data-question="7" data-correct="c">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q7" value="a" class="accent-primary"> <span>Mail Server</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q7" value="b" class="accent-primary"> <span>Print Server</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q7" value="c" class="accent-primary"> <span>Web Server</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q7" value="d" class="accent-primary"> <span>FTP Server</span></label>
+                    </div>
+                </div>
+
+                <!-- Q8 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">8. Fungsi utama DNS Server adalah...</p>
+                    <div class="space-y-2" data-question="8" data-correct="b">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q8" value="a" class="accent-primary"> <span>Menyimpan file yang bisa diunduh siapa saja</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q8" value="b" class="accent-primary"> <span>Menerjemahkan nama domain menjadi alamat IP</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q8" value="c" class="accent-primary"> <span>Mencetak dokumen dari jarak jauh</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q8" value="d" class="accent-primary"> <span>Mengirim email ke banyak orang sekaligus</span></label>
+                    </div>
+                </div>
+
+                <!-- Q9 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">9. Urutan alur kerja model client-server yang benar adalah...</p>
+                    <div class="space-y-2" data-question="9" data-correct="a">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q9" value="a" class="accent-primary"> <span>Client mengirim request → server memproses → server mengirim response</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q9" value="b" class="accent-primary"> <span>Server mengirim request ke client lalu diam saja</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q9" value="c" class="accent-primary"> <span>Client dan server tidak pernah berkomunikasi</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q9" value="d" class="accent-primary"> <span>Response dikirim sebelum request dibuat</span></label>
+                    </div>
+                </div>
+
+                <!-- Q10 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">10. Alat yang menjaga server tetap menyala sesaat setelah listrik padam adalah...</p>
+                    <div class="space-y-2" data-question="10" data-correct="c">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q10" value="a" class="accent-primary"> <span>Router</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q10" value="b" class="accent-primary"> <span>Switch</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q10" value="c" class="accent-primary"> <span>UPS</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q10" value="d" class="accent-primary"> <span>Printer</span></label>
+                    </div>
+                </div>
+
+                <!-- Q11 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">11. Sistem operasi yang paling banyak dipakai pada server web di dunia adalah...</p>
+                    <div class="space-y-2" data-question="11" data-correct="b">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q11" value="a" class="accent-primary"> <span>Android</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q11" value="b" class="accent-primary"> <span>Linux</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q11" value="c" class="accent-primary"> <span>iOS</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q11" value="d" class="accent-primary"> <span>MS-DOS</span></label>
+                    </div>
+                </div>
+
+                <!-- Q12 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">12. Gelang anti-statis dipakai administrator saat memegang komponen server untuk mencegah...</p>
+                    <div class="space-y-2" data-question="12" data-correct="d">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q12" value="a" class="accent-primary"> <span>Server terlalu cepat panas</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q12" value="b" class="accent-primary"> <span>Kabel jaringan putus</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q12" value="c" class="accent-primary"> <span>Data terhapus otomatis</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q12" value="d" class="accent-primary"> <span>Kerusakan komponen akibat listrik statis (ESD)</span></label>
+                    </div>
+                </div>
+
+                <!-- Q13 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">13. Kegiatan mencadangkan data agar tidak hilang jika terjadi kerusakan disebut...</p>
+                    <div class="space-y-2" data-question="13" data-correct="a">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q13" value="a" class="accent-primary"> <span>Backup</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q13" value="b" class="accent-primary"> <span>Formatting</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q13" value="c" class="accent-primary"> <span>Streaming</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q13" value="d" class="accent-primary"> <span>Rendering</span></label>
+                    </div>
+                </div>
+
+                <!-- Q14 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">14. Profesi yang berfokus menjembatani tim developer dan operasional dengan otomatisasi deployment disebut...</p>
+                    <div class="space-y-2" data-question="14" data-correct="c">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q14" value="a" class="accent-primary"> <span>IT Support</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q14" value="b" class="accent-primary"> <span>Print Operator</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q14" value="c" class="accent-primary"> <span>DevOps Engineer</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q14" value="d" class="accent-primary"> <span>Graphic Designer</span></label>
+                    </div>
+                </div>
+
+                <!-- Q15 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">15. Mengapa penataan kabel yang rapi penting di ruang server?</p>
+                    <div class="space-y-2" data-question="15" data-correct="b">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q15" value="a" class="accent-primary"> <span>Supaya terlihat lebih berwarna</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q15" value="b" class="accent-primary"> <span>Mencegah kecelakaan, memudahkan troubleshooting, dan menjaga sirkulasi udara</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q15" value="c" class="accent-primary"> <span>Agar server terhubung ke wifi tetangga</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q15" value="d" class="accent-primary"> <span>Tidak ada pengaruhnya sama sekali</span></label>
+                    </div>
+                </div>
+
+                <!-- Q16 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">16. Jika sebuah server mengalami down saat jam sibuk, tindakan PALING TEPAT yang pertama dilakukan administrator adalah...</p>
+                    <div class="space-y-2" data-question="16" data-correct="a">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q16" value="a" class="accent-primary"> <span>Mengecek log dan status server untuk mencari penyebabnya</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q16" value="b" class="accent-primary"> <span>Langsung mematikan seluruh jaringan sekolah</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q16" value="c" class="accent-primary"> <span>Membiarkannya sampai besok</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q16" value="d" class="accent-primary"> <span>Menghapus semua data server</span></label>
+                    </div>
+                </div>
+
+                <!-- Q17 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">17. Manakah pasangan profesi dan sertifikasi yang paling sesuai?</p>
+                    <div class="space-y-2" data-question="17" data-correct="c">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q17" value="a" class="accent-primary"> <span>IT Support — AWS Certified Solutions Architect</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q17" value="b" class="accent-primary"> <span>Cyber Security — ITIL Foundation</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q17" value="c" class="accent-primary"> <span>Network Engineer — CCNA</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q17" value="d" class="accent-primary"> <span>Cloud Engineer — CompTIA A+</span></label>
+                    </div>
+                </div>
+
+                <!-- Q18 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">18. Mengapa kisaran gaji profesi IT bisa berbeda-beda antar sumber dan wilayah?</p>
+                    <div class="space-y-2" data-question="18" data-correct="b">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q18" value="a" class="accent-primary"> <span>Karena semua perusahaan wajib membayar gaji yang sama persis</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q18" value="b" class="accent-primary"> <span>Karena dipengaruhi pengalaman, lokasi, skala perusahaan, dan sertifikasi</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q18" value="c" class="accent-primary"> <span>Karena gaji IT tidak pernah berubah sejak dulu</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q18" value="d" class="accent-primary"> <span>Karena hanya ditentukan oleh umur karyawan</span></label>
+                    </div>
+                </div>
+
+                <!-- Q19 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">19. Disaster Recovery adalah istilah untuk...</p>
+                    <div class="space-y-2" data-question="19" data-correct="d">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q19" value="a" class="accent-primary"> <span>Menghapus data lama secara berkala</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q19" value="b" class="accent-primary"> <span>Membeli server baru setiap tahun</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q19" value="c" class="accent-primary"> <span>Mendesain ulang tampilan website</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q19" value="d" class="accent-primary"> <span>Rencana pemulihan sistem setelah bencana besar</span></label>
+                    </div>
+                </div>
+
+                <!-- Q20 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">20. Ciri utama soft skill "critical thinking" pada seorang administrator adalah...</p>
+                    <div class="space-y-2" data-question="20" data-correct="a">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q20" value="a" class="accent-primary"> <span>Menganalisis situasi secara matang sebelum bertindak</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q20" value="b" class="accent-primary"> <span>Langsung bertindak tanpa berpikir</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q20" value="c" class="accent-primary"> <span>Menyalahkan orang lain saat terjadi masalah</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q20" value="d" class="accent-primary"> <span>Mengabaikan laporan pengguna</span></label>
+                    </div>
+                </div>
+
+                <!-- Q21 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">21. Percobaan login gagal berulang kali dalam waktu singkat pada log server paling mungkin mengindikasikan...</p>
+                    <div class="space-y-2" data-question="21" data-correct="c">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q21" value="a" class="accent-primary"> <span>Server sedang diupdate otomatis</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q21" value="b" class="accent-primary"> <span>Listrik padam</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q21" value="c" class="accent-primary"> <span>Kemungkinan percobaan serangan (brute force) ke sistem</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q21" value="d" class="accent-primary"> <span>Kabel jaringan putus</span></label>
+                    </div>
+                </div>
+
+                <!-- Q22 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">22. Perbedaan utama antara komputer biasa dan server adalah...</p>
+                    <div class="space-y-2" data-question="22" data-correct="b">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q22" value="a" class="accent-primary"> <span>Server hanya bisa dipakai satu orang</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q22" value="b" class="accent-primary"> <span>Server dirancang menyala nonstop dan melayani banyak permintaan sekaligus</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q22" value="c" class="accent-primary"> <span>Server tidak butuh listrik</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q22" value="d" class="accent-primary"> <span>Server selalu lebih murah dari komputer biasa</span></label>
+                    </div>
+                </div>
+
+                <!-- Q23 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">23. Kombinasi jenis server yang paling mungkin bekerja sama saat kamu berbelanja di aplikasi e-commerce adalah...</p>
+                    <div class="space-y-2" data-question="23" data-correct="d">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q23" value="a" class="accent-primary"> <span>Print Server dan FTP Server saja</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q23" value="b" class="accent-primary"> <span>Mail Server saja</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q23" value="c" class="accent-primary"> <span>DHCP Server saja</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q23" value="d" class="accent-primary"> <span>Web Server, Application Server, dan Database Server</span></label>
+                    </div>
+                </div>
+
+                <!-- Q24 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">24. Seorang administrator menemukan bahwa file penting terhapus tidak sengaja oleh staf lain. Tindakan paling tepat adalah...</p>
+                    <div class="space-y-2" data-question="24" data-correct="a">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q24" value="a" class="accent-primary"> <span>Memulihkan file dari backup terbaru yang tersedia</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q24" value="b" class="accent-primary"> <span>Memarahi staf tersebut di depan umum</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q24" value="c" class="accent-primary"> <span>Membiarkannya karena bukan tanggung jawabnya</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q24" value="d" class="accent-primary"> <span>Menghapus data lain sebagai balasan</span></label>
+                    </div>
+                </div>
+
+                <!-- Q25 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">25. Mengapa dokumentasi pekerjaan sangat penting bagi seorang system administrator?</p>
+                    <div class="space-y-2" data-question="25" data-correct="c">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q25" value="a" class="accent-primary"> <span>Agar terlihat sibuk di depan atasan</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q25" value="b" class="accent-primary"> <span>Karena diwajibkan tanpa alasan jelas</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q25" value="c" class="accent-primary"> <span>Agar perubahan sistem bisa ditelusuri dan dipahami tim lain di kemudian hari</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q25" value="d" class="accent-primary"> <span>Supaya file semakin banyak dan berat</span></label>
+                    </div>
+                </div>
+
+                <!-- Praktik / Essay -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-2">26. (Praktik Reflektif) Tuliskan 1 profesi IT yang paling menarik untukmu dari Bab 1 ini, dan jelaskan alasannya dalam 2-3 kalimat.</p>
+                    <p class="text-xs text-gray-500 mb-3">*Jawaban ini akan dinilai langsung oleh Guru, bukan otomatis oleh sistem.</p>
+                    <textarea id="essay-jawaban" rows="4" placeholder="Tulis jawabanmu di sini..." class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-secondary"></textarea>
+                </div>
+
+                <button type="submit" id="submit-btn" class="w-full bg-primary text-darker font-bold py-4 rounded-xl hover:bg-emerald-400 transition-colors text-lg">
+                    <i class="fas fa-paper-plane mr-2"></i> Kumpulkan Jawaban
+                </button>
+            </form>
+
+            <!-- RESULT CARD -->
+            <div id="result-card" class="hidden mt-8 bg-gradient-to-br from-dark to-gray-900 border-2 border-primary rounded-2xl p-8 text-center shadow-2xl">
+                <i class="fas fa-award text-5xl text-yellow-400 mb-4"></i>
+                <p class="text-gray-400 mb-1">Hasil Kuis Bab 1 atas nama</p>
+                <p id="result-nama" class="text-xl font-bold text-white mb-4">-</p>
+                <p class="text-6xl font-extrabold text-primary mb-2" id="result-score">0</p>
+                <p class="text-gray-400 mb-6">dari 100 (Pilihan Ganda: <span id="result-fraction">0/5</span> benar)</p>
+                <div class="bg-gray-800/60 rounded-lg p-4 text-sm text-gray-300 mb-6 text-left">
+                    <i class="fas fa-info-circle text-secondary mr-2"></i>
+                    Tunjukkan/screenshot layar ini kepada Bapak Khalid Nabawi, S.Kom. sebagai bukti nilai kuis kamu. Jawaban nomor 26 akan dinilai terpisah oleh Guru.
+                </div>
+                <button onclick="salinHasil()" id="copy-btn" class="bg-secondary text-white font-semibold px-6 py-3 rounded-full hover:bg-blue-600 transition-colors">
+                    <i class="fas fa-copy mr-2"></i> Salin Hasil untuk Dikirim ke Guru
+                </button>
+            </div>
+        </section>
+
+        <!-- 18. KUNCI JAWABAN -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-key"></i></div>
+                <h2 class="text-2xl font-bold text-white">18. Kunci Jawaban & Pembahasan Singkat</h2>
+            </div>
+            <details class="jawaban-box bg-dark border border-gray-800 rounded-xl p-6 text-gray-300 leading-relaxed">
+                <summary class="font-semibold text-white">Klik untuk membuka pembahasan (kerjakan kuis dulu sebelum melihat ini!)</summary>
+                <ol class="space-y-2 list-decimal list-inside text-sm mt-4">
+                    <li><strong class="text-primary">B.</strong> Server melayani permintaan client, bukan aktivitas hiburan pribadi.</li>
+                    <li><strong class="text-primary">C.</strong> DHCP Server membagikan IP address otomatis ke perangkat baru.</li>
+                    <li><strong class="text-primary">D.</strong> Mendesain logo adalah tugas desainer grafis, bukan sysadmin.</li>
+                    <li><strong class="text-primary">A.</strong> Cloud Engineer berkaitan langsung dengan infrastruktur server dan jaringan.</li>
+                    <li><strong class="text-primary">B.</strong> Menjaga kerahasiaan data adalah inti etika profesi administrator.</li>
+                    <li><strong class="text-primary">A.</strong> Client adalah perangkat pengguna yang meminta layanan ke server.</li>
+                    <li><strong class="text-primary">C.</strong> Web Server menyajikan halaman website ke browser pengguna.</li>
+                    <li><strong class="text-primary">B.</strong> DNS menerjemahkan nama domain menjadi alamat IP.</li>
+                    <li><strong class="text-primary">A.</strong> Alur client-server selalu diawali request dari client.</li>
+                    <li><strong class="text-primary">C.</strong> UPS menjaga server tetap menyala sesaat setelah listrik padam.</li>
+                    <li><strong class="text-primary">B.</strong> Linux adalah sistem operasi paling umum dipakai di server web dunia.</li>
+                    <li><strong class="text-primary">D.</strong> Gelang anti-statis mencegah kerusakan komponen akibat ESD.</li>
+                    <li><strong class="text-primary">A.</strong> Backup adalah proses mencadangkan data.</li>
+                    <li><strong class="text-primary">C.</strong> DevOps Engineer menjembatani tim developer dan operasional.</li>
+                    <li><strong class="text-primary">B.</strong> Kabel rapi mencegah kecelakaan dan memudahkan perawatan.</li>
+                    <li><strong class="text-primary">A.</strong> Mengecek log/status server adalah langkah awal troubleshooting yang tepat.</li>
+                    <li><strong class="text-primary">C.</strong> CCNA adalah sertifikasi jaringan yang relevan untuk Network Engineer.</li>
+                    <li><strong class="text-primary">B.</strong> Gaji IT dipengaruhi banyak faktor: pengalaman, lokasi, skala perusahaan, sertifikasi.</li>
+                    <li><strong class="text-primary">D.</strong> Disaster Recovery adalah rencana pemulihan sistem pasca-bencana.</li>
+                    <li><strong class="text-primary">A.</strong> Critical thinking berarti menganalisis dulu sebelum bertindak.</li>
+                    <li><strong class="text-primary">C.</strong> Login gagal berulang dalam waktu singkat adalah tanda percobaan serangan.</li>
+                    <li><strong class="text-primary">B.</strong> Server dirancang untuk nonstop dan melayani banyak permintaan sekaligus.</li>
+                    <li><strong class="text-primary">D.</strong> Belanja online melibatkan Web, Application, dan Database Server sekaligus.</li>
+                    <li><strong class="text-primary">A.</strong> Memulihkan dari backup adalah solusi paling tepat dan profesional.</li>
+                    <li><strong class="text-primary">C.</strong> Dokumentasi membuat perubahan sistem bisa ditelusuri tim lain.</li>
+                </ol>
+            </details>
+        </section>
+
+        <!-- 19. GLOSARIUM -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-book"></i></div>
+                <h2 class="text-2xl font-bold text-white">19. Glosarium</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 text-gray-300 leading-relaxed">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 text-sm">
+                    <p><strong class="text-white">Server</strong> — komputer/software yang melayani permintaan client.</p>
+                    <p><strong class="text-white">Client</strong> — perangkat yang mengirim permintaan ke server.</p>
+                    <p><strong class="text-white">System Administrator</strong> — pengelola server dan sistem jaringan.</p>
+                    <p><strong class="text-white">Request</strong> — permintaan yang dikirim client ke server.</p>
+                    <p><strong class="text-white">Response</strong> — balasan yang dikirim server ke client.</p>
+                    <p><strong class="text-white">Web Server</strong> — server penyaji halaman website.</p>
+                    <p><strong class="text-white">Database Server</strong> — server penyimpan data terstruktur.</p>
+                    <p><strong class="text-white">File Server</strong> — server penyimpan dan pembagi file.</p>
+                    <p><strong class="text-white">DHCP</strong> — protokol pembagi alamat IP otomatis.</p>
+                    <p><strong class="text-white">DNS</strong> — sistem penerjemah nama domain ke alamat IP.</p>
+                    <p><strong class="text-white">Mail Server</strong> — server pengelola pengiriman/penerimaan email.</p>
+                    <p><strong class="text-white">FTP</strong> — protokol untuk transfer file antar komputer.</p>
+                    <p><strong class="text-white">Print Server</strong> — server yang membagikan akses printer.</p>
+                    <p><strong class="text-white">Application Server</strong> — server yang menjalankan logika aplikasi.</p>
+                    <p><strong class="text-white">IP Address</strong> — alamat unik sebuah perangkat di jaringan.</p>
+                    <p><strong class="text-white">Firewall</strong> — sistem penyaring lalu lintas jaringan untuk keamanan.</p>
+                    <p><strong class="text-white">Backup</strong> — proses mencadangkan data.</p>
+                    <p><strong class="text-white">Disaster Recovery</strong> — rencana pemulihan sistem setelah bencana.</p>
+                    <p><strong class="text-white">Uptime</strong> — lamanya waktu sistem berjalan tanpa gangguan.</p>
+                    <p><strong class="text-white">Downtime</strong> — waktu sistem tidak bisa diakses/berjalan.</p>
+                    <p><strong class="text-white">Monitoring</strong> — kegiatan memantau kondisi sistem secara berkala.</p>
+                    <p><strong class="text-white">Troubleshooting</strong> — proses mencari dan memperbaiki masalah.</p>
+                    <p><strong class="text-white">Root/Admin</strong> — akun dengan hak akses tertinggi dalam sistem.</p>
+                    <p><strong class="text-white">Virtualisasi</strong> — teknologi membuat komputer virtual di satu perangkat fisik.</p>
+                    <p><strong class="text-white">Cloud Computing</strong> — layanan komputasi yang diakses lewat internet.</p>
+                    <p><strong class="text-white">UPS</strong> — perangkat baterai cadangan daya listrik.</p>
+                    <p><strong class="text-white">Grounding</strong> — sistem pentanahan untuk keamanan listrik.</p>
+                    <p><strong class="text-white">ESD</strong> — pelepasan muatan listrik statis yang bisa merusak komponen.</p>
+                    <p><strong class="text-white">Log</strong> — catatan aktivitas yang terjadi pada sistem.</p>
+                    <p><strong class="text-white">SSH</strong> — protokol untuk mengakses server secara aman dari jarak jauh.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 20. REFERENSI -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-link"></i></div>
+                <h2 class="text-2xl font-bold text-white">20. Referensi</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 text-gray-300 leading-relaxed">
+                <p class="text-sm mb-3">Materi Bab 1 disusun dengan mensintesis dan menulis ulang informasi dari berbagai sumber resmi, di antaranya:</p>
+                <ul class="space-y-1 text-sm list-disc list-inside">
+                    <li>Ubuntu Server Documentation (ubuntu.com/server/docs)</li>
+                    <li>Debian Documentation (debian.org/doc)</li>
+                    <li>Red Hat Documentation (access.redhat.com/documentation)</li>
+                    <li>Linux Foundation (linuxfoundation.org)</li>
+                    <li>Cisco Networking Academy (netacad.com)</li>
+                    <li>Microsoft Learn (learn.microsoft.com)</li>
+                    <li>AWS Academy & AWS Documentation (aws.amazon.com/documentation)</li>
+                    <li>DigitalOcean Tutorials (digitalocean.com/community/tutorials)</li>
+                    <li>IBM Documentation (ibm.com/docs)</li>
+                    <li>Cloudflare Learning Center (cloudflare.com/learning)</li>
+                    <li>Oracle Documentation (docs.oracle.com)</li>
+                    <li>Buku Administrasi Sistem Jaringan SMK Kurikulum Merdeka</li>
+                    <li>Data kisaran gaji: Jobstreet Indonesia dan Geekhunter (2026)</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Navigation -->
+        <div class="flex justify-between items-center pt-8 border-t border-gray-800">
+            <a href="index.html" class="text-gray-400 hover:text-primary transition-colors flex items-center gap-2">
+                <i class="fas fa-map-signs"></i> Roadmap
+            </a>
+            <a href="belum-tersedia.html?bab=Bab%202&judul=Hardware%20dan%20OS%20Server" class="text-gray-400 hover:text-primary transition-colors flex items-center gap-2">
+                Bab 2 <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </main>
+
+    <footer class="bg-darker border-t border-gray-800 py-8 text-center text-gray-500 text-sm">
+        <p>&copy; 2026/2027 SMK Bintang Raudloh. ASJ Kelas XI.</p>
+    </footer>
+
+    <script>
+        const form = document.getElementById('quiz-form');
+        const resultCard = document.getElementById('result-card');
+        let lastResultText = '';
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const namaInput = document.getElementById('nama-siswa').value.trim();
+            if (!namaInput) {
+                alert('Mohon isi nama kamu terlebih dahulu sebelum mengumpulkan jawaban.');
+                document.getElementById('nama-siswa').focus();
+                return;
+            }
+
+            const groups = document.querySelectorAll('[data-question]');
+            let unanswered = [];
+            groups.forEach(g => {
+                const qNum = g.getAttribute('data-question');
+                const checked = g.querySelector('input[type="radio"]:checked');
+                if (!checked) unanswered.push(qNum);
+            });
+            if (unanswered.length > 0) {
+                alert('Masih ada soal pilihan ganda yang belum dijawab (nomor: ' + unanswered.join(', ') + ').');
+                return;
+            }
+
+            let correctCount = 0;
+            const total = groups.length;
+
+            groups.forEach(g => {
+                const correctVal = g.getAttribute('data-correct');
+                const checked = g.querySelector('input[type="radio"]:checked');
+                const labels = g.querySelectorAll('label.quiz-option');
+
+                labels.forEach(lbl => {
+                    lbl.classList.add('locked');
+                    const input = lbl.querySelector('input');
+                    if (input.value === correctVal) {
+                        lbl.classList.add('correct-answer');
+                    } else if (input.checked && input.value !== correctVal) {
+                        lbl.classList.add('wrong-answer');
+                    }
+                });
+
+                if (checked && checked.value === correctVal) correctCount++;
+            });
+
+            const score = Math.round((correctCount / total) * 100);
+
+            document.getElementById('result-nama').textContent = namaInput;
+            document.getElementById('result-score').textContent = score;
+            document.getElementById('result-fraction').textContent = correctCount + '/' + total;
+            resultCard.classList.remove('hidden');
+            document.getElementById('submit-btn').disabled = true;
+            document.getElementById('submit-btn').classList.add('opacity-50', 'cursor-not-allowed');
+
+            const essay = document.getElementById('essay-jawaban').value.trim();
+            lastResultText =
+                'HASIL KUIS - BAB 1 (Mengenal Administrasi Sistem Jaringan)\n' +
+                'Nama: ' + namaInput + '\n' +
+                'Nilai Pilihan Ganda: ' + score + ' (' + correctCount + '/' + total + ' benar)\n' +
+                'Jawaban No.26 (Reflektif): ' + (essay || '-(kosong)-');
+
+            resultCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+
+        function salinHasil() {
+            navigator.clipboard.writeText(lastResultText).then(() => {
+                const btn = document.getElementById('copy-btn');
+                const original = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check mr-2"></i> Tersalin!';
+                setTimeout(() => { btn.innerHTML = original; }, 2000);
+            }).catch(() => {
+                alert('Gagal menyalin otomatis. Silahkan screenshot layar hasil kuis ini.');
+            });
+        }
+    </script>
+</body>
+</html>
