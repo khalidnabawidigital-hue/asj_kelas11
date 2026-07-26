@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roadmap ASJ Kelas XI - SMK Bintang Raudloh</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        dark: '#0f172a',
+                        darker: '#020617',
+                        primary: '#10b981', // Emerald green for Linux vibe
+                        secondary: '#3b82f6', // Blue for networks
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #020617;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #10b981; 
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #059669; 
+        }
+
+        /* Timeline Styles */
+        .timeline-container {
+            position: relative;
+        }
+        .timeline-container::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            background-color: #1e293b;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -2px;
+        }
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            background-color: inherit;
+            width: 50%;
+        }
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            right: -10px;
+            background-color: #020617;
+            border: 4px solid #10b981;
+            top: 15px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+        .left { left: 0; }
+        .right { left: 50%; }
+        .right::after {
+            left: -10px;
+            border-color: #3b82f6;
+        }
+        
+        @media screen and (max-width: 768px) {
+            .timeline-container::after { left: 31px; }
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            .timeline-item::after { left: 21px; }
+            .right { left: 0%; }
+        }
+
+        /* Scroll Animation Classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Terminal blinking cursor */
+        .cursor-blink {
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+        
+        /* Grid Background Pattern */
+        .bg-grid {
+            background-image: linear-gradient(to right, #1e293b 1px, transparent 1px),
+                              linear-gradient(to bottom, #1e293b 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-primary selection:text-darker">
+
+    <header class="min-h-screen flex flex-col justify-center relative overflow-hidden bg-grid">
+        <!-- Overlay gradient -->
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-darker"></div>
+        
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="max-w-4xl mx-auto text-center reveal active">
+                <div class="inline-block mb-6 p-4 rounded-xl bg-dark border border-gray-800 shadow-2xl text-left w-full md:w-3/4 mx-auto font-mono text-sm">
+                    <div class="flex gap-2 mb-3">
+                        <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                    </div>
+                    <div class="text-gray-400">
+                        <span class="text-primary">root@smkbintangraudloh</span>:<span class="text-secondary">~</span>$ <span id="typewriter"></span><span class="cursor-blink bg-gray-400 w-2 h-4 inline-block ml-1 align-middle"></span>
+                    </div>
+                </div>
+
+                <h1 class="text-4xl md:text-6xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+                    Roadmap Pembelajaran 1 Tahun
+                </h1>
+                <h2 class="text-2xl md:text-3xl font-semibold mb-6 text-gray-300">
+                    Administrasi Sistem Jaringan (ASJ) Kelas XI
+                </h2>
+                
+                <div class="flex flex-col md:flex-row justify-center items-center gap-6 mt-8 text-gray-400">
+                    <div class="flex items-center gap-2 bg-dark py-2 px-4 rounded-full border border-gray-800">
+                        <i class="fas fa-school text-primary"></i>
+                        <span>SMK Bintang Raudloh</span>
+                    </div>
+                    <div class="flex items-center gap-2 bg-dark py-2 px-4 rounded-full border border-gray-800">
+                        <i class="fas fa-calendar-alt text-secondary"></i>
+                        <span>Tahun Ajaran 2026/2027</span>
+                    </div>
+                    <div class="flex items-center gap-2 bg-dark py-2 px-4 rounded-full border border-gray-800">
+                        <i class="fas fa-chalkboard-teacher text-purple-500"></i>
+                        <span>Guru: Khalid Nabawi, S.Kom.</span>
+                    </div>
+                </div>
+
+                <div class="mt-16 animate-bounce">
+                    <i class="fas fa-chevron-down text-3xl text-gray-500"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="py-20 bg-darker relative z-10">
+        <div class="container mx-auto px-6 max-w-5xl">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-3xl font-bold mb-4"><i class="fas fa-bullseye text-red-500 mr-2"></i> Tujuan Pembelajaran</h2>
+                <div class="h-1 w-20 bg-primary mx-auto rounded-full"></div>
+            </div>
+            
+            <div class="bg-dark p-8 rounded-2xl border border-gray-800 shadow-xl reveal relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-8 opacity-10">
+                    <i class="fas fa-server text-9xl text-primary"></i>
+                </div>
+                <p class="text-lg text-gray-300 leading-relaxed mb-6 relative z-10">
+                    Selama satu tahun ke depan, kita akan belajar bagaimana menjadi <strong class="text-primary">System Administrator</strong> yang mampu menginstal, mengelola, mengamankan, dan melakukan troubleshooting server berbasis Linux.
+                </p>
+                <div class="p-4 bg-gray-800/50 rounded-xl border-l-4 border-secondary relative z-10">
+                    <p class="text-xl font-semibold text-white">
+                        "Di akhir pembelajaran, setiap siswa diharapkan mampu membangun Server Sekolah secara mandiri yang menyediakan berbagai layanan jaringan."
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-[#070b19]">
+        <div class="container mx-auto px-6 max-w-6xl">
+            <div class="text-center mb-16 reveal">
+                <span class="bg-primary/20 text-primary py-1 px-4 rounded-full text-sm font-bold tracking-wider mb-2 inline-block">SEMESTER GANJIL</span>
+                <h2 class="text-3xl md:text-4xl font-bold mt-2">🟢 Membangun Fondasi SysAdmin</h2>
+            </div>
+
+            <div class="timeline-container">
+                
+                <!-- Bab 1 -->
+                <div class="timeline-item left reveal">
+                    <a href="bab1.html" class="group block bg-dark p-6 rounded-xl border border-gray-800 shadow-lg hover:-translate-y-1 hover:border-primary transition-all cursor-pointer">
+                        <h3 class="text-xl font-bold mb-3 text-primary">Bab 1 – Mengenal Administrasi Sistem Jaringan</h3>
+                        <ul class="text-gray-400 space-y-2 mb-4">
+                            <li><i class="fas fa-angle-right text-gray-600 mr-2"></i>Apa itu Server?</li>
+                            <li><i class="fas fa-angle-right text-gray-600 mr-2"></i>Tugas seorang System Administrator</li>
+                            <li><i class="fas fa-angle-right text-gray-600 mr-2"></i>Peluang kerja di bidang IT</li>
+                            <li><i class="fas fa-angle-right text-gray-600 mr-2"></i>Etika dan tanggung jawab Administrator</li>
+                        </ul>
+                        <div class="bg-gray-800/50 p-3 rounded-lg text-sm border border-gray-700 mb-3">
+                            <strong class="text-yellow-500"><i class="fas fa-flag-checkered mr-1"></i> Output:</strong> Siswa memahami dunia kerja seorang administrator sistem.
+                        </div>
+                        <div class="text-sm font-semibold text-primary flex items-center gap-2">
+                            <i class="fas fa-book-open"></i> Buka Materi & Kuis <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Bab 2 -->
+                <div class="timeline-item right reveal">
+                    <a href="belum-tersedia.html?bab=Bab%202&judul=Hardware%20dan%20OS%20Server" class="group block bg-dark p-6 rounded-xl border border-gray-800 shadow-lg hover:-translate-y-1 hover:border-primary transition-all cursor-pointer">
+                        <h3 class="text-xl font-bold mb-3 text-primary">Bab 2 – Hardware dan OS Server</h3>
+                        <ul class="text-gray-400 space-y-2 mb-4">
+                            <li><i class="fas fa-microchip text-gray-600 mr-2"></i>Jenis & Spesifikasi Server</li>
+                            <li><i class="fab fa-linux text-gray-600 mr-2"></i>Linux vs <i class="fab fa-windows text-gray-600 mr-1"></i>Windows Server</li>
+                            <li><i class="fas fa-code-branch text-gray-600 mr-2"></i>Memilih Sistem Operasi</li>
+                        </ul>
+                        <div class="bg-gray-800/50 p-3 rounded-lg text-sm border border-gray-700 mb-3">
+                            <strong class="text-primary"><i class="fas fa-laptop-code mr-1"></i> Praktik:</strong> Mengenal perangkat server secara langsung.
+                        </div>
+                        <div class="text-sm font-semibold text-primary flex items-center gap-2">
+                            <i class="fas fa-book-open"></i> Buka Materi & Kuis <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Bab 3 -->
+                <div class="timeline-item left reveal">
+                    <a href="belum-tersedia.html?bab=Bab%203&judul=Virtualisasi" class="group block bg-dark p-6 rounded-xl border border-gray-800 shadow-lg hover:-translate-y-1 hover:border-primary transition-all cursor-pointer">
+                        <h3 class="text-xl font-bold mb-3 text-primary">Bab 3 – Virtualisasi</h3>
+                        <ul class="text-gray-400 space-y-2 mb-4">
+                            <li><i class="fas fa-desktop text-gray-600 mr-2"></i>Apa itu Virtual Machine?</li>
+                            <li><i class="fas fa-box text-gray-600 mr-2"></i>Oracle VirtualBox & VMware</li>
+                            <li><i class="fas fa-plus-circle text-gray-600 mr-2"></i>Membuat Virtual Machine</li>
+                        </ul>
+                        <div class="bg-gray-800/50 p-3 rounded-lg text-sm border border-gray-700 mb-3">
+                            <strong class="text-primary"><i class="fas fa-laptop-code mr-1"></i> Praktik:</strong> Membuat komputer virtual pertama.
+                        </div>
+                        <div class="text-sm font-semibold text-primary flex items-center gap-2">
+                            <i class="fas fa-book-open"></i> Buka Materi & Kuis <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Bab 4 -->
+                <div class="timeline-item right reveal">
+                    <a href="belum-tersedia.html?bab=Bab%204&judul=Instalasi%20Ubuntu%20Server" class="group block bg-dark p-6 rounded-xl border border-gray-800 shadow-lg hover:-translate-y-1 hover:border-primary transition-all cursor-pointer">
+                        <h3 class="text-xl font-bold mb-3 text-primary">Bab 4 – Instalasi Ubuntu Server</h3>
+                        <ul class="text-gray-400 space-y-2 mb-4">
+                            <li><i class="fab fa-ubuntu text-orange-500 mr-2"></i>Install Ubuntu Server</li>
+                            <li><i class="fas fa-hdd text-gray-600 mr-2"></i>Partisi Harddisk</li>
+                            <li><i class="fas fa-cogs text-gray-600 mr-2"></i>Konfigurasi Awal & Login</li>
+                        </ul>
+                        <div class="bg-gray-800/50 p-3 rounded-lg text-sm border border-gray-700 mb-3">
+                            <strong class="text-primary"><i class="fas fa-laptop-code mr-1"></i> Praktik:</strong> Instalasi Ubuntu Server sampai berhasil login CLI.
+                        </div>
+                        <div class="text-sm font-semibold text-primary flex items-center gap-2">
+                            <i class="fas fa-book-open"></i> Buka Materi & Kuis <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Bab 5 -->
+                <div class="timeline-item left reveal">
+                    <a href="belum-tersedia.html?bab=Bab%205&judul=Linux%20Fundamental" class="group block bg-dark p-6 rounded-xl border border-gray-800 shadow-lg hover:-translate-y-1 hover:border-primary transition-all cursor-pointer">
+                        <h3 class="text-xl font-bold mb-3 text-primary">Bab 5 – Linux Fundamental</h3>
+                        <p class="text-gray-400 text-sm mb-3">Belajar menggunakan Terminal (Perintah Dasar).</p>
+                        <div class="flex flex-wrap gap-2 mb-4 font-mono text-xs">
+                            <span class="bg-gray-800 px-2 py-1 rounded text-green-400">pwd</span>
+                            <span class="bg-gray-800 px-2 py-1 rounded text-green-400">ls</span>
+                            <span class="bg-gray-800 px-2 py-1 rounded text-green-400">cd</span>
+                            <span class="bg-gray-800 px-2 py-1 rounded text-green-400">mkdir</span>
+                            <span class="bg-gray-800 px-2 py-1 rounded text-green-400">cp</span>
+                            <span class="bg-gray-800 px-2 py-1 rounded text-green-400">mv</span>
+                            <span class="bg-gray-800 px-2 py-1 rounded text-green-400">rm</span>
+                            <span class="bg-gray-800 px-2 py-1 rounded text-green-400">nano</span>
+                            <span class="bg-gray-800 px-2 py-1 rounded text-green-400">cat</span>
+                            <span class="bg-gray-800 px-2 py-1 rounded text-green-400">touch</span>
+                        </div>
+                        <div class="bg-gray-800/50 p-3 rounded-lg text-sm border border-gray-700 mb-3">
+                            <strong class="text-primary"><i class="fas fa-laptop-code mr-1"></i> Praktik:</strong> Mengelola file dan direktori melalui Terminal.
+                        </div>
+                        <div class="text-sm font-semibold text-primary flex items-center gap-2">
+                            <i class="fas fa-book-open"></i> Buka Materi & Kuis <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Bab 6 -->
+                <div class="timeline-item right reveal">
+                    <a href="belum-tersedia.html?bab=Bab%206&judul=User%20dan%20Permission" class="group block bg-dark p-6 rounded-xl border border-gray-800 shadow-lg hover:-translate-y-1 hover:border-primary transition-all cursor-pointer">
+                        <h3 class="text-xl font-bold mb-3 text-primary">Bab 6 – User dan Permission</h3>
+                        <div class="flex flex-wrap gap-2 mb-4 font-mono text-xs">
+                            <span class="bg-gray-800 px-2 py-1 rounded text-blue-400">useradd</span>
+                            <span class="bg-gray-800 px-2 py-1 rounded text-blue-400">groupadd</span>
+                            <span class="bg-gray-800 px-2 py-1 rounded text-red-400">chmod</span>
+                            <span class="bg-gray-800 px-2 py-1 rounded text-red-400">chown</span>
+                        </div>
+                        <div class="bg-gray-800/50 p-3 rounded-lg text-sm border border-gray-700 mb-3">
+                            <strong class="text-primary"><i class="fas fa-laptop-code mr-1"></i> Praktik:</strong> Membuat banyak user dan mengatur hak akses (Read, Write, Execute).
+                        </div>
+                        <div class="text-sm font-semibold text-primary flex items-center gap-2">
+                            <i class="fas fa-book-open"></i> Buka Materi & Kuis <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Bab 7 & 8 -->
+                <div class="timeline-item left reveal">
+                    <a href="belum-tersedia.html?bab=Bab%207%20%26%208&judul=Package%20Management%20%26%20Remote%20Server" class="group block bg-dark p-6 rounded-xl border border-gray-800 shadow-lg hover:-translate-y-1 hover:border-primary transition-all cursor-pointer">
+                        <h3 class="text-xl font-bold mb-3 text-primary">Bab 7 & 8 – Package Mgt & Remote Server</h3>
+                        <p class="text-gray-400 text-sm mb-3">Manajemen aplikasi dan kontrol jarak jauh.</p>
+                        <div class="flex flex-wrap gap-2 mb-4 font-mono text-xs">
+                            <span class="bg-gray-800 px-2 py-1 rounded text-yellow-400">apt update</span>
+                            <span class="bg-gray-800 px-2 py-1 rounded text-yellow-400">apt install</span>
+                            <span class="bg-gray-800 px-2 py-1 rounded text-purple-400">ssh</span>
+                            <span class="bg-gray-800 px-2 py-1 rounded text-purple-400">putty</span>
+                        </div>
+                        <div class="bg-gray-800/50 p-3 rounded-lg text-sm border border-gray-700 mb-3">
+                            <strong class="text-primary"><i class="fas fa-laptop-code mr-1"></i> Praktik:</strong> Install software & mengontrol server secara *remote* dari komputer host.
+                        </div>
+                        <div class="text-sm font-semibold text-primary flex items-center gap-2">
+                            <i class="fas fa-book-open"></i> Buka Materi & Kuis <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                        </div>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-darker">
+        <div class="container mx-auto px-6 max-w-6xl">
+            <div class="text-center mb-16 reveal">
+                <span class="bg-secondary/20 text-secondary py-1 px-4 rounded-full text-sm font-bold tracking-wider mb-2 inline-block">SEMESTER GENAP</span>
+                <h2 class="text-3xl md:text-4xl font-bold mt-2">🔵 Menjadi Administrator Server</h2>
+            </div>
+
+            <div class="timeline-container">
+                
+                <!-- Bab 9 -->
+                <div class="timeline-item right reveal">
+                    <a href="belum-tersedia.html?bab=Bab%209&judul=DHCP%20Server" class="group block bg-dark p-6 rounded-xl border border-gray-800 shadow-lg hover:-translate-y-1 hover:border-secondary transition-all cursor-pointer">
+                        <h3 class="text-xl font-bold mb-3 text-secondary"><i class="fas fa-network-wired mr-2"></i>Bab 9 – DHCP Server</h3>
+                        <p class="text-gray-400 text-sm mb-4">Belajar membuat server yang memberikan IP Address secara otomatis ke klien.</p>
+                        <div class="bg-gray-800/50 p-3 rounded-lg text-sm border border-gray-700 mb-3">
+                            <strong class="text-secondary"><i class="fas fa-laptop-code mr-1"></i> Praktik:</strong> Komputer client mendapatkan IP otomatis dari server Linux kita.
+                        </div>
+                        <div class="text-sm font-semibold text-secondary flex items-center gap-2">
+                            <i class="fas fa-book-open"></i> Buka Materi & Kuis <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Bab 10 -->
+                <div class="timeline-item left reveal">
+                    <a href="belum-tersedia.html?bab=Bab%2010&judul=DNS%20Server" class="group block bg-dark p-6 rounded-xl border border-gray-800 shadow-lg hover:-translate-y-1 hover:border-secondary transition-all cursor-pointer">
+                        <h3 class="text-xl font-bold mb-3 text-secondary"><i class="fas fa-globe mr-2"></i>Bab 10 – DNS Server</h3>
+                        <p class="text-gray-400 text-sm mb-4">Menerjemahkan IP Address menjadi nama domain (misal: <code>www.sekolahku.sch.id</code>).</p>
+                        <div class="bg-gray-800/50 p-3 rounded-lg text-sm border border-gray-700 mb-3">
+                            <strong class="text-secondary"><i class="fas fa-laptop-code mr-1"></i> Praktik:</strong> Client dapat mengakses server menggunakan nama domain sendiri, bukan menghafal IP.
+                        </div>
+                        <div class="text-sm font-semibold text-secondary flex items-center gap-2">
+                            <i class="fas fa-book-open"></i> Buka Materi & Kuis <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Bab 11 & 12 -->
+                <div class="timeline-item right reveal">
+                    <a href="belum-tersedia.html?bab=Bab%2011%20%26%2012&judul=Web%20%26%20Database%20Server" class="group block bg-dark p-6 rounded-xl border border-gray-800 shadow-lg hover:-translate-y-1 hover:border-secondary transition-all cursor-pointer">
+                        <h3 class="text-xl font-bold mb-3 text-secondary"><i class="fas fa-server mr-2"></i>Bab 11 & 12 – Web & Database Server</h3>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-gray-800 px-2 py-1 rounded text-xs font-mono text-red-400">Apache</span>
+                            <span class="bg-gray-800 px-2 py-1 rounded text-xs font-mono text-purple-400">PHP</span>
+                            <span class="bg-gray-800 px-2 py-1 rounded text-xs font-mono text-blue-400">MariaDB</span>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-4">Membangun layanan hosting website dan menyimpan data pada tabel database.</p>
+                        <div class="bg-gray-800/50 p-3 rounded-lg text-sm border border-gray-700 mb-3">
+                            <strong class="text-secondary"><i class="fas fa-laptop-code mr-1"></i> Praktik:</strong> Website dinamis berhasil berjalan di server dan terhubung ke database.
+                        </div>
+                        <div class="text-sm font-semibold text-secondary flex items-center gap-2">
+                            <i class="fas fa-book-open"></i> Buka Materi & Kuis <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Bab 13 & 14 -->
+                <div class="timeline-item left reveal">
+                    <a href="belum-tersedia.html?bab=Bab%2013%20%26%2014&judul=FTP%20%26%20Samba%20File%20Server" class="group block bg-dark p-6 rounded-xl border border-gray-800 shadow-lg hover:-translate-y-1 hover:border-secondary transition-all cursor-pointer">
+                        <h3 class="text-xl font-bold mb-3 text-secondary"><i class="fas fa-folder-open mr-2"></i>Bab 13 & 14 – FTP & Samba File Server</h3>
+                        <ul class="text-gray-400 text-sm space-y-2 mb-4">
+                            <li><strong class="text-white">FTP:</strong> Upload/download file web ke server.</li>
+                            <li><strong class="text-white">Samba:</strong> Membuat folder sharing lintas OS.</li>
+                        </ul>
+                        <div class="bg-gray-800/50 p-3 rounded-lg text-sm border border-gray-700 mb-3">
+                            <strong class="text-secondary"><i class="fas fa-laptop-code mr-1"></i> Praktik:</strong> Komputer Windows client dapat membuka dan mentransfer file ke folder Linux.
+                        </div>
+                        <div class="text-sm font-semibold text-secondary flex items-center gap-2">
+                            <i class="fas fa-book-open"></i> Buka Materi & Kuis <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Bab 15 & 16 -->
+                <div class="timeline-item right reveal">
+                    <a href="belum-tersedia.html?bab=Bab%2015%20%26%2016&judul=Backup%2C%20Restore%20%26%20Monitoring" class="group block bg-dark p-6 rounded-xl border border-gray-800 shadow-lg hover:-translate-y-1 hover:border-secondary transition-all cursor-pointer">
+                        <h3 class="text-xl font-bold mb-3 text-secondary"><i class="fas fa-shield-alt mr-2"></i>Bab 15 & 16 – Backup, Restore & Monitoring</h3>
+                        <p class="text-gray-400 text-sm mb-4">Menjaga data tetap aman dan mengecek resource server (CPU, RAM, Storage) secara real-time.</p>
+                        <div class="bg-gray-800/50 p-3 rounded-lg text-sm border border-gray-700 mb-3">
+                            <strong class="text-secondary"><i class="fas fa-laptop-code mr-1"></i> Praktik:</strong> Mengetahui kondisi kesehatan server dan melakukan simulasi backup database.
+                        </div>
+                        <div class="text-sm font-semibold text-secondary flex items-center gap-2">
+                            <i class="fas fa-book-open"></i> Buka Materi & Kuis <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Bab 17 -->
+                <div class="timeline-item left reveal">
+                    <a href="belum-tersedia.html?bab=Bab%2017&judul=Firewall%20Dasar" class="group block bg-dark p-6 rounded-xl border border-gray-800 shadow-lg hover:-translate-y-1 hover:border-secondary transition-all cursor-pointer">
+                        <h3 class="text-xl font-bold mb-3 text-secondary"><i class="fas fa-fire-alt mr-2"></i>Bab 17 – Firewall Dasar</h3>
+                        <div class="flex flex-wrap gap-2 mb-4 font-mono text-xs">
+                            <span class="bg-gray-800 px-2 py-1 rounded text-green-400">Allow</span>
+                            <span class="bg-gray-800 px-2 py-1 rounded text-red-400">Deny</span>
+                            <span class="bg-gray-800 px-2 py-1 rounded text-yellow-400">Ports</span>
+                        </div>
+                        <div class="bg-gray-800/50 p-3 rounded-lg text-sm border border-gray-700 mb-3">
+                            <strong class="text-secondary"><i class="fas fa-laptop-code mr-1"></i> Praktik:</strong> Mengamankan server dengan menutup port yang tidak digunakan (iptables / ufw).
+                        </div>
+                        <div class="text-sm font-semibold text-secondary flex items-center gap-2">
+                            <i class="fas fa-book-open"></i> Buka Materi & Kuis <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                        </div>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Final Project Section -->
+    <section class="py-20 bg-gradient-to-b from-darker to-[#070b19]">
+        <div class="container mx-auto px-6 max-w-5xl">
+            <div class="bg-gradient-to-br from-indigo-900 via-purple-900 to-dark p-8 md:p-12 rounded-3xl shadow-2xl border border-indigo-500/30 reveal">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl md:text-5xl font-bold text-white mb-4"><i class="fas fa-rocket mr-3"></i>Bab 18 – Final Project</h2>
+                    <p class="text-indigo-200 text-lg">Ujian Praktik Akhir Tahun: Integrasi Seluruh Layanan</p>
+                </div>
+                
+                <div class="bg-darker/60 p-6 rounded-2xl mb-8">
+                    <p class="text-gray-300 text-center mb-6">Siswa akan membangun sebuah <strong>Production Server</strong> dari nol yang memiliki seluruh layanan berikut berjalan secara bersamaan:</p>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-4 text-center text-sm font-semibold text-gray-200">
+                        <div class="bg-gray-800/80 p-3 rounded-xl border border-gray-700"><i class="fab fa-ubuntu text-orange-500 mb-2 text-xl block"></i> Ubuntu</div>
+                        <div class="bg-gray-800/80 p-3 rounded-xl border border-gray-700"><i class="fas fa-terminal text-gray-400 mb-2 text-xl block"></i> SSH</div>
+                        <div class="bg-gray-800/80 p-3 rounded-xl border border-gray-700"><i class="fas fa-network-wired text-blue-400 mb-2 text-xl block"></i> DHCP</div>
+                        <div class="bg-gray-800/80 p-3 rounded-xl border border-gray-700"><i class="fas fa-globe text-green-400 mb-2 text-xl block"></i> DNS</div>
+                        <div class="bg-gray-800/80 p-3 rounded-xl border border-gray-700"><i class="fas fa-server text-red-400 mb-2 text-xl block"></i> Apache</div>
+                        <div class="bg-gray-800/80 p-3 rounded-xl border border-gray-700"><i class="fab fa-php text-purple-400 mb-2 text-xl block"></i> PHP</div>
+                        <div class="bg-gray-800/80 p-3 rounded-xl border border-gray-700"><i class="fas fa-database text-blue-500 mb-2 text-xl block"></i> MariaDB</div>
+                        <div class="bg-gray-800/80 p-3 rounded-xl border border-gray-700"><i class="fas fa-file-upload text-yellow-400 mb-2 text-xl block"></i> FTP</div>
+                        <div class="bg-gray-800/80 p-3 rounded-xl border border-gray-700"><i class="fas fa-folder-shared text-pink-400 mb-2 text-xl block"></i> Samba</div>
+                        <div class="bg-gray-800/80 p-3 rounded-xl border border-gray-700"><i class="fas fa-shield-alt text-red-500 mb-2 text-xl block"></i> Firewall</div>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <a href="belum-tersedia.html?bab=Bab%2018&judul=Final%20Project" class="inline-flex items-center gap-2 bg-white text-indigo-900 font-bold px-6 py-3 rounded-full hover:bg-indigo-100 transition-colors">
+                        <i class="fas fa-book-open"></i> Buka Detail & Kuis Final Project <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="py-20 bg-[#070b19]">
+        <div class="container mx-auto px-6 max-w-5xl">
+            <div class="text-center mb-12 reveal">
+                <h2 class="text-3xl font-bold"><i class="fas fa-briefcase text-yellow-500 mr-2"></i> Skill Setelah Lulus</h2>
+                <p class="text-gray-400 mt-2">Kompetensi yang siap dibawa ke dunia industri (PKL/Kerja).</p>
+            </div>
+            
+            <div class="flex flex-wrap justify-center gap-3 reveal">
+                <!-- Skill Badges -->
+                <span class="px-4 py-2 bg-dark border border-primary/50 text-primary rounded-full text-sm hover:bg-primary hover:text-dark transition-colors cursor-default"><i class="fas fa-check mr-2"></i>Instalasi Ubuntu</span>
+                <span class="px-4 py-2 bg-dark border border-primary/50 text-primary rounded-full text-sm hover:bg-primary hover:text-dark transition-colors cursor-default"><i class="fas fa-check mr-2"></i>Administrasi Linux</span>
+                <span class="px-4 py-2 bg-dark border border-primary/50 text-primary rounded-full text-sm hover:bg-primary hover:text-dark transition-colors cursor-default"><i class="fas fa-check mr-2"></i>Terminal Linux</span>
+                <span class="px-4 py-2 bg-dark border border-primary/50 text-primary rounded-full text-sm hover:bg-primary hover:text-dark transition-colors cursor-default"><i class="fas fa-check mr-2"></i>Manajemen User</span>
+                <span class="px-4 py-2 bg-dark border border-primary/50 text-primary rounded-full text-sm hover:bg-primary hover:text-dark transition-colors cursor-default"><i class="fas fa-check mr-2"></i>Permission Linux</span>
+                <span class="px-4 py-2 bg-dark border border-secondary/50 text-secondary rounded-full text-sm hover:bg-secondary hover:text-dark transition-colors cursor-default"><i class="fas fa-check mr-2"></i>SSH Remote</span>
+                <span class="px-4 py-2 bg-dark border border-secondary/50 text-secondary rounded-full text-sm hover:bg-secondary hover:text-dark transition-colors cursor-default"><i class="fas fa-check mr-2"></i>DHCP Server</span>
+                <span class="px-4 py-2 bg-dark border border-secondary/50 text-secondary rounded-full text-sm hover:bg-secondary hover:text-dark transition-colors cursor-default"><i class="fas fa-check mr-2"></i>DNS Server</span>
+                <span class="px-4 py-2 bg-dark border border-secondary/50 text-secondary rounded-full text-sm hover:bg-secondary hover:text-dark transition-colors cursor-default"><i class="fas fa-check mr-2"></i>Web Server (Apache/PHP)</span>
+                <span class="px-4 py-2 bg-dark border border-purple-500/50 text-purple-400 rounded-full text-sm hover:bg-purple-500 hover:text-white transition-colors cursor-default"><i class="fas fa-check mr-2"></i>Database (MariaDB)</span>
+                <span class="px-4 py-2 bg-dark border border-purple-500/50 text-purple-400 rounded-full text-sm hover:bg-purple-500 hover:text-white transition-colors cursor-default"><i class="fas fa-check mr-2"></i>FTP & Samba Server</span>
+                <span class="px-4 py-2 bg-dark border border-red-500/50 text-red-400 rounded-full text-sm hover:bg-red-500 hover:text-white transition-colors cursor-default"><i class="fas fa-check mr-2"></i>Firewall Dasar</span>
+                <span class="px-4 py-2 bg-dark border border-yellow-500/50 text-yellow-400 rounded-full text-sm hover:bg-yellow-500 hover:text-dark transition-colors cursor-default"><i class="fas fa-check mr-2"></i>Backup & Restore</span>
+                <span class="px-4 py-2 bg-dark border border-yellow-500/50 text-yellow-400 rounded-full text-sm hover:bg-yellow-500 hover:text-dark transition-colors cursor-default"><i class="fas fa-check mr-2"></i>Troubleshooting Dasar</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rules Section -->
+    <section class="py-20 bg-darker">
+        <div class="container mx-auto px-6 max-w-5xl">
+            <div class="text-center mb-12 reveal">
+                <h2 class="text-3xl font-bold"><i class="fas fa-gavel text-gray-400 mr-2"></i> Aturan Belajar di Kelas</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 reveal">
+                <div class="bg-dark p-5 rounded-xl border border-gray-800 flex items-start gap-4">
+                    <div class="bg-blue-900/50 p-3 rounded-lg text-blue-400"><i class="fas fa-clock text-xl"></i></div>
+                    <div>
+                        <h4 class="font-bold text-gray-200">Disiplin Waktu</h4>
+                        <p class="text-sm text-gray-400">Datang dan kumpulkan tugas tepat waktu sesuai jadwal.</p>
+                    </div>
+                </div>
+                <div class="bg-dark p-5 rounded-xl border border-gray-800 flex items-start gap-4">
+                    <div class="bg-green-900/50 p-3 rounded-lg text-green-400"><i class="fas fa-laptop text-xl"></i></div>
+                    <div>
+                        <h4 class="font-bold text-gray-200">Bawa Perangkat</h4>
+                        <p class="text-sm text-gray-400">Wajib membawa laptop saat jadwal praktik di kelas.</p>
+                    </div>
+                </div>
+                <div class="bg-dark p-5 rounded-xl border border-gray-800 flex items-start gap-4">
+                    <div class="bg-yellow-900/50 p-3 rounded-lg text-yellow-400"><i class="fas fa-comments text-xl"></i></div>
+                    <div>
+                        <h4 class="font-bold text-gray-200">Aktif & Diskusi</h4>
+                        <p class="text-sm text-gray-400">Jangan takut salah, berani bertanya jika mengalami error/kendala.</p>
+                    </div>
+                </div>
+                <div class="bg-dark p-5 rounded-xl border border-gray-800 flex items-start gap-4">
+                    <div class="bg-red-900/50 p-3 rounded-lg text-red-400"><i class="fas fa-user-shield text-xl"></i></div>
+                    <div>
+                        <h4 class="font-bold text-gray-200">Etika IT</h4>
+                        <p class="text-sm text-gray-400">Gunakan jaringan sekolah untuk belajar, bukan untuk meretas/hal negatif.</p>
+                    </div>
+                </div>
+                <div class="bg-dark p-5 rounded-xl border border-gray-800 flex items-start gap-4">
+                    <div class="bg-purple-900/50 p-3 rounded-lg text-purple-400"><i class="fas fa-gamepad text-xl"></i></div>
+                    <div>
+                        <h4 class="font-bold text-gray-200">Fokus Praktik</h4>
+                        <p class="text-sm text-gray-400">Dilarang bermain game atau membuka sosmed saat jam pelajaran berlangsung.</p>
+                    </div>
+                </div>
+                <div class="bg-dark p-5 rounded-xl border border-gray-800 flex items-start gap-4">
+                    <div class="bg-teal-900/50 p-3 rounded-lg text-teal-400"><i class="fas fa-tasks text-xl"></i></div>
+                    <div>
+                        <h4 class="font-bold text-gray-200">Tuntas Proyek</h4>
+                        <p class="text-sm text-gray-400">Setiap bab memiliki output praktik yang harus diselesaikan.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Message from Teacher -->
+    <section class="py-24 bg-grid relative overflow-hidden">
+        <div class="absolute inset-0 bg-dark/90"></div>
+        <div class="container mx-auto px-6 max-w-4xl relative z-10 text-center reveal">
+            <i class="fas fa-quote-left text-4xl text-gray-600 mb-6 opacity-50"></i>
+            <p class="text-xl md:text-2xl text-gray-300 italic leading-relaxed mb-8">
+                "Selama satu tahun ke depan, kita tidak hanya belajar teori. Kita akan belajar dengan praktik langsung seperti yang dilakukan seorang <strong>System Administrator di dunia kerja</strong>. Jangan takut melakukan kesalahan (error) saat mencoba, karena setiap error adalah bagian dari proses belajar (troubleshooting). Jika kalian tekun dan konsisten, di akhir tahun kalian akan mampu membangun server sendiri dan memiliki bekal yang bermanfaat untuk PKL, sertifikasi, maupun dunia kerja."
+            </p>
+            <div>
+                <h4 class="text-xl font-bold text-primary">Khalid Nabawi, S.Kom.</h4>
+                <p class="text-gray-500 text-sm">Guru Pengampu ASJ - SMK Bintang Raudloh</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-darker border-t border-gray-800 py-8 text-center text-gray-500 text-sm">
+        <p>&copy; 2026/2027 SMK Bintang Raudloh. Dibuat untuk Presentasi Kelas ASJ XI.</p>
+    </footer>
+
+    <script>
+        // Typewriter Effect for Terminal
+        const textToType = "cat roadmap-asj-kelas-11.txt";
+        const typewriterElement = document.getElementById('typewriter');
+        let index = 0;
+
+        function typeWriter() {
+            if (index < textToType.length) {
+                typewriterElement.innerHTML += textToType.charAt(index);
+                index++;
+                setTimeout(typeWriter, 100);
+            }
+        }
+
+        // Start typing effect shortly after load
+        setTimeout(typeWriter, 1000);
+
+        // Scroll Reveal Animation via Intersection Observer
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 100; // when to trigger
+
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+
+        // Add event listener for scroll
+        window.addEventListener("scroll", reveal);
+        
+        // Trigger once on load to show visible elements
+        reveal();
+    </script>
+</body>
+</html>
