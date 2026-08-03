@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bab 2 – Hardware dan Sistem Operasi Server | ASJ Kelas XI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        dark: '#0f172a',
+                        darker: '#020617',
+                        primary: '#10b981',
+                        secondary: '#3b82f6',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #020617; color: #e2e8f0; }
+        .bg-grid {
+            background-image: linear-gradient(to right, #1e293b 1px, transparent 1px),
+                              linear-gradient(to bottom, #1e293b 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #10b981; border-radius: 5px; }
+
+        .quiz-option {
+            transition: all .2s ease;
+        }
+        .quiz-option:hover {
+            border-color: #10b981;
+        }
+        .quiz-option.selected {
+            border-color: #10b981;
+            background-color: rgba(16, 185, 129, 0.1);
+        }
+        .quiz-option.correct-answer {
+            border-color: #10b981 !important;
+            background-color: rgba(16, 185, 129, 0.15) !important;
+        }
+        .quiz-option.wrong-answer {
+            border-color: #ef4444 !important;
+            background-color: rgba(239, 68, 68, 0.1) !important;
+        }
+        .quiz-option.locked {
+            pointer-events: none;
+        }
+        details.jawaban-box summary { cursor: pointer; }
+        details.jawaban-box[open] summary { color: #10b981; }
+
+        .tbl-compare { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+        .tbl-compare th, .tbl-compare td { border: 1px solid #1e293b; padding: 10px 12px; text-align: left; vertical-align: top; }
+        .tbl-compare th { background-color: rgba(30, 41, 59, 0.6); color: #fff; font-weight: 600; }
+        .tbl-compare tr:nth-child(even) td { background-color: rgba(30, 41, 59, 0.25); }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Navbar -->
+    <nav class="bg-dark border-b border-gray-800 py-4 sticky top-0 z-30">
+        <div class="container mx-auto px-6 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-2 text-gray-300 hover:text-primary transition-colors">
+                <i class="fas fa-arrow-left"></i>
+                <span class="font-semibold hidden sm:inline">Kembali ke Roadmap</span>
+            </a>
+            <div class="flex items-center gap-2 text-sm text-gray-400 font-mono">
+                <i class="fas fa-server text-primary"></i>
+                <span>Bab 2 / 18</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="bg-grid relative overflow-hidden py-16 border-b border-gray-800">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-darker"></div>
+        <div class="container mx-auto px-6 relative z-10 max-w-4xl text-center">
+            <span class="bg-primary/20 text-primary py-1 px-4 rounded-full text-sm font-bold tracking-wider mb-4 inline-block">SEMESTER GANJIL &bull; BAB 2</span>
+            <h1 class="text-3xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+                Hardware dan Sistem Operasi Server
+            </h1>
+            <p class="text-gray-400 text-lg">Output: Siswa mengenal perangkat keras server dan mampu memilih sistem operasi yang tepat.</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 max-w-4xl py-16 space-y-16">
+
+        <!-- 1. PENDAHULUAN -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-flag-checkered"></i></div>
+                <h2 class="text-2xl font-bold text-white">1. Pendahuluan</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-4 text-gray-300 leading-relaxed">
+                <p>Di Bab 1, kamu sudah berkenalan dengan dunia System Administrator dan tahu bahwa server adalah "dapur" di balik semua layanan digital. Sekarang pertanyaannya: sebelum kita mulai belajar meng-install dan mengatur Linux Server di bab-bab berikutnya, kenapa kita harus belajar hardware-nya dulu?</p>
+                <p>Jawabannya sederhana: seorang teknisi yang hebat harus mengenal "tubuh" dari alat yang ia kerjakan. Sama seperti dokter yang harus paham anatomi tubuh manusia sebelum bisa mendiagnosis penyakit, seorang calon System Administrator harus paham komponen fisik server sebelum bisa memasang, merawat, atau memperbaikinya. Salah pasang RAM atau salah pilih spesifikasi bisa membuat server tidak berjalan sama sekali, bahkan sebelum sistem operasinya sempat dinyalakan.</p>
+                <div class="bg-gray-800/50 p-4 rounded-lg border-l-4 border-primary">
+                    <p class="text-sm"><strong class="text-primary">Hubungan dengan dunia industri:</strong> Di perusahaan sungguhan, sebelum tim IT bisa menjalankan aplikasi atau website, mereka harus lebih dulu menentukan: server jenis apa yang dibeli, spesifikasi apa yang dibutuhkan, dan sistem operasi apa yang paling cocok. Keputusan ini disebut <em>perencanaan infrastruktur</em>, dan biasanya menjadi tugas awal seorang Data Center Engineer atau System Administrator junior sebelum naik ke tahap konfigurasi lanjutan.</p>
+                </div>
+                <p>Di Bab 2 ini kamu akan belajar mengenal komponen hardware server, jenis-jenis bentuk server, cara membaca spesifikasi, perbandingan Linux vs Windows Server, cara memilih sistem operasi yang tepat, hingga praktik langsung mengenali perangkat server secara fisik. Anggap ini seperti kelas "kenalan dulu sebelum pacaran" — kamu perlu kenal dulu dengan hardware-nya sebelum mulai "berhubungan" lewat baris-baris perintah Linux di bab selanjutnya.</p>
+            </div>
+        </section>
+
+        <!-- 2. MATERI 1: HARDWARE SERVER -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-microchip"></i></div>
+                <h2 class="text-2xl font-bold text-white">2. Hardware Server</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-4 text-gray-300 leading-relaxed">
+                <p><strong class="text-white">Hardware server</strong> adalah seluruh perangkat keras fisik yang menyusun sebuah server, mulai dari komponen di dalam casing (motherboard, CPU, RAM) sampai perangkat pendukung di luarnya (UPS, rack, KVM switch).</p>
+                <p class="font-semibold text-white mt-2">Kenapa server butuh hardware khusus, bukan komputer biasa?</p>
+                <p>Komputer rumahan biasanya dipakai beberapa jam sehari, lalu dimatikan. Server sebaliknya, harus menyala <strong class="text-white">24 jam nonstop</strong>, melayani puluhan hingga jutaan permintaan sekaligus, dan tidak boleh sering mati karena bisa merugikan bisnis. Karena itu hardware server dirancang lebih tahan banting, lebih mudah diperbaiki tanpa mematikan sistem (disebut <em>hot-swap</em>), dan punya komponen cadangan (<em>redundancy</em>) supaya kalau satu bagian rusak, server tetap bisa berjalan.</p>
+                <div class="bg-gray-800/50 p-4 rounded-lg border-l-4 border-primary">
+                    <p class="text-sm"><strong class="text-primary">Analogi:</strong> Komputer rumahan itu seperti sepeda motor harian — cukup andal untuk pemakaian normal. Server itu seperti truk pengangkut logistik yang jalan nonstop siang-malam — harus dibuat dari komponen yang lebih kuat, dengan mesin cadangan dan perawatan rutin, karena kalau berhenti di tengah jalan, banyak pihak yang dirugikan.</p>
+                </div>
+
+                <p class="font-semibold text-white mt-4 mb-2">Komponen-komponen Utama Hardware Server</p>
+                <div class="space-y-3">
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold"><i class="fas fa-diagram-project text-secondary mr-2"></i>Motherboard (Papan Induk)</p>
+                        <p class="text-sm mt-1"><strong>Fungsi:</strong> Papan sirkuit utama yang menghubungkan seluruh komponen server agar bisa saling "berbicara". <strong>Cara kerja:</strong> Setiap komponen (CPU, RAM, storage) dipasang ke slot khusus di motherboard, lalu data mengalir melalui jalur listrik kecil (disebut <em>bus</em>) di dalamnya. <strong>Analogi:</strong> Motherboard itu seperti jalan raya kota — menghubungkan semua "gedung" (komponen) agar bisa saling terhubung. <strong>Contoh:</strong> Motherboard server biasanya mendukung lebih banyak slot RAM dan CPU dibanding motherboard PC rumahan.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold"><i class="fas fa-microchip text-secondary mr-2"></i>Processor / CPU (Central Processing Unit)</p>
+                        <p class="text-sm mt-1"><strong>Fungsi:</strong> "Otak" server yang mengeksekusi seluruh instruksi dan perhitungan. <strong>Cara kerja:</strong> CPU menerima instruksi dari sistem operasi, memprosesnya dalam hitungan nanodetik, lalu mengirim hasilnya ke komponen lain. <strong>Analogi:</strong> CPU itu seperti kepala koki di dapur restoran besar — menerima banyak pesanan sekaligus dan mengatur mana yang dikerjakan lebih dulu. <strong>Contoh:</strong> CPU server (seperti Intel Xeon atau AMD EPYC) punya lebih banyak <em>core</em> dibanding CPU laptop biasa, agar sanggup menangani banyak proses sekaligus.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold"><i class="fas fa-memory text-secondary mr-2"></i>RAM ECC (Error-Correcting Code)</p>
+                        <p class="text-sm mt-1"><strong>Fungsi:</strong> Menyimpan data sementara yang sedang diproses CPU, dengan kemampuan tambahan mendeteksi dan memperbaiki kesalahan data secara otomatis. <strong>Cara kerja:</strong> RAM biasa hanya menyimpan data; RAM ECC menambahkan bit ekstra untuk mengecek apakah data yang tersimpan berubah karena gangguan listrik, lalu memperbaikinya sebelum menyebabkan error. <strong>Analogi:</strong> RAM ECC seperti staf yang tidak hanya mencatat pesanan tapi juga mengecek ulang agar tidak salah tulis. <strong>Contoh:</strong> Server bank wajib pakai RAM ECC karena satu bit data yang salah bisa berarti selisih saldo nasabah.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold"><i class="fas fa-hdd text-secondary mr-2"></i>Harddisk (HDD)</p>
+                        <p class="text-sm mt-1"><strong>Fungsi:</strong> Media penyimpanan data permanen menggunakan piringan magnetik yang berputar. <strong>Cara kerja:</strong> Sebuah "jarum" pembaca (head) bergerak di atas piringan yang berputar untuk membaca dan menulis data. <strong>Analogi:</strong> HDD seperti piringan hitam (vinyl) yang dibaca oleh jarum turntable. <strong>Contoh:</strong> Server file dengan kebutuhan storage besar tapi tidak butuh kecepatan tinggi (misalnya arsip dokumen) sering masih memakai HDD karena harga per gigabyte-nya lebih murah.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold"><i class="fas fa-sd-card text-secondary mr-2"></i>SSD (Solid State Drive)</p>
+                        <p class="text-sm mt-1"><strong>Fungsi:</strong> Media penyimpanan data permanen tanpa komponen bergerak, menggunakan chip memori flash. <strong>Cara kerja:</strong> Data disimpan secara elektronik pada sel-sel memori, sehingga bisa dibaca/ditulis jauh lebih cepat dibanding HDD dan tidak mudah rusak karena guncangan. <strong>Analogi:</strong> Kalau HDD seperti piringan hitam, SSD seperti flashdisk berkapasitas besar — tanpa bagian yang berputar. <strong>Contoh:</strong> Server database sering pakai SSD supaya proses baca-tulis data pelanggan jauh lebih cepat.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold"><i class="fas fa-bolt-lightning text-secondary mr-2"></i>NVMe SSD</p>
+                        <p class="text-sm mt-1"><strong>Fungsi:</strong> Jenis SSD generasi terbaru yang terhubung langsung ke jalur data tercepat di motherboard (disebut PCIe), bukan lewat jalur SATA yang lebih lambat. <strong>Cara kerja:</strong> Karena "jalan tol" datanya lebih lebar, NVMe bisa memindahkan data beberapa kali lebih cepat dari SSD SATA biasa. <strong>Analogi:</strong> Kalau SSD SATA itu jalan tol dua lajur, NVMe adalah jalan tol delapan lajur untuk kendaraan yang sama. <strong>Contoh:</strong> Server yang menjalankan database besar dengan traffic tinggi (misalnya aplikasi e-commerce nasional) banyak memakai NVMe agar tidak terjadi antrean data.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold"><i class="fas fa-layer-group text-secondary mr-2"></i>RAID Controller</p>
+                        <p class="text-sm mt-1"><strong>Fungsi:</strong> Perangkat yang mengatur beberapa harddisk/SSD agar bekerja sebagai satu kesatuan, baik untuk mempercepat akses data maupun melindungi data dari kerusakan satu disk. <strong>Cara kerja:</strong> Data dipecah dan/atau digandakan ke beberapa disk sekaligus mengikuti pola tertentu (disebut level RAID, misalnya RAID 1 untuk menggandakan data, RAID 5 untuk kombinasi kecepatan dan keamanan). <strong>Analogi:</strong> Seperti menyalin dokumen penting ke beberapa lemari berbeda — kalau satu lemari terbakar, salinan di lemari lain masih aman. <strong>Contoh:</strong> Server penyimpanan foto sebuah studio memakai RAID 1 agar data pelanggan tetap aman meski satu harddisk tiba-tiba rusak.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold"><i class="fas fa-plug text-secondary mr-2"></i>Power Supply Unit (PSU)</p>
+                        <p class="text-sm mt-1"><strong>Fungsi:</strong> Mengubah arus listrik dari stop kontak (AC) menjadi arus yang dibutuhkan komponen server (DC), dengan tegangan yang stabil. <strong>Cara kerja:</strong> PSU menyaring dan mengonversi listrik agar aman dialirkan ke motherboard, CPU, storage, dan komponen lainnya. <strong>Analogi:</strong> PSU seperti trafo pada gardu listrik — mengubah listrik besar dari luar menjadi listrik yang aman dipakai di dalam rumah. <strong>Contoh:</strong> Server yang menyala nonstop butuh PSU dengan efisiensi tinggi agar tidak boros listrik dan tidak cepat panas.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold"><i class="fas fa-plug-circle-bolt text-secondary mr-2"></i>Dual Power Supply</p>
+                        <p class="text-sm mt-1"><strong>Fungsi:</strong> Dua unit PSU yang dipasang sekaligus dalam satu server sebagai cadangan satu sama lain. <strong>Cara kerja:</strong> Jika satu PSU rusak atau kehilangan sumber listrik, PSU kedua otomatis mengambil alih tanpa mematikan server. <strong>Analogi:</strong> Seperti pesawat terbang yang punya dua mesin — jika satu mesin bermasalah, pesawat tetap bisa terbang dengan mesin yang lain. <strong>Contoh:</strong> Server perusahaan besar sering dipasangi dua PSU yang masing-masing terhubung ke jalur listrik berbeda, agar tetap menyala meski salah satu jalur listrik padam.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold"><i class="fas fa-fan text-secondary mr-2"></i>Cooling Fan (Kipas Pendingin)</p>
+                        <p class="text-sm mt-1"><strong>Fungsi:</strong> Mendinginkan komponen server yang menghasilkan panas tinggi saat bekerja terus-menerus. <strong>Cara kerja:</strong> Kipas menghembuskan udara melewati heatsink (logam penyerap panas) di atas CPU dan komponen lain, membawa panas keluar dari casing. <strong>Analogi:</strong> Seperti kipas angin yang meniup ke arah tubuh yang berkeringat supaya lebih cepat dingin. <strong>Contoh:</strong> Rack server biasanya punya banyak kipas kecil berkecepatan tinggi karena ruang di dalam casing rack sangat sempit dan padat komponen.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold"><i class="fas fa-ethernet text-secondary mr-2"></i>NIC (Network Interface Card)</p>
+                        <p class="text-sm mt-1"><strong>Fungsi:</strong> Kartu jaringan yang menghubungkan server ke jaringan komputer (LAN/internet) menggunakan kabel Ethernet. <strong>Cara kerja:</strong> NIC mengubah data digital di dalam server menjadi sinyal listrik yang dikirim lewat kabel jaringan, dan sebaliknya. <strong>Analogi:</strong> NIC seperti pintu gerbang rumah yang menghubungkan rumahmu (server) dengan jalan raya (jaringan). <strong>Contoh:</strong> Server penting biasanya punya lebih dari satu NIC agar tetap terhubung ke jaringan meski satu kabel/port bermasalah.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold"><i class="fas fa-server text-secondary mr-2"></i>Rack Server (Casing Rak)</p>
+                        <p class="text-sm mt-1"><strong>Fungsi:</strong> Casing server berbentuk tipis dan memanjang, dirancang untuk dipasang bertumpuk di dalam lemari rak khusus (disebut server rack). <strong>Cara kerja:</strong> Ukurannya distandarkan dalam satuan "U" (1U setara ±4,45 cm) agar bisa ditumpuk rapi dan menghemat ruang. <strong>Analogi:</strong> Seperti rak buku di perpustakaan — banyak "buku" (server) disusun rapi dalam satu rak agar hemat tempat. <strong>Contoh:</strong> Data center bisa menyimpan puluhan rack server dalam satu ruangan berkat desain rack yang efisien ruang.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold"><i class="fas fa-car-battery text-secondary mr-2"></i>UPS (Uninterruptible Power Supply)</p>
+                        <p class="text-sm mt-1"><strong>Fungsi:</strong> Baterai cadangan yang otomatis menyuplai listrik ke server saat listrik utama padam mendadak. <strong>Cara kerja:</strong> UPS terus mengisi daya selagi listrik normal; begitu listrik padam, baterainya langsung mengambil alih dalam hitungan milidetik sehingga server tidak sempat mati mendadak. <strong>Analogi:</strong> UPS seperti power bank otomatis yang langsung menyala begitu casan HP-mu putus tiba-tiba. <strong>Contoh:</strong> UPS memberi waktu beberapa menit bagi administrator untuk mematikan server dengan aman (bukan mati paksa) saat listrik PLN padam.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold"><i class="fas fa-desktop text-secondary mr-2"></i>KVM Switch (Keyboard, Video, Mouse)</p>
+                        <p class="text-sm mt-1"><strong>Fungsi:</strong> Perangkat yang memungkinkan satu set keyboard, monitor, dan mouse dipakai bergantian untuk mengendalikan banyak server sekaligus. <strong>Cara kerja:</strong> Teknisi tinggal menekan tombol pada KVM switch untuk berpindah "mengendalikan" server mana yang sedang aktif di layar. <strong>Analogi:</strong> Seperti remote TV universal yang bisa dipakai untuk mengganti-ganti channel di beberapa TV berbeda tanpa perlu remote terpisah. <strong>Contoh:</strong> Di ruang server dengan puluhan rack, teknisi tidak perlu monitor dan keyboard terpisah untuk tiap server — cukup satu KVM switch untuk semuanya.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. MATERI 2: JENIS SERVER -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-shapes"></i></div>
+                <h2 class="text-2xl font-bold text-white">3. Jenis-Jenis Server</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-4 text-gray-300 leading-relaxed">
+                <p>Server tidak selalu berbentuk sama. Bentuk fisik (atau bahkan ketiadaan bentuk fisik, untuk server virtual/cloud) dipilih menyesuaikan kebutuhan ruang, anggaran, dan skala perusahaan.</p>
+                <div class="overflow-x-auto">
+                    <table class="tbl-compare">
+                        <thead>
+                            <tr>
+                                <th>Jenis</th>
+                                <th>Bentuk</th>
+                                <th>Kelebihan</th>
+                                <th>Kekurangan</th>
+                                <th>Penggunaan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong class="text-white">Tower Server</strong></td>
+                                <td>Berdiri tegak seperti PC desktop biasa, ukuran besar.</td>
+                                <td>Harga relatif murah, mudah dirawat, tidak butuh rack khusus.</td>
+                                <td>Memakan banyak ruang, kurang efisien untuk skala besar.</td>
+                                <td>Kantor kecil, sekolah, usaha rintisan.</td>
+                            </tr>
+                            <tr>
+                                <td><strong class="text-white">Rack Server</strong></td>
+                                <td>Tipis memanjang, dipasang bertumpuk dalam lemari rack.</td>
+                                <td>Hemat ruang, mudah ditambah/dikurangi, rapi untuk banyak server.</td>
+                                <td>Butuh rack, pendingin ruangan, dan instalasi khusus.</td>
+                                <td>Kantor menengah-besar, data center kecil.</td>
+                            </tr>
+                            <tr>
+                                <td><strong class="text-white">Blade Server</strong></td>
+                                <td>Modul tipis ("blade") yang ditancapkan ke satu casing (chassis) bersama.</td>
+                                <td>Sangat hemat ruang & kabel, mudah dikelola dalam jumlah banyak.</td>
+                                <td>Harga mahal, satu chassis rusak bisa memengaruhi banyak blade.</td>
+                                <td>Data center besar, perusahaan skala enterprise.</td>
+                            </tr>
+                            <tr>
+                                <td><strong class="text-white">Mini Server</strong></td>
+                                <td>Berukuran kecil seperti mini PC, hemat daya.</td>
+                                <td>Hemat listrik & tempat, biaya rendah, cocok untuk pemula.</td>
+                                <td>Kapasitas dan performa terbatas untuk beban berat.</td>
+                                <td>Belajar/lab pribadi, warnet kecil, IoT sederhana.</td>
+                            </tr>
+                            <tr>
+                                <td><strong class="text-white">Cloud Server</strong></td>
+                                <td>Tidak berwujud fisik bagi penggunanya — disewa lewat internet.</td>
+                                <td>Fleksibel (skala naik/turun sesuai kebutuhan), tanpa perlu beli hardware.</td>
+                                <td>Biaya sewa berjalan terus, bergantung pada koneksi internet & vendor.</td>
+                                <td>Startup, aplikasi dengan trafik naik-turun, bisnis online.</td>
+                            </tr>
+                            <tr>
+                                <td><strong class="text-white">Virtual Server (VPS)</strong></td>
+                                <td>Server "virtual" hasil pembagian satu server fisik menjadi beberapa bagian.</td>
+                                <td>Lebih murah dari server fisik utuh, tetap punya kontrol penuh (root access).</td>
+                                <td>Performa berbagi dengan VPS lain dalam satu mesin fisik yang sama.</td>
+                                <td>Hosting website, aplikasi skala kecil-menengah, belajar Linux Server.</td>
+                            </tr>
+                            <tr>
+                                <td><strong class="text-white">NAS Server</strong></td>
+                                <td>Kotak penyimpanan khusus yang terhubung ke jaringan, fokus pada storage.</td>
+                                <td>Mudah dipakai, harga terjangkau, cocok untuk berbagi file/backup.</td>
+                                <td>Kurang fleksibel untuk menjalankan aplikasi berat selain file sharing.</td>
+                                <td>Backup kantor kecil, penyimpanan file bersama, media server rumahan.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. MATERI 3: SPESIFIKASI SERVER -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-list-ol"></i></div>
+                <h2 class="text-2xl font-bold text-white">4. Spesifikasi Server</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-4 text-gray-300 leading-relaxed">
+                <p>Membaca spesifikasi server itu seperti membaca "kartu kesehatan" sebuah mesin — semakin kamu paham istilahnya, semakin mudah kamu menentukan server mana yang cocok untuk suatu kebutuhan.</p>
+                <ul class="space-y-3">
+                    <li class="flex items-start gap-3"><i class="fas fa-microchip text-primary mt-1"></i><span><strong class="text-white">CPU</strong> — jumlah dan kecepatan prosesor; server dengan beban berat butuh CPU dengan banyak core/thread.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-layer-group text-primary mt-1"></i><span><strong class="text-white">Core</strong> — "unit otak" fisik di dalam satu CPU; makin banyak core, makin banyak proses yang bisa dikerjakan bersamaan secara nyata.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-code-branch text-primary mt-1"></i><span><strong class="text-white">Thread</strong> — "jalur proses" virtual dalam satu core; satu core modern biasanya bisa menjalankan 2 thread berkat teknologi seperti Hyper-Threading, sehingga terasa lebih gesit menangani banyak tugas kecil sekaligus.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-memory text-primary mt-1"></i><span><strong class="text-white">RAM</strong> — kapasitas memori sementara; makin banyak pengguna/aplikasi yang dilayani bersamaan, makin besar RAM yang dibutuhkan.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-hdd text-primary mt-1"></i><span><strong class="text-white">Storage</strong> — kapasitas dan jenis penyimpanan (HDD/SSD/NVMe) untuk menampung sistem, aplikasi, dan data.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-network-wired text-primary mt-1"></i><span><strong class="text-white">Network</strong> — kecepatan dan jumlah port jaringan (misalnya 1 Gbps atau 10 Gbps) yang menentukan seberapa cepat data bisa keluar-masuk server.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-bolt text-primary mt-1"></i><span><strong class="text-white">Power</strong> — daya listrik yang dibutuhkan server (dalam watt), memengaruhi biaya listrik dan kebutuhan pendingin.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-shield-halved text-primary mt-1"></i><span><strong class="text-white">Redundancy</strong> — komponen cadangan (PSU ganda, disk ganda) agar server tetap jalan walau satu bagian rusak.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-layer-group text-primary mt-1"></i><span><strong class="text-white">RAID</strong> — pengaturan gabungan beberapa disk untuk kecepatan dan/atau keamanan data tambahan.</span></li>
+                </ul>
+
+                <p class="font-semibold text-white mt-4 mb-2">Contoh Spesifikasi Berdasarkan Skala Kebutuhan</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="bg-gray-800/40 p-4 rounded-lg space-y-1">
+                        <p class="text-white font-semibold"><i class="fas fa-school text-secondary mr-2"></i>Server Sekolah</p>
+                        <p class="text-sm">CPU 4 core, RAM 8–16 GB, Storage SSD 256–512 GB, Network 1 Gbps, PSU tunggal.</p>
+                        <p class="text-sm text-gray-400">Cukup untuk absensi digital, e-learning, dan file sharing skala sekolah.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg space-y-1">
+                        <p class="text-white font-semibold"><i class="fas fa-gamepad text-secondary mr-2"></i>Server Warnet</p>
+                        <p class="text-sm">CPU 6–8 core, RAM 16–32 GB, Storage NVMe 512 GB–1 TB, Network 1 Gbps.</p>
+                        <p class="text-sm text-gray-400">Fokus kecepatan baca-tulis untuk game/streaming banyak client sekaligus.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg space-y-1">
+                        <p class="text-white font-semibold"><i class="fas fa-building text-secondary mr-2"></i>Server Perusahaan</p>
+                        <p class="text-sm">CPU 16–32 core (bisa dual CPU), RAM 64–128 GB, Storage RAID SSD, Dual PSU, Network 10 Gbps.</p>
+                        <p class="text-sm text-gray-400">Melayani banyak aplikasi bisnis sekaligus dengan redundancy tinggi.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg space-y-1">
+                        <p class="text-white font-semibold"><i class="fas fa-warehouse text-secondary mr-2"></i>Server Data Center</p>
+                        <p class="text-sm">CPU multi-core kelas enterprise (puluhan-ratusan core per rack), RAM ratusan GB–TB, Storage RAID skala besar, Network 10–100 Gbps, redundancy penuh.</p>
+                        <p class="text-sm text-gray-400">Melayani ribuan hingga jutaan pengguna, biasanya dikelola banyak tim sekaligus.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. MATERI 4: LINUX VS WINDOWS SERVER -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-code-compare"></i></div>
+                <h2 class="text-2xl font-bold text-white">5. Linux vs Windows Server</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-4 text-gray-300 leading-relaxed">
+                <p>Ini adalah salah satu keputusan paling penting seorang administrator: sistem operasi apa yang dipakai untuk server. Berikut perbandingannya:</p>
+                <div class="overflow-x-auto">
+                    <table class="tbl-compare">
+                        <thead>
+                            <tr><th>Aspek</th><th><i class="fab fa-linux mr-1"></i>Linux Server</th><th><i class="fab fa-windows mr-1"></i>Windows Server</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong class="text-white">Harga</strong></td><td>Gratis (sebagian besar distro open source).</td><td>Berbayar, butuh lisensi resmi dari Microsoft.</td></tr>
+                            <tr><td><strong class="text-white">Lisensi</strong></td><td>Open Source, source code bisa dilihat & dimodifikasi.</td><td>Proprietary (tertutup), hanya Microsoft yang mengelola kode sumbernya.</td></tr>
+                            <tr><td><strong class="text-white">Keamanan</strong></td><td>Umumnya dianggap lebih tahan malware, celah cepat ditambal komunitas.</td><td>Sering jadi target malware karena banyak dipakai, tapi terus diperkuat Microsoft.</td></tr>
+                            <tr><td><strong class="text-white">Stabilitas</strong></td><td>Sangat stabil, banyak server bisa menyala bertahun-tahun tanpa restart.</td><td>Stabil, namun beberapa update besar kadang membutuhkan restart.</td></tr>
+                            <tr><td><strong class="text-white">Performa</strong></td><td>Ringan, cocok untuk hardware terbatas maupun skala besar.</td><td>Butuh resource lebih besar karena tampilan grafis yang lebih berat.</td></tr>
+                            <tr><td><strong class="text-white">Kemudahan</strong></td><td>Butuh waktu belajar Command Line, kurva belajar lebih curam di awal.</td><td>Lebih mudah bagi pemula karena tampilan mirip Windows biasa (GUI).</td></tr>
+                            <tr><td><strong class="text-white">Komunitas</strong></td><td>Komunitas open source sangat besar & aktif di seluruh dunia.</td><td>Dukungan resmi dari Microsoft, forum komunitas juga cukup besar.</td></tr>
+                            <tr><td><strong class="text-white">Software</strong></td><td>Kaya software server open source (Apache, Nginx, MySQL, dll).</td><td>Unggul untuk software berbasis ekosistem Microsoft (.NET, SQL Server, Active Directory).</td></tr>
+                            <tr><td><strong class="text-white">Update</strong></td><td>Update lebih sering, biasanya tidak butuh restart total.</td><td>Update terjadwal, terkadang butuh restart penuh sistem.</td></tr>
+                            <tr><td><strong class="text-white">Command Line</strong></td><td>Sangat kuat & fleksibel (Bash/Terminal) menjadi andalan utama.</td><td>Tersedia (PowerShell/CMD) namun bukan cara utama kebanyakan pengguna.</td></tr>
+                            <tr><td><strong class="text-white">GUI</strong></td><td>Server umumnya tanpa tampilan grafis (mode teks/CLI) demi efisiensi.</td><td>Umumnya memakai tampilan grafis penuh, familiar bagi pengguna awam.</td></tr>
+                            <tr><td><strong class="text-white">Penggunaan</strong></td><td>Web server, cloud, DevOps, big data, hampir semua infrastruktur internet skala besar.</td><td>Perusahaan yang sudah memakai ekosistem Microsoft (Active Directory, SQL Server, aplikasi .NET).</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="font-semibold text-white mt-2">Kapan memilih Linux, kapan memilih Windows Server?</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="bg-gray-800/50 p-4 rounded-lg border-l-4 border-primary text-sm">
+                        <p class="font-semibold text-primary mb-1"><i class="fab fa-linux mr-1"></i> Pilih Linux jika...</p>
+                        <p>Butuh biaya rendah, akan menjalankan web server/aplikasi open source, ingin performa maksimal dengan resource terbatas, atau sedang belajar dasar administrasi server (seperti kelas ASJ ini).</p>
+                    </div>
+                    <div class="bg-gray-800/50 p-4 rounded-lg border-l-4 border-secondary text-sm">
+                        <p class="font-semibold text-secondary mb-1"><i class="fab fa-windows mr-1"></i> Pilih Windows Server jika...</p>
+                        <p>Perusahaan sudah bergantung pada ekosistem Microsoft (Active Directory, Exchange, aplikasi .NET) atau tim IT lebih familiar dengan tampilan grafis Windows.</p>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-400 mt-2">Catatan: kelas ASJ ini akan fokus belajar <strong class="text-white">Linux Server (Ubuntu Server)</strong> mulai Bab 4, karena gratis, ringan, dan menjadi standar industri untuk web hosting dan cloud saat ini.</p>
+            </div>
+        </section>
+
+        <!-- 6. MATERI 5: MEMILIH SISTEM OPERASI SERVER -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-list-check"></i></div>
+                <h2 class="text-2xl font-bold text-white">6. Memilih Sistem Operasi Server</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-4 text-gray-300 leading-relaxed">
+                <p>Tidak ada sistem operasi yang "paling benar" — yang ada adalah sistem operasi yang paling cocok dengan kebutuhan. Berikut faktor yang wajib dipertimbangkan administrator sebelum memilih:</p>
+                <ul class="space-y-3">
+                    <li class="flex items-start gap-3"><i class="fas fa-list-check text-primary mt-1"></i><span><strong class="text-white">Jenis layanan</strong> — server web butuh OS yang ringan; server dengan software Windows khusus (misal aplikasi akuntansi lawas) mungkin wajib pakai Windows Server.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-microchip text-primary mt-1"></i><span><strong class="text-white">Hardware</strong> — hardware terbatas biasanya lebih optimal dengan Linux yang lebih ringan.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-money-bill-wave text-primary mt-1"></i><span><strong class="text-white">Budget</strong> — Linux menghemat biaya lisensi tahunan yang bisa sangat mahal pada Windows Server skala besar.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-shield-halved text-primary mt-1"></i><span><strong class="text-white">Keamanan</strong> — pertimbangkan riwayat celah keamanan dan kecepatan penambalannya untuk masing-masing OS.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-screwdriver-wrench text-primary mt-1"></i><span><strong class="text-white">Kemudahan maintenance</strong> — tim yang sudah terbiasa dengan salah satu OS akan lebih cepat dan aman merawatnya.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-puzzle-piece text-primary mt-1"></i><span><strong class="text-white">Kompatibilitas software</strong> — pastikan software yang dibutuhkan tersedia dan didukung penuh di OS pilihan.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-people-group text-primary mt-1"></i><span><strong class="text-white">Dukungan komunitas</strong> — komunitas besar mempercepat proses mencari solusi saat terjadi masalah teknis.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-arrow-up-right-dots text-primary mt-1"></i><span><strong class="text-white">Skalabilitas</strong> — pertimbangkan apakah OS mudah "diperbesar" (ditambah resource/server) saat kebutuhan berkembang di masa depan.</span></li>
+                </ul>
+                <div class="bg-gray-800/50 p-4 rounded-lg border-l-4 border-yellow-500 mt-2">
+                    <p class="font-semibold text-white text-sm mb-1"><i class="fas fa-scale-balanced mr-2 text-yellow-500"></i>Studi Kasus Singkat</p>
+                    <p class="text-sm">Sebuah startup e-commerce baru berdiri dengan modal terbatas. Mereka ingin membangun website dengan biaya operasional serendah mungkin, namun tetap bisa berkembang pesat jika pengunjung melonjak. Tim IT-nya sudah cukup terbiasa dengan Command Line. Berdasarkan faktor-faktor di atas, sistem operasi apa yang paling masuk akal untuk dipilih, dan mengapa?</p>
+                    <p class="text-sm mt-2 text-gray-400"><em>(Diskusikan di kelas — jawaban idealnya mempertimbangkan budget rendah, kebutuhan skalabilitas tinggi, dan kesiapan tim dengan Command Line, yang mengarah ke pemilihan Linux Server.)</em></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. MATERI 6: MENGENAL PERANGKAT SERVER SECARA LANGSUNG -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-hand-sparkles"></i></div>
+                <h2 class="text-2xl font-bold text-white">7. Mengenal Perangkat Server Secara Langsung</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-4 text-gray-300 leading-relaxed">
+                <p>Sebelum praktik langsung memegang server sungguhan, pahami dulu langkah-langkah dasar berikut. Selalu ikuti prosedur keselamatan kerja karena kamu sedang berhadapan dengan perangkat listrik dan komponen sensitif.</p>
+                <ul class="space-y-3">
+                    <li class="flex items-start gap-3"><i class="fas fa-magnifying-glass text-primary mt-1"></i><span><strong class="text-white">Cara mengidentifikasi server</strong> — lihat label/stiker pada casing yang biasanya mencantumkan merek, model, dan nomor seri; bentuk fisik rack/tower juga membantu mengenali jenisnya.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-eye text-primary mt-1"></i><span><strong class="text-white">Cara melihat spesifikasi</strong> — spesifikasi bisa dilihat lewat stiker di casing, dokumen pembelian, atau lewat sistem operasi menggunakan perintah khusus (akan dipelajari lebih detail di Bab 5).</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-ethernet text-primary mt-1"></i><span><strong class="text-white">Cara mengenali port</strong> — port jaringan (RJ45) biasanya berwarna kuning-hijau dengan lampu indikator, port power terhubung ke PSU, port USB/VGA untuk KVM dan perangkat tambahan.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-lightbulb text-primary mt-1"></i><span><strong class="text-white">Cara mengenali lampu indikator</strong> — lampu hijau biasanya berarti normal, kuning/oranye berarti peringatan, dan merah berarti ada komponen yang bermasalah dan perlu dicek segera.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-box-open text-primary mt-1"></i><span><strong class="text-white">Cara membuka casing dengan aman</strong> — matikan server dan cabut semua kabel daya terlebih dahulu, gunakan gelang anti-statis, lalu buka baut/pengunci casing sesuai petunjuk pabrik.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-memory text-primary mt-1"></i><span><strong class="text-white">Cara memasang RAM</strong> — buka pengunci di kedua sisi slot RAM, sejajarkan lekukan (notch) pada modul RAM dengan slot, tekan perlahan sampai pengunci otomatis terkunci.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-hdd text-primary mt-1"></i><span><strong class="text-white">Cara memasang HDD</strong> — masukkan HDD ke dalam tray/bracket yang sesuai, kencangkan baut penahan, lalu hubungkan kabel data (SATA/SAS) dan kabel daya.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-sd-card text-primary mt-1"></i><span><strong class="text-white">Cara memasang SSD</strong> — mirip HDD untuk SSD 2.5 inci (pasang di tray lalu sambungkan kabel), sedangkan SSD NVMe ditancapkan langsung ke slot M.2 di motherboard tanpa kabel tambahan.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-ethernet text-primary mt-1"></i><span><strong class="text-white">Cara memasang kabel LAN</strong> — pastikan konektor RJ45 diselipkan sampai terdengar bunyi "klik" pada port NIC agar koneksi tidak longgar.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-helmet-safety text-primary mt-1"></i><span><strong class="text-white">Keselamatan kerja</strong> — selalu matikan & cabut daya sebelum membongkar, gunakan gelang anti-statis, jangan menyentuh komponen dengan tangan basah, dan pastikan area kerja bersih dari cairan.</span></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 8. TAHUKAH KAMU -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-circle-question"></i></div>
+                <h2 class="text-2xl font-bold text-white">8. Tahukah Kamu?</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 text-gray-300 leading-relaxed">
+                <ol class="space-y-3 list-decimal list-inside">
+                    <li>Satuan tinggi rack server disebut "U" (unit); 1U setara sekitar 4,45 cm, dan rack standar biasanya berukuran 42U.</li>
+                    <li>Beberapa CPU server kelas enterprise memiliki lebih dari 60 core dalam satu chip, jauh melebihi CPU laptop biasa yang umumnya hanya 4–8 core.</li>
+                    <li>RAM ECC bisa memperbaiki kesalahan 1-bit secara otomatis tanpa sepengetahuan pengguna, mencegah error data yang tidak terlihat kasat mata.</li>
+                    <li>SSD tidak memiliki bagian yang bergerak sama sekali, sehingga jauh lebih tahan guncangan dibanding HDD yang punya piringan berputar.</li>
+                    <li>Level RAID pertama kali dipublikasikan dalam sebuah makalah ilmiah oleh peneliti University of California, Berkeley pada tahun 1988.</li>
+                    <li>Blade server bisa menghemat kabel hingga puluhan persen dibanding rack server biasa, karena banyak blade berbagi satu chassis dan sistem daya.</li>
+                    <li>Linux pertama kali dirilis oleh Linus Torvalds pada tahun 1991 sebagai proyek hobi, dan kini menjadi tulang punggung mayoritas server dan superkomputer di dunia.</li>
+                    <li>Windows Server pertama kali dirilis oleh Microsoft dengan nama "Windows NT Server" pada tahun 1993.</li>
+                    <li>Beberapa data center menempatkan server mereka di lokasi bersuhu dingin alami (misalnya dekat kutub) untuk menghemat biaya pendinginan.</li>
+                    <li>NVMe bisa mencapai kecepatan baca-tulis data beberapa gigabyte per detik, jauh lebih cepat dibanding HDD yang umumnya hanya ratusan megabyte per detik.</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- 9. TIPS TEKNISI -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-hand-holding-hand"></i></div>
+                <h2 class="text-2xl font-bold text-white">9. Tips Teknisi</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 text-gray-300 leading-relaxed">
+                <ol class="space-y-3 list-decimal list-inside">
+                    <li>Selalu cabut kabel daya sebelum membongkar casing server, jangan hanya mematikan tombol power.</li>
+                    <li>Gunakan gelang anti-statis (ESD wristband) setiap kali menyentuh komponen dalam server.</li>
+                    <li>Catat posisi dan urutan kabel sebelum mencabutnya agar mudah dipasang kembali dengan benar.</li>
+                    <li>Simpan buku manual atau catat nomor seri setiap komponen server untuk memudahkan klaim garansi.</li>
+                    <li>Bersihkan debu pada kipas dan heatsink secara rutin agar pendinginan tetap optimal.</li>
+                    <li>Jangan memaksa memasang komponen (RAM, kabel) jika terasa seret — cek dulu arah dan posisinya.</li>
+                    <li>Beri label pada setiap kabel jaringan agar mudah ditelusuri saat troubleshooting di kemudian hari.</li>
+                    <li>Selalu cek lampu indikator sebelum dan sesudah melakukan perubahan hardware untuk memastikan semua normal.</li>
+                    <li>Rencanakan waktu maintenance di luar jam sibuk pengguna untuk meminimalkan gangguan layanan.</li>
+                    <li>Dokumentasikan setiap perubahan hardware (kapan, apa, siapa) agar tim lain bisa memahami riwayat server.</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- 10. KESALAHAN PEMULA -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-triangle-exclamation"></i></div>
+                <h2 class="text-2xl font-bold text-white">10. Kesalahan Pemula</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 text-gray-300 leading-relaxed">
+                <ol class="space-y-3 list-decimal list-inside">
+                    <li>Membuka casing server tanpa mencabut kabel daya terlebih dahulu.</li>
+                    <li>Tidak memakai gelang anti-statis sehingga berisiko merusak komponen akibat listrik statis (ESD).</li>
+                    <li>Memasang RAM tanpa menyejajarkan notch, sehingga modul RAM dipaksa masuk dan bisa rusak.</li>
+                    <li>Salah memilih level RAID sehingga data tidak benar-benar terlindungi seperti yang dikira.</li>
+                    <li>Mengira semua HDD dan SSD memiliki konektor yang sama persis, padahal ada beberapa standar berbeda (SATA, SAS, NVMe).</li>
+                    <li>Memilih spesifikasi server terlalu rendah karena hanya melihat harga murah, tanpa mempertimbangkan kebutuhan jangka panjang.</li>
+                    <li>Memilih Windows Server hanya karena "familiar", padahal kebutuhan sebenarnya lebih cocok dengan Linux yang gratis dan ringan.</li>
+                    <li>Tidak memberi label kabel, sehingga kesulitan saat harus troubleshooting di kemudian hari.</li>
+                    <li>Menumpuk server tanpa memperhatikan sirkulasi udara, menyebabkan overheat.</li>
+                    <li>Lupa mendokumentasikan perubahan hardware, sehingga tim lain kebingungan saat terjadi masalah.</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- 11. STUDI KASUS -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-magnifying-glass-chart"></i></div>
+                <h2 class="text-2xl font-bold text-white">11. Studi Kasus</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-4 text-gray-300 leading-relaxed">
+                <div class="bg-gray-800/40 p-4 rounded-lg">
+                    <p class="text-white font-semibold mb-1">Kasus 1 — Sekolah dengan Anggaran Terbatas</p>
+                    <p class="text-sm">Sebuah sekolah ingin memiliki server sendiri untuk absensi dan e-learning, tapi dana terbatas dan ruang server sangat kecil. Jenis server dan sistem operasi apa yang paling masuk akal untuk direkomendasikan, dan mengapa?</p>
+                </div>
+                <div class="bg-gray-800/40 p-4 rounded-lg">
+                    <p class="text-white font-semibold mb-1">Kasus 2 — Server Sering Overheat</p>
+                    <p class="text-sm">Sebuah rack server di ruang sempit sering mati sendiri karena kepanasan. Faktor hardware apa saja yang mungkin menjadi penyebabnya, dan bagaimana solusinya?</p>
+                </div>
+                <div class="bg-gray-800/40 p-4 rounded-lg">
+                    <p class="text-white font-semibold mb-1">Kasus 3 — Satu Harddisk Rusak Mendadak</p>
+                    <p class="text-sm">Server penyimpanan foto sebuah studio kehilangan satu harddisk karena rusak. Untungnya data pelanggan tetap aman. Konfigurasi RAID apa yang kemungkinan besar dipakai studio tersebut, dan mengapa data bisa tetap aman?</p>
+                </div>
+                <div class="bg-gray-800/40 p-4 rounded-lg">
+                    <p class="text-white font-semibold mb-1">Kasus 4 — Listrik Sering Padam</p>
+                    <p class="text-sm">Sebuah kantor kecil sering mengalami pemadaman listrik mendadak, dan server selalu mati paksa sehingga beberapa kali data menjadi korup. Perangkat hardware apa yang sebaiknya ditambahkan untuk mencegah masalah ini?</p>
+                </div>
+                <div class="bg-gray-800/40 p-4 rounded-lg">
+                    <p class="text-white font-semibold mb-1">Kasus 5 — Startup yang Butuh Skalabilitas Tinggi</p>
+                    <p class="text-sm">Sebuah startup e-commerce memprediksi trafik penggunanya akan naik drastis dalam 6 bulan ke depan, tapi belum yakin seberapa besar. Jenis server (fisik/cloud/virtual) apa yang paling cocok untuk kondisi seperti ini, dan mengapa?</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 12. PRAKTIKUM 1 -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-flask"></i></div>
+                <h2 class="text-2xl font-bold text-white">12. Praktikum 1 — Mengidentifikasi Hardware Server</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-3 text-gray-300 leading-relaxed">
+                <p><strong class="text-white">Tujuan:</strong> Siswa mampu mengenali komponen fisik server dan menjelaskan fungsi masing-masing komponen.</p>
+                <p><strong class="text-white">Alat:</strong> Unit server/PC bekas (atau gambar/video komponen server dari sekolah), obeng, gelang anti-statis (jika tersedia), lembar pengamatan.</p>
+                <p class="font-semibold text-white">Langkah Praktikum:</p>
+                <ol class="list-decimal list-inside space-y-2 text-sm">
+                    <li>Pastikan server/PC dalam keadaan mati dan kabel daya sudah dicabut sebelum membuka casing.</li>
+                    <li>Buka casing dengan hati-hati mengikuti prosedur keselamatan kerja yang sudah dipelajari.</li>
+                    <li>Identifikasi dan tunjuk komponen berikut: motherboard, CPU, RAM, storage (HDD/SSD), PSU, dan NIC.</li>
+                    <li>Catat merek dan spesifikasi masing-masing komponen jika terlihat pada stiker/label.</li>
+                    <li>Buat tabel pengamatan berisi: nama komponen, fungsi singkat, dan kondisi fisik yang teramati.</li>
+                    <li>Tutup kembali casing dengan benar setelah pengamatan selesai.</li>
+                </ol>
+                <p><strong class="text-white">Hasil yang Diharapkan:</strong> Siswa dapat menunjukkan dan menjelaskan minimal 5 komponen hardware server secara langsung beserta fungsinya masing-masing.</p>
+            </div>
+        </section>
+
+        <!-- 13. PRAKTIKUM 2 -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-flask-vial"></i></div>
+                <h2 class="text-2xl font-bold text-white">13. Praktikum 2 — Membandingkan Linux dan Windows Server</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-3 text-gray-300 leading-relaxed">
+                <p><strong class="text-white">Tujuan:</strong> Siswa mampu menganalisis perbedaan Linux Server dan Windows Server berdasarkan studi literatur/observasi.</p>
+                <p class="font-semibold text-white">Langkah:</p>
+                <ol class="list-decimal list-inside space-y-2 text-sm">
+                    <li>Bagi kelas menjadi kelompok kecil (3-4 siswa).</li>
+                    <li>Setiap kelompok mencari 1 studi kasus nyata perusahaan/lembaga yang memakai Linux Server, dan 1 studi kasus yang memakai Windows Server (bisa dari artikel, dokumentasi resmi, atau wawancara sederhana).</li>
+                    <li>Analisis alasan masing-masing memilih sistem operasi tersebut berdasarkan faktor-faktor pada Materi 5 (jenis layanan, budget, keamanan, dsb).</li>
+                    <li>Buat tabel perbandingan sederhana dari hasil temuan kelompok.</li>
+                    <li>Presentasikan hasil analisis secara singkat di depan kelas.</li>
+                </ol>
+                <p><strong class="text-white">Analisis:</strong> Diskusikan apakah pemilihan OS pada studi kasus tersebut sudah tepat berdasarkan teori yang dipelajari, atau adakah pertimbangan lain yang mungkin terlewat.</p>
+                <p><strong class="text-white">Kesimpulan:</strong> Setiap kelompok menuliskan kesimpulan singkat tentang faktor paling menentukan dalam memilih sistem operasi server berdasarkan hasil diskusi.</p>
+            </div>
+        </section>
+
+        <!-- 14. RINGKASAN -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-list-check"></i></div>
+                <h2 class="text-2xl font-bold text-white">14. Ringkasan</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 text-gray-300 leading-relaxed">
+                <ul class="space-y-2 list-none">
+                    <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i><span>Hardware server dirancang lebih tahan banting dan punya komponen cadangan (redundancy) karena harus menyala nonstop 24 jam.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i><span>Komponen utama server meliputi motherboard, CPU, RAM ECC, storage (HDD/SSD/NVMe), RAID controller, PSU, cooling fan, NIC, rack, UPS, dan KVM switch.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i><span>Jenis server terdiri dari Tower, Rack, Blade, Mini, Cloud, Virtual, dan NAS, masing-masing punya kelebihan dan penggunaan berbeda.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i><span>Spesifikasi server (CPU, core, thread, RAM, storage, network, power, redundancy, RAID) disesuaikan dengan skala kebutuhan, mulai dari sekolah hingga data center.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i><span>Linux Server unggul dalam biaya dan performa, sedangkan Windows Server unggul dalam kemudahan dan integrasi dengan ekosistem Microsoft.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i><span>Pemilihan sistem operasi server harus mempertimbangkan jenis layanan, hardware, budget, keamanan, maintenance, kompatibilitas software, komunitas, dan skalabilitas.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i><span>Mengenal perangkat server secara fisik (port, lampu indikator, cara buka casing, pasang komponen) adalah dasar penting sebelum masuk ke konfigurasi sistem operasi.</span></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 15. REFLEKSI -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-comment-dots"></i></div>
+                <h2 class="text-2xl font-bold text-white">15. Refleksi</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 text-gray-300 leading-relaxed">
+                <ol class="space-y-2 list-decimal list-inside text-sm">
+                    <li>Komponen hardware server mana yang menurutmu paling penting? Mengapa?</li>
+                    <li>Apa perbedaan mendasar yang kamu pahami antara HDD, SSD, dan NVMe?</li>
+                    <li>Menurutmu, jenis server apa yang paling cocok untuk sekolahmu sendiri? Jelaskan alasannya.</li>
+                    <li>Jika kamu jadi administrator sebuah startup baru dengan modal terbatas, sistem operasi apa yang akan kamu pilih? Mengapa?</li>
+                    <li>Apa risiko yang bisa terjadi jika server tidak memiliki RAID atau dual PSU?</li>
+                    <li>Ceritakan pengalamanmu (jika ada) memegang atau melihat langsung komponen komputer/server. Apa yang paling berkesan?</li>
+                    <li>Mengapa keselamatan kerja (ESD, mencabut kabel daya) sangat penting saat membongkar server?</li>
+                    <li>Menurutmu, kapan sebuah bisnis sebaiknya beralih dari server fisik ke cloud server?</li>
+                    <li>Bagian mana dari Bab 2 ini yang paling menantang untuk kamu pahami? Kenapa?</li>
+                    <li>Apa satu hal baru yang paling mengejutkan buatmu dari materi Bab 2 ini?</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- QUIZ SECTION -->
+        <section id="quiz-section">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-secondary/20 text-secondary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-clipboard-question"></i></div>
+                <h2 class="text-2xl font-bold text-white">16. Kuis Bab 2</h2>
+            </div>
+
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 mb-6">
+                <label class="block text-sm text-gray-400 mb-2">Nama Siswa</label>
+                <input id="nama-siswa" type="text" placeholder="Tulis nama lengkap kamu di sini..." class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary">
+            </div>
+
+            <form id="quiz-form" class="space-y-6">
+
+                <!-- Q1 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">1. Perangkat yang berfungsi sebagai "otak" server dan mengeksekusi seluruh instruksi disebut...</p>
+                    <div class="space-y-2" data-question="1" data-correct="b">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q1" value="a" class="accent-primary"> <span>RAM</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q1" value="b" class="accent-primary"> <span>CPU</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q1" value="c" class="accent-primary"> <span>PSU</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q1" value="d" class="accent-primary"> <span>NIC</span></label>
+                    </div>
+                </div>
+
+                <!-- Q2 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">2. Komponen yang berfungsi menyimpan data sementara selama diproses CPU disebut...</p>
+                    <div class="space-y-2" data-question="2" data-correct="c">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q2" value="a" class="accent-primary"> <span>Harddisk</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q2" value="b" class="accent-primary"> <span>Motherboard</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q2" value="c" class="accent-primary"> <span>RAM</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q2" value="d" class="accent-primary"> <span>NIC</span></label>
+                    </div>
+                </div>
+
+                <!-- Q3 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">3. Perangkat baterai cadangan yang menjaga server tetap menyala saat listrik padam mendadak disebut...</p>
+                    <div class="space-y-2" data-question="3" data-correct="a">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q3" value="a" class="accent-primary"> <span>UPS</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q3" value="b" class="accent-primary"> <span>NIC</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q3" value="c" class="accent-primary"> <span>RAID</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q3" value="d" class="accent-primary"> <span>KVM Switch</span></label>
+                    </div>
+                </div>
+
+                <!-- Q4 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">4. Kartu yang menghubungkan server ke jaringan komputer disebut...</p>
+                    <div class="space-y-2" data-question="4" data-correct="d">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q4" value="a" class="accent-primary"> <span>RAID Controller</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q4" value="b" class="accent-primary"> <span>PSU</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q4" value="c" class="accent-primary"> <span>Cooling Fan</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q4" value="d" class="accent-primary"> <span>NIC</span></label>
+                    </div>
+                </div>
+
+                <!-- Q5 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">5. Jenis server yang berbentuk tipis memanjang dan dipasang bertumpuk dalam lemari khusus disebut...</p>
+                    <div class="space-y-2" data-question="5" data-correct="b">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q5" value="a" class="accent-primary"> <span>Tower Server</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q5" value="b" class="accent-primary"> <span>Rack Server</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q5" value="c" class="accent-primary"> <span>Mini Server</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q5" value="d" class="accent-primary"> <span>NAS Server</span></label>
+                    </div>
+                </div>
+
+                <!-- Q6 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">6. Sistem operasi server yang bersifat open source dan gratis adalah...</p>
+                    <div class="space-y-2" data-question="6" data-correct="a">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q6" value="a" class="accent-primary"> <span>Linux</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q6" value="b" class="accent-primary"> <span>Windows Server</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q6" value="c" class="accent-primary"> <span>Keduanya berbayar</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q6" value="d" class="accent-primary"> <span>Tidak ada yang gratis</span></label>
+                    </div>
+                </div>
+
+                <!-- Q7 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">7. Media penyimpanan yang menggunakan piringan magnetik berputar adalah...</p>
+                    <div class="space-y-2" data-question="7" data-correct="c">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q7" value="a" class="accent-primary"> <span>SSD</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q7" value="b" class="accent-primary"> <span>NVMe</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q7" value="c" class="accent-primary"> <span>HDD</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q7" value="d" class="accent-primary"> <span>RAM</span></label>
+                    </div>
+                </div>
+
+                <!-- Q8 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">8. Perangkat yang memungkinkan satu keyboard, monitor, dan mouse dipakai bergantian untuk banyak server disebut...</p>
+                    <div class="space-y-2" data-question="8" data-correct="d">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q8" value="a" class="accent-primary"> <span>RAID Controller</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q8" value="b" class="accent-primary"> <span>UPS</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q8" value="c" class="accent-primary"> <span>NIC</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q8" value="d" class="accent-primary"> <span>KVM Switch</span></label>
+                    </div>
+                </div>
+
+                <!-- Q9 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">9. Satuan tinggi rack server yang standar disebut...</p>
+                    <div class="space-y-2" data-question="9" data-correct="b">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q9" value="a" class="accent-primary"> <span>G (Giga)</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q9" value="b" class="accent-primary"> <span>U (Unit)</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q9" value="c" class="accent-primary"> <span>W (Watt)</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q9" value="d" class="accent-primary"> <span>H (Hertz)</span></label>
+                    </div>
+                </div>
+
+                <!-- Q10 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">10. Sebelum membuka casing server, hal pertama yang wajib dilakukan adalah...</p>
+                    <div class="space-y-2" data-question="10" data-correct="a">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q10" value="a" class="accent-primary"> <span>Mematikan server dan mencabut kabel daya</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q10" value="b" class="accent-primary"> <span>Menambah kecepatan kipas</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q10" value="c" class="accent-primary"> <span>Menyalakan lampu ruangan</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q10" value="d" class="accent-primary"> <span>Menghubungkan ke internet</span></label>
+                    </div>
+                </div>
+
+                <!-- Q11 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">11. RAM ECC lebih unggul dibanding RAM biasa karena...</p>
+                    <div class="space-y-2" data-question="11" data-correct="c">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q11" value="a" class="accent-primary"> <span>Warnanya lebih menarik</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q11" value="b" class="accent-primary"> <span>Ukurannya lebih kecil</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q11" value="c" class="accent-primary"> <span>Mampu mendeteksi dan memperbaiki kesalahan data secara otomatis</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q11" value="d" class="accent-primary"> <span>Tidak membutuhkan listrik</span></label>
+                    </div>
+                </div>
+
+                <!-- Q12 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">12. Manakah urutan kecepatan penyimpanan dari yang PALING LAMBAT ke PALING CEPAT?</p>
+                    <div class="space-y-2" data-question="12" data-correct="b">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q12" value="a" class="accent-primary"> <span>NVMe → SSD → HDD</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q12" value="b" class="accent-primary"> <span>HDD → SSD → NVMe</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q12" value="c" class="accent-primary"> <span>SSD → HDD → NVMe</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q12" value="d" class="accent-primary"> <span>Ketiganya sama cepat</span></label>
+                    </div>
+                </div>
+
+                <!-- Q13 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">13. Server dengan kebutuhan menyimpan foto pelanggan dan tidak ingin kehilangan data jika satu disk rusak, sebaiknya menggunakan...</p>
+                    <div class="space-y-2" data-question="13" data-correct="d">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q13" value="a" class="accent-primary"> <span>Satu HDD tanpa RAID</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q13" value="b" class="accent-primary"> <span>Menghapus data lama secara berkala</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q13" value="c" class="accent-primary"> <span>Menambah kecepatan CPU</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q13" value="d" class="accent-primary"> <span>RAID dengan redundancy (misalnya RAID 1)</span></label>
+                    </div>
+                </div>
+
+                <!-- Q14 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">14. Startup dengan modal terbatas namun ingin fleksibel menyesuaikan kapasitas server sesuai trafik pengguna, sebaiknya memilih...</p>
+                    <div class="space-y-2" data-question="14" data-correct="a">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q14" value="a" class="accent-primary"> <span>Cloud Server</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q14" value="b" class="accent-primary"> <span>Tower Server tunggal</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q14" value="c" class="accent-primary"> <span>Mini Server tanpa jaringan</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q14" value="d" class="accent-primary"> <span>NAS Server saja</span></label>
+                    </div>
+                </div>
+
+                <!-- Q15 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">15. Perusahaan yang sudah sepenuhnya menggunakan Active Directory dan aplikasi berbasis .NET kemungkinan besar akan memilih...</p>
+                    <div class="space-y-2" data-question="15" data-correct="c">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q15" value="a" class="accent-primary"> <span>Linux tanpa GUI</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q15" value="b" class="accent-primary"> <span>Sistem operasi mobile</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q15" value="c" class="accent-primary"> <span>Windows Server</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q15" value="d" class="accent-primary"> <span>Tidak butuh sistem operasi</span></label>
+                    </div>
+                </div>
+
+                <!-- Q16 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">16. Dual Power Supply pada server berfungsi untuk...</p>
+                    <div class="space-y-2" data-question="16" data-correct="b">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q16" value="a" class="accent-primary"> <span>Membuat server dua kali lebih cepat</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q16" value="b" class="accent-primary"> <span>Menjadi cadangan jika salah satu PSU/jalur listrik bermasalah</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q16" value="c" class="accent-primary"> <span>Menggandakan kapasitas storage</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q16" value="d" class="accent-primary"> <span>Mendinginkan CPU</span></label>
+                    </div>
+                </div>
+
+                <!-- Q17 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">17. Mengapa Linux Server umumnya lebih hemat biaya dibanding Windows Server dalam skala besar?</p>
+                    <div class="space-y-2" data-question="17" data-correct="a">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q17" value="a" class="accent-primary"> <span>Linux tidak memerlukan biaya lisensi seperti Windows Server</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q17" value="b" class="accent-primary"> <span>Linux tidak butuh listrik</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q17" value="c" class="accent-primary"> <span>Linux hanya bisa dipakai satu server saja</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q17" value="d" class="accent-primary"> <span>Windows Server tidak bisa dipakai di perusahaan</span></label>
+                    </div>
+                </div>
+
+                <!-- Q18 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">18. Jika sebuah rack server sering mati sendiri karena kepanasan, kemungkinan besar masalahnya terkait dengan...</p>
+                    <div class="space-y-2" data-question="18" data-correct="d">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q18" value="a" class="accent-primary"> <span>Warna casing server</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q18" value="b" class="accent-primary"> <span>Merek RAM yang dipakai</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q18" value="c" class="accent-primary"> <span>Jumlah port USB</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q18" value="d" class="accent-primary"> <span>Sistem pendinginan (cooling fan) dan sirkulasi udara</span></label>
+                    </div>
+                </div>
+
+                <!-- Q19 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">19. Blade server dianggap sangat hemat ruang dan kabel karena...</p>
+                    <div class="space-y-2" data-question="19" data-correct="b">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q19" value="a" class="accent-primary"> <span>Ukurannya lebih besar dari tower server</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q19" value="b" class="accent-primary"> <span>Banyak modul blade berbagi satu chassis dan sistem daya bersama</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q19" value="c" class="accent-primary"> <span>Tidak membutuhkan listrik sama sekali</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q19" value="d" class="accent-primary"> <span>Hanya bisa dipakai untuk satu aplikasi</span></label>
+                    </div>
+                </div>
+
+                <!-- Q20 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">20. Manakah pernyataan yang PALING TEPAT tentang NVMe SSD?</p>
+                    <div class="space-y-2" data-question="20" data-correct="c">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q20" value="a" class="accent-primary"> <span>NVMe lebih lambat dari HDD</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q20" value="b" class="accent-primary"> <span>NVMe memiliki piringan yang berputar</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q20" value="c" class="accent-primary"> <span>NVMe terhubung lewat jalur PCIe yang lebih cepat dibanding SATA</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q20" value="d" class="accent-primary"> <span>NVMe tidak bisa dipakai di server</span></label>
+                    </div>
+                </div>
+
+                <!-- Q21 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">21. Sebuah perusahaan ingin migrasi dari Windows Server ke Linux Server untuk web hosting mereka demi menghemat biaya lisensi tahunan. Risiko yang PALING PERLU diantisipasi tim IT adalah...</p>
+                    <div class="space-y-2" data-question="21" data-correct="a">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q21" value="a" class="accent-primary"> <span>Kesiapan tim dalam menguasai Command Line dan proses migrasi aplikasi</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q21" value="b" class="accent-primary"> <span>Warna tampilan sistem operasi</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q21" value="c" class="accent-primary"> <span>Jenis mouse yang dipakai</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q21" value="d" class="accent-primary"> <span>Merek keyboard kantor</span></label>
+                    </div>
+                </div>
+
+                <!-- Q22 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">22. Data center skala besar biasanya membutuhkan jaringan berkecepatan tinggi karena...</p>
+                    <div class="space-y-2" data-question="22" data-correct="d">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q22" value="a" class="accent-primary"> <span>Agar terlihat lebih canggih saja</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q22" value="b" class="accent-primary"> <span>Karena wajib oleh pemerintah</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q22" value="c" class="accent-primary"> <span>Supaya listrik lebih hemat</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q22" value="d" class="accent-primary"> <span>Untuk melayani ribuan-jutaan permintaan data secara bersamaan tanpa hambatan</span></label>
+                    </div>
+                </div>
+
+                <!-- Q23 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">23. Seorang teknisi memasang RAM baru namun terasa seret dan dipaksa hingga terdengar bunyi retak. Kesalahan apa yang paling mungkin terjadi?</p>
+                    <div class="space-y-2" data-question="23" data-correct="b">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q23" value="a" class="accent-primary"> <span>RAM dipasang terlalu cepat</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q23" value="b" class="accent-primary"> <span>Notch RAM tidak disejajarkan dengan benar sebelum dipasang</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q23" value="c" class="accent-primary"> <span>RAM terlalu besar kapasitasnya</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q23" value="d" class="accent-primary"> <span>Motherboard tidak butuh RAM</span></label>
+                    </div>
+                </div>
+
+                <!-- Q24 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">24. Sebuah warnet ingin membangun server game dengan prioritas kecepatan baca-tulis data setinggi mungkin dengan anggaran menengah. Kombinasi komponen paling tepat adalah...</p>
+                    <div class="space-y-2" data-question="24" data-correct="c">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q24" value="a" class="accent-primary"> <span>CPU lambat dengan HDD tunggal</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q24" value="b" class="accent-primary"> <span>RAM sangat kecil dengan NIC lambat</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q24" value="c" class="accent-primary"> <span>CPU 6-8 core, RAM cukup besar, dan storage NVMe</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q24" value="d" class="accent-primary"> <span>Tanpa PSU sama sekali</span></label>
+                    </div>
+                </div>
+
+                <!-- Q25 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">25. Mengapa dokumentasi perubahan hardware server tetap penting meskipun perubahan tersebut terlihat kecil (misalnya menambah 1 keping RAM)?</p>
+                    <div class="space-y-2" data-question="25" data-correct="d">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q25" value="a" class="accent-primary"> <span>Supaya file dokumentasi semakin banyak</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q25" value="b" class="accent-primary"> <span>Karena diwajibkan tanpa alasan jelas</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q25" value="c" class="accent-primary"> <span>Agar terlihat sibuk di depan atasan</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q25" value="d" class="accent-primary"> <span>Agar riwayat perubahan bisa ditelusuri tim lain saat terjadi masalah di kemudian hari</span></label>
+                    </div>
+                </div>
+
+                <!-- Praktik / Essay -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-2">26. (Praktik Reflektif) Jika kamu diminta merancang spesifikasi server sederhana untuk sekolahmu, sebutkan minimal 3 komponen hardware yang akan kamu prioritaskan dan jelaskan alasannya dalam 2-3 kalimat.</p>
+                    <p class="text-xs text-gray-500 mb-3">*Jawaban ini akan dinilai langsung oleh Guru, bukan otomatis oleh sistem.</p>
+                    <textarea id="essay-jawaban" rows="4" placeholder="Tulis jawabanmu di sini..." class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-secondary"></textarea>
+                </div>
+
+                <button type="submit" id="submit-btn" class="w-full bg-primary text-darker font-bold py-4 rounded-xl hover:bg-emerald-400 transition-colors text-lg">
+                    <i class="fas fa-paper-plane mr-2"></i> Kumpulkan Jawaban
+                </button>
+            </form>
+
+            <!-- RESULT CARD -->
+            <div id="result-card" class="hidden mt-8 bg-gradient-to-br from-dark to-gray-900 border-2 border-primary rounded-2xl p-8 text-center shadow-2xl">
+                <i class="fas fa-award text-5xl text-yellow-400 mb-4"></i>
+                <p class="text-gray-400 mb-1">Hasil Kuis Bab 2 atas nama</p>
+                <p id="result-nama" class="text-xl font-bold text-white mb-4">-</p>
+                <p class="text-6xl font-extrabold text-primary mb-2" id="result-score">0</p>
+                <p class="text-gray-400 mb-6">dari 100 (Pilihan Ganda: <span id="result-fraction">0/5</span> benar)</p>
+                <div class="bg-gray-800/60 rounded-lg p-4 text-sm text-gray-300 mb-6 text-left">
+                    <i class="fas fa-info-circle text-secondary mr-2"></i>
+                    Tunjukkan/screenshot layar ini kepada Bapak Khalid Nabawi, S.Kom. sebagai bukti nilai kuis kamu. Jawaban nomor 26 akan dinilai terpisah oleh Guru.
+                </div>
+                <button onclick="salinHasil()" id="copy-btn" class="bg-secondary text-white font-semibold px-6 py-3 rounded-full hover:bg-blue-600 transition-colors">
+                    <i class="fas fa-copy mr-2"></i> Salin Hasil untuk Dikirim ke Guru
+                </button>
+            </div>
+        </section>
+
+        <!-- 17. KUNCI JAWABAN -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-key"></i></div>
+                <h2 class="text-2xl font-bold text-white">17. Kunci Jawaban & Pembahasan Singkat</h2>
+            </div>
+            <details class="jawaban-box bg-dark border border-gray-800 rounded-xl p-6 text-gray-300 leading-relaxed">
+                <summary class="font-semibold text-white">Klik untuk membuka pembahasan (kerjakan kuis dulu sebelum melihat ini!)</summary>
+                <ol class="space-y-2 list-decimal list-inside text-sm mt-4">
+                    <li><strong class="text-primary">B.</strong> CPU adalah "otak" server yang mengeksekusi instruksi.</li>
+                    <li><strong class="text-primary">C.</strong> RAM menyimpan data sementara selama diproses CPU.</li>
+                    <li><strong class="text-primary">A.</strong> UPS menjaga server tetap menyala saat listrik padam.</li>
+                    <li><strong class="text-primary">D.</strong> NIC menghubungkan server ke jaringan komputer.</li>
+                    <li><strong class="text-primary">B.</strong> Rack Server berbentuk tipis memanjang, dipasang bertumpuk di rack.</li>
+                    <li><strong class="text-primary">A.</strong> Linux bersifat open source dan gratis.</li>
+                    <li><strong class="text-primary">C.</strong> HDD menggunakan piringan magnetik yang berputar.</li>
+                    <li><strong class="text-primary">D.</strong> KVM Switch memungkinkan satu set alat mengendalikan banyak server.</li>
+                    <li><strong class="text-primary">B.</strong> "U" (Unit) adalah satuan tinggi rack server.</li>
+                    <li><strong class="text-primary">A.</strong> Matikan server dan cabut kabel daya sebelum membuka casing.</li>
+                    <li><strong class="text-primary">C.</strong> RAM ECC mendeteksi dan memperbaiki kesalahan data otomatis.</li>
+                    <li><strong class="text-primary">B.</strong> Urutan dari paling lambat ke cepat: HDD → SSD → NVMe.</li>
+                    <li><strong class="text-primary">D.</strong> RAID dengan redundancy (misal RAID 1) melindungi data dari kerusakan satu disk.</li>
+                    <li><strong class="text-primary">A.</strong> Cloud Server paling fleksibel untuk kebutuhan skala yang berubah-ubah.</li>
+                    <li><strong class="text-primary">C.</strong> Windows Server unggul untuk ekosistem Active Directory dan .NET.</li>
+                    <li><strong class="text-primary">B.</strong> Dual Power Supply menjadi cadangan jika satu PSU/jalur listrik bermasalah.</li>
+                    <li><strong class="text-primary">A.</strong> Linux tidak memerlukan biaya lisensi seperti Windows Server.</li>
+                    <li><strong class="text-primary">D.</strong> Overheat biasanya terkait sistem pendinginan dan sirkulasi udara.</li>
+                    <li><strong class="text-primary">B.</strong> Blade server berbagi satu chassis dan sistem daya bersama, hemat ruang & kabel.</li>
+                    <li><strong class="text-primary">C.</strong> NVMe terhubung lewat jalur PCIe yang lebih cepat dibanding SATA.</li>
+                    <li><strong class="text-primary">A.</strong> Kesiapan tim dengan Command Line adalah risiko utama migrasi ke Linux.</li>
+                    <li><strong class="text-primary">D.</strong> Jaringan cepat dibutuhkan untuk melayani permintaan data dalam jumlah besar.</li>
+                    <li><strong class="text-primary">B.</strong> RAM harus disejajarkan notch-nya, tidak boleh dipaksa masuk.</li>
+                    <li><strong class="text-primary">C.</strong> CPU cukup kuat, RAM besar, dan storage NVMe cocok untuk server game.</li>
+                    <li><strong class="text-primary">D.</strong> Dokumentasi memudahkan penelusuran masalah oleh tim di kemudian hari.</li>
+                </ol>
+            </details>
+        </section>
+
+        <!-- 18. GLOSARIUM -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-book"></i></div>
+                <h2 class="text-2xl font-bold text-white">18. Glosarium</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 text-gray-300 leading-relaxed">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 text-sm">
+                    <p><strong class="text-white">Motherboard</strong> — papan sirkuit utama penghubung seluruh komponen server.</p>
+                    <p><strong class="text-white">CPU</strong> — prosesor, "otak" yang mengeksekusi instruksi.</p>
+                    <p><strong class="text-white">Core</strong> — unit pemroses fisik di dalam satu CPU.</p>
+                    <p><strong class="text-white">Thread</strong> — jalur proses virtual dalam satu core.</p>
+                    <p><strong class="text-white">RAM</strong> — memori penyimpan data sementara selama diproses.</p>
+                    <p><strong class="text-white">ECC</strong> — teknologi RAM yang mendeteksi & memperbaiki error data otomatis.</p>
+                    <p><strong class="text-white">HDD</strong> — media penyimpanan berbasis piringan magnetik berputar.</p>
+                    <p><strong class="text-white">SSD</strong> — media penyimpanan berbasis chip memori flash tanpa bagian bergerak.</p>
+                    <p><strong class="text-white">NVMe</strong> — jenis SSD yang terhubung lewat jalur PCIe berkecepatan tinggi.</p>
+                    <p><strong class="text-white">RAID</strong> — pengaturan gabungan disk untuk kecepatan dan/atau keamanan data.</p>
+                    <p><strong class="text-white">RAID Controller</strong> — perangkat pengatur kerja RAID pada beberapa disk.</p>
+                    <p><strong class="text-white">PSU</strong> — power supply unit, pengubah listrik AC menjadi DC untuk komponen server.</p>
+                    <p><strong class="text-white">Dual PSU</strong> — dua unit PSU sebagai cadangan satu sama lain.</p>
+                    <p><strong class="text-white">Cooling Fan</strong> — kipas pendingin komponen server.</p>
+                    <p><strong class="text-white">NIC</strong> — kartu jaringan penghubung server ke jaringan komputer.</p>
+                    <p><strong class="text-white">Rack Server</strong> — casing server tipis yang dipasang bertumpuk dalam rak.</p>
+                    <p><strong class="text-white">Tower Server</strong> — casing server berdiri tegak seperti PC desktop.</p>
+                    <p><strong class="text-white">Blade Server</strong> — modul server tipis yang berbagi satu chassis bersama.</p>
+                    <p><strong class="text-white">NAS</strong> — perangkat penyimpanan khusus yang terhubung ke jaringan.</p>
+                    <p><strong class="text-white">Cloud Server</strong> — server yang disewa dan diakses lewat internet.</p>
+                    <p><strong class="text-white">Virtual Server (VPS)</strong> — server virtual hasil pembagian satu server fisik.</p>
+                    <p><strong class="text-white">UPS</strong> — baterai cadangan daya listrik untuk server.</p>
+                    <p><strong class="text-white">KVM Switch</strong> — perangkat berbagi keyboard/monitor/mouse untuk banyak server.</p>
+                    <p><strong class="text-white">Redundancy</strong> — komponen cadangan agar sistem tetap berjalan saat ada kerusakan.</p>
+                    <p><strong class="text-white">Hot-swap</strong> — kemampuan mengganti komponen tanpa mematikan sistem.</p>
+                    <p><strong class="text-white">ESD</strong> — pelepasan muatan listrik statis yang bisa merusak komponen elektronik.</p>
+                    <p><strong class="text-white">Open Source</strong> — perangkat lunak yang kode sumbernya terbuka dan bebas dimodifikasi.</p>
+                    <p><strong class="text-white">Proprietary</strong> — perangkat lunak tertutup yang dimiliki dan dikendalikan satu perusahaan.</p>
+                    <p><strong class="text-white">GUI</strong> — antarmuka grafis (Graphical User Interface) yang memudahkan interaksi visual.</p>
+                    <p><strong class="text-white">CLI / Command Line</strong> — antarmuka berbasis teks/perintah untuk mengoperasikan sistem.</p>
+                    <p><strong class="text-white">Skalabilitas</strong> — kemampuan sistem untuk diperbesar/diperkecil sesuai kebutuhan.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 19. REFERENSI -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-link"></i></div>
+                <h2 class="text-2xl font-bold text-white">19. Referensi</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 text-gray-300 leading-relaxed">
+                <p class="text-sm mb-3">Materi Bab 2 disusun dengan mensintesis dan menulis ulang informasi dari berbagai sumber resmi, di antaranya:</p>
+                <ul class="space-y-1 text-sm list-disc list-inside">
+                    <li>Ubuntu Server Documentation (ubuntu.com/server/docs)</li>
+                    <li>Microsoft Learn – Windows Server Documentation (learn.microsoft.com)</li>
+                    <li>Red Hat Documentation (access.redhat.com/documentation)</li>
+                    <li>Dell Technologies – PowerEdge Server Documentation (dell.com/support)</li>
+                    <li>HPE – ProLiant Server Documentation (support.hpe.com)</li>
+                    <li>Cisco Networking Academy (netacad.com)</li>
+                    <li>Intel & AMD Server Processor Documentation (intel.com, amd.com)</li>
+                    <li>Storage Networking Industry Association – SNIA (snia.org)</li>
+                    <li>DigitalOcean Tutorials (digitalocean.com/community/tutorials)</li>
+                    <li>AWS Documentation (aws.amazon.com/documentation)</li>
+                    <li>Buku Administrasi Sistem Jaringan SMK Kurikulum Merdeka</li>
+                    <li>Data kisaran spesifikasi hardware: dokumentasi vendor server resmi (2026)</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Navigation -->
+        <div class="flex justify-between items-center pt-8 border-t border-gray-800">
+            <a href="index.html" class="text-gray-400 hover:text-primary transition-colors flex items-center gap-2">
+                <i class="fas fa-map-signs"></i> Roadmap
+            </a>
+            <a href="belum-tersedia.html?bab=Bab%203&judul=Virtualisasi" class="text-gray-400 hover:text-primary transition-colors flex items-center gap-2">
+                Bab 3 <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </main>
+
+    <footer class="bg-darker border-t border-gray-800 py-8 text-center text-gray-500 text-sm">
+        <p>&copy; 2026/2027 SMK Bintang Raudloh. ASJ Kelas XI.</p>
+    </footer>
+
+    <script>
+        const form = document.getElementById('quiz-form');
+        const resultCard = document.getElementById('result-card');
+        let lastResultText = '';
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const namaInput = document.getElementById('nama-siswa').value.trim();
+            if (!namaInput) {
+                alert('Mohon isi nama kamu terlebih dahulu sebelum mengumpulkan jawaban.');
+                document.getElementById('nama-siswa').focus();
+                return;
+            }
+
+            const groups = document.querySelectorAll('[data-question]');
+            let unanswered = [];
+            groups.forEach(g => {
+                const qNum = g.getAttribute('data-question');
+                const checked = g.querySelector('input[type="radio"]:checked');
+                if (!checked) unanswered.push(qNum);
+            });
+            if (unanswered.length > 0) {
+                alert('Masih ada soal pilihan ganda yang belum dijawab (nomor: ' + unanswered.join(', ') + ').');
+                return;
+            }
+
+            let correctCount = 0;
+            const total = groups.length;
+
+            groups.forEach(g => {
+                const correctVal = g.getAttribute('data-correct');
+                const checked = g.querySelector('input[type="radio"]:checked');
+                const labels = g.querySelectorAll('label.quiz-option');
+
+                labels.forEach(lbl => {
+                    lbl.classList.add('locked');
+                    const input = lbl.querySelector('input');
+                    if (input.value === correctVal) {
+                        lbl.classList.add('correct-answer');
+                    } else if (input.checked && input.value !== correctVal) {
+                        lbl.classList.add('wrong-answer');
+                    }
+                });
+
+                if (checked && checked.value === correctVal) correctCount++;
+            });
+
+            const score = Math.round((correctCount / total) * 100);
+
+            document.getElementById('result-nama').textContent = namaInput;
+            document.getElementById('result-score').textContent = score;
+            document.getElementById('result-fraction').textContent = correctCount + '/' + total;
+            resultCard.classList.remove('hidden');
+            document.getElementById('submit-btn').disabled = true;
+            document.getElementById('submit-btn').classList.add('opacity-50', 'cursor-not-allowed');
+
+            const essay = document.getElementById('essay-jawaban').value.trim();
+            lastResultText =
+                'HASIL KUIS - BAB 2 (Hardware dan Sistem Operasi Server)\n' +
+                'Nama: ' + namaInput + '\n' +
+                'Nilai Pilihan Ganda: ' + score + ' (' + correctCount + '/' + total + ' benar)\n' +
+                'Jawaban No.26 (Reflektif): ' + (essay || '-(kosong)-');
+
+            resultCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+
+        function salinHasil() {
+            navigator.clipboard.writeText(lastResultText).then(() => {
+                const btn = document.getElementById('copy-btn');
+                const original = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check mr-2"></i> Tersalin!';
+                setTimeout(() => { btn.innerHTML = original; }, 2000);
+            }).catch(() => {
+                alert('Gagal menyalin otomatis. Silahkan screenshot layar hasil kuis ini.');
+            });
+        }
+    </script>
+</body>
+</html>
