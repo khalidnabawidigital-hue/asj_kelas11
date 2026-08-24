@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bab 3 – Virtualisasi | ASJ Kelas XI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        dark: '#0f172a',
+                        darker: '#020617',
+                        primary: '#10b981',
+                        secondary: '#3b82f6',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #020617; color: #e2e8f0; }
+        .bg-grid {
+            background-image: linear-gradient(to right, #1e293b 1px, transparent 1px),
+                              linear-gradient(to bottom, #1e293b 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #10b981; border-radius: 5px; }
+
+        .quiz-option {
+            transition: all .2s ease;
+        }
+        .quiz-option:hover {
+            border-color: #10b981;
+        }
+        .quiz-option.selected {
+            border-color: #10b981;
+            background-color: rgba(16, 185, 129, 0.1);
+        }
+        .quiz-option.correct-answer {
+            border-color: #10b981 !important;
+            background-color: rgba(16, 185, 129, 0.15) !important;
+        }
+        .quiz-option.wrong-answer {
+            border-color: #ef4444 !important;
+            background-color: rgba(239, 68, 68, 0.1) !important;
+        }
+        .quiz-option.locked {
+            pointer-events: none;
+        }
+        details.jawaban-box summary { cursor: pointer; }
+        details.jawaban-box[open] summary { color: #10b981; }
+
+        .tbl-compare { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+        .tbl-compare th, .tbl-compare td { border: 1px solid #1e293b; padding: 10px 12px; text-align: left; vertical-align: top; }
+        .tbl-compare th { background-color: rgba(30, 41, 59, 0.6); color: #fff; font-weight: 600; }
+        .tbl-compare tr:nth-child(even) td { background-color: rgba(30, 41, 59, 0.25); }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Navbar -->
+    <nav class="bg-dark border-b border-gray-800 py-4 sticky top-0 z-30">
+        <div class="container mx-auto px-6 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-2 text-gray-300 hover:text-primary transition-colors">
+                <i class="fas fa-arrow-left"></i>
+                <span class="font-semibold hidden sm:inline">Kembali ke Roadmap</span>
+            </a>
+            <div class="flex items-center gap-2 text-sm text-gray-400 font-mono">
+                <i class="fas fa-server text-primary"></i>
+                <span>Bab 3 / 18</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="bg-grid relative overflow-hidden py-16 border-b border-gray-800">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-darker"></div>
+        <div class="container mx-auto px-6 relative z-10 max-w-4xl text-center">
+            <span class="bg-primary/20 text-primary py-1 px-4 rounded-full text-sm font-bold tracking-wider mb-4 inline-block">SEMESTER GANJIL &bull; BAB 3</span>
+            <h1 class="text-3xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+                Virtualisasi
+            </h1>
+            <p class="text-gray-400 text-lg">Output: Siswa mampu membuat dan menjalankan Virtual Machine sebagai fondasi sebelum instalasi Ubuntu Server.</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 max-w-4xl py-16 space-y-16">
+
+        <!-- 1. PENDAHULUAN / APERSEPSI -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-flag-checkered"></i></div>
+                <h2 class="text-2xl font-bold text-white">1. Pendahuluan</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-4 text-gray-300 leading-relaxed">
+                <p class="text-lg text-white font-semibold">Bagaimana jika satu komputer bisa menjalankan beberapa komputer sekaligus?</p>
+                <p>Coba bayangkan: satu laptop yang kamu pakai sehari-hari bisa menjalankan Windows, Ubuntu Server, dan Debian secara <strong class="text-white">bersamaan</strong>, seolah-olah kamu punya tiga komputer berbeda — padahal hardware fisiknya cuma satu. Tidak masuk akal? Justru inilah yang setiap hari dilakukan jutaan teknisi IT di seluruh dunia, dan teknologinya bernama <strong class="text-white">virtualisasi</strong>.</p>
+                <p>Di Bab 2, kamu sudah belajar tentang hardware dan sistem operasi server. Sekarang muncul masalah praktis: bagaimana caranya kamu bisa belajar Ubuntu Server tanpa harus membeli komputer fisik baru, tanpa takut merusak laptop pribadimu, dan tanpa harus bolak-balik install ulang setiap kali salah konfigurasi? Jawabannya ada di Bab 3 ini.</p>
+                <div class="bg-gray-800/50 p-4 rounded-lg border-l-4 border-primary">
+                    <p class="text-sm"><strong class="text-primary">Kenapa ini penting?</strong> Mulai Bab 4, kamu akan mulai meng-install Ubuntu Server sungguhan. Supaya proses belajar itu aman, murah, dan bisa diulang berkali-kali tanpa risiko, kita akan menjalankan Ubuntu Server itu di dalam sebuah <em>Virtual Machine</em> — bukan langsung di laptop fisikmu. Bab 3 inilah yang mengajarkanmu caranya.</p>
+                </div>
+                <p>Perjalanan belajar kita di bab ini: dari memahami <strong class="text-white">apa itu komputer virtual</strong>, mengenal <strong class="text-white">hypervisor</strong> yang mengaturnya, mencoba software <strong class="text-white">VirtualBox/VMware</strong>, sampai akhirnya kamu benar-benar membuat Virtual Machine pertamamu sendiri — siap dipakai untuk instalasi Ubuntu Server di Bab 4.</p>
+            </div>
+        </section>
+
+        <!-- 2. APA ITU VIRTUALISASI -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-cubes-stacked"></i></div>
+                <h2 class="text-2xl font-bold text-white">2. Apa itu Virtualisasi?</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-4 text-gray-300 leading-relaxed">
+                <p><strong class="text-white">Virtualisasi</strong> adalah teknologi yang memungkinkan satu perangkat keras (hardware) fisik "dipecah" atau dibagi menjadi beberapa komputer yang berjalan secara independen, seolah-olah masing-masing adalah komputer terpisah — padahal semuanya berbagi hardware fisik yang sama.</p>
+                <p class="font-semibold text-white mt-2">Mengapa virtualisasi dibuat, dan masalah apa yang diselesaikannya?</p>
+                <p>Dulu, setiap kali sebuah perusahaan butuh satu server untuk satu keperluan (misalnya satu untuk web, satu untuk database, satu untuk email), mereka harus membeli satu unit hardware fisik untuk masing-masing. Padahal kenyataannya, banyak server fisik itu hanya terpakai 10–20% dari kemampuannya — sisanya menganggur, tapi tetap memakan listrik, ruang, dan biaya perawatan. Virtualisasi lahir untuk menjawab pemborosan ini: satu hardware fisik yang kuat bisa "dibagi" menjadi banyak komputer virtual, masing-masing dipakai untuk keperluan berbeda, sehingga hardware benar-benar dimanfaatkan secara maksimal.</p>
+                <div class="bg-gray-800/50 p-4 rounded-lg border-l-4 border-primary">
+                    <p class="text-sm"><strong class="text-primary">Analogi:</strong> Bayangkan satu gedung apartemen. Gedung itu adalah "hardware fisik", sedangkan setiap unit kamar di dalamnya adalah "komputer virtual". Setiap penghuni kamar merasa punya rumah sendiri — punya pintu sendiri, kunci sendiri, ruang sendiri — padahal mereka semua berbagi satu gedung, satu jaringan listrik, dan satu sistem air yang sama.</p>
+                </div>
+
+                <p class="font-semibold text-white mt-4">Cara Kerja Virtualisasi (Sederhana)</p>
+                <p>Sebuah software khusus (disebut <em>hypervisor</em>, akan dibahas di bagian selanjutnya) dipasang pada hardware fisik. Software ini bertugas "membagi-bagi" resource fisik (CPU, RAM, storage) menjadi beberapa bagian, lalu menciptakan komputer-komputer virtual dari bagian-bagian tersebut. Setiap komputer virtual ini punya sistem operasinya sendiri, aplikasinya sendiri, dan berjalan seolah-olah terpisah total dari komputer virtual lainnya.</p>
+
+                <p class="font-semibold text-white mt-4">Istilah Penting</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold"><i class="fas fa-desktop text-secondary mr-2"></i>Physical Machine</p>
+                        <p class="text-sm mt-1">Komputer fisik sungguhan — ada bentuknya, bisa kamu sentuh, seperti laptop atau server rack yang dipelajari di Bab 2.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold"><i class="fas fa-cube text-secondary mr-2"></i>Virtual Machine (VM)</p>
+                        <p class="text-sm mt-1">"Komputer" yang dibuat oleh software, tidak berbentuk fisik, tetapi berperilaku persis seperti komputer sungguhan.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold"><i class="fas fa-house-laptop text-secondary mr-2"></i>Host</p>
+                        <p class="text-sm mt-1">Komputer fisik yang "menampung" dan menjalankan Virtual Machine di dalamnya. Contoh: laptopmu adalah host.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold"><i class="fas fa-user text-secondary mr-2"></i>Guest</p>
+                        <p class="text-sm mt-1">Sistem operasi yang berjalan di dalam Virtual Machine. Contoh: Ubuntu Server yang kamu install di dalam VM adalah guest.</p>
+                    </div>
+                </div>
+
+                <p class="font-semibold text-white mt-4 mb-2">Diagram Sederhana Susunan Virtualisasi</p>
+                <div class="bg-gray-800/50 p-5 rounded-lg text-center font-mono text-sm space-y-2">
+                    <p class="text-secondary font-bold">HOST (Laptop/PC Fisikmu)</p>
+                    <p class="text-gray-500">↓</p>
+                    <p class="text-gray-300">HARDWARE FISIK (CPU, RAM, Storage)</p>
+                    <p class="text-gray-500">↓</p>
+                    <p class="text-primary font-bold">HYPERVISOR (VirtualBox / VMware)</p>
+                    <p class="text-gray-500">↓ &nbsp;&nbsp;&nbsp;&nbsp; ↓ &nbsp;&nbsp;&nbsp;&nbsp; ↓</p>
+                    <p class="text-white">VM 1 (Ubuntu) &nbsp;&nbsp; VM 2 (Debian) &nbsp;&nbsp; VM 3 (Windows)</p>
+                </div>
+                <p class="text-sm text-gray-400">Ketiga VM di atas berjalan bersamaan, masing-masing merasa punya komputer sendiri, padahal semuanya berbagi satu hardware fisik yang sama di lapisan paling bawah.</p>
+            </div>
+        </section>
+
+        <!-- 3. MENGAPA VIRTUALISASI PENTING -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-star"></i></div>
+                <h2 class="text-2xl font-bold text-white">3. Mengapa Virtualisasi Penting?</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-4 text-gray-300 leading-relaxed">
+                <ul class="space-y-3">
+                    <li class="flex items-start gap-3"><i class="fas fa-piggy-bank text-primary mt-1"></i><span><strong class="text-white">Menghemat hardware & biaya</strong> — satu server fisik yang kuat bisa menggantikan banyak server fisik terpisah, mengurangi biaya pembelian dan listrik.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-gauge-high text-primary mt-1"></i><span><strong class="text-white">Efisiensi penggunaan resource</strong> — resource hardware yang tadinya menganggur bisa dimanfaatkan maksimal oleh banyak VM sekaligus.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-flask text-primary mt-1"></i><span><strong class="text-white">Memudahkan pengujian</strong> — ingin mencoba software atau konfigurasi baru yang berisiko? Coba dulu di VM, tanpa mengganggu sistem utama.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-graduation-cap text-primary mt-1"></i><span><strong class="text-white">Memudahkan pembelajaran</strong> — siswa bisa belajar Linux Server, jaringan, bahkan "merusak" sistem sesuka hati di VM tanpa takut merusak laptop sungguhan.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-shield-halved text-primary mt-1"></i><span><strong class="text-white">Isolasi sistem</strong> — masalah di satu VM (misalnya crash atau virus) tidak akan menyebar ke VM lain maupun ke host, karena masing-masing terisolasi.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-camera text-primary mt-1"></i><span><strong class="text-white">Snapshot</strong> — bisa menyimpan "kondisi" VM pada waktu tertentu, dan kembali ke kondisi itu kapan saja (dibahas lebih dalam di bagian selanjutnya).</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-clone text-primary mt-1"></i><span><strong class="text-white">Clone</strong> — VM yang sudah dikonfigurasi bisa diduplikasi menjadi VM baru dengan cepat, tanpa perlu setup dari nol berulang kali.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-clock-rotate-left text-primary mt-1"></i><span><strong class="text-white">Backup lebih mudah</strong> — VM pada dasarnya hanyalah kumpulan file di storage host, sehingga jauh lebih mudah dicadangkan dibanding komputer fisik utuh.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-vials text-primary mt-1"></i><span><strong class="text-white">Laboratorium virtual & pengembangan/testing</strong> — tim developer bisa membuat "lab" berisi banyak server virtual untuk simulasi sebelum diterapkan ke server produksi sungguhan.</span></li>
+                </ul>
+
+                <p class="font-semibold text-white mt-4">Contoh Nyata Penerapan Virtualisasi</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="bg-gray-800/50 p-3 rounded-lg text-sm"><i class="fas fa-school text-secondary mr-2"></i><strong class="text-white">Sekolah:</strong> siswa belajar Linux Server di VM tanpa perlu komputer fisik terpisah untuk tiap siswa.</div>
+                    <div class="bg-gray-800/50 p-3 rounded-lg text-sm"><i class="fas fa-flask-vial text-secondary mr-2"></i><strong class="text-white">Laboratorium komputer:</strong> satu ruang lab bisa mensimulasikan puluhan skenario jaringan berbeda dengan VM.</div>
+                    <div class="bg-gray-800/50 p-3 rounded-lg text-sm"><i class="fas fa-building text-secondary mr-2"></i><strong class="text-white">Perusahaan:</strong> banyak aplikasi bisnis berjalan di server virtual berbeda di atas beberapa server fisik saja.</div>
+                    <div class="bg-gray-800/50 p-3 rounded-lg text-sm"><i class="fas fa-warehouse text-secondary mr-2"></i><strong class="text-white">Data center:</strong> ribuan VM disewakan ke banyak pelanggan berbeda di atas hardware fisik yang sama.</div>
+                    <div class="bg-gray-800/50 p-3 rounded-lg text-sm sm:col-span-2"><i class="fas fa-cloud text-secondary mr-2"></i><strong class="text-white">Cloud computing:</strong> layanan seperti AWS, Google Cloud, dan Azure pada dasarnya menjual "sewa" Virtual Machine kepada penggunanya di seluruh dunia — inilah fondasi bisnis cloud modern.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. HYPERVISOR -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-layer-group"></i></div>
+                <h2 class="text-2xl font-bold text-white">4. Hypervisor</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-4 text-gray-300 leading-relaxed">
+                <p><strong class="text-white">Hypervisor</strong> (disebut juga Virtual Machine Monitor/VMM) adalah software yang bertugas menciptakan, menjalankan, dan mengatur Virtual Machine. Hypervisor inilah yang membagi-bagi resource hardware fisik (CPU, RAM, storage) ke setiap VM, serta memastikan satu VM tidak "mengganggu" VM lainnya.</p>
+                <p class="font-semibold text-white mt-2">Mengapa hypervisor diperlukan?</p>
+                <p>Tanpa hypervisor, sistem operasi tidak tahu caranya berbagi hardware dengan sistem operasi lain secara aman dalam satu waktu. Hypervisor bertindak sebagai "penengah" yang mengatur jadwal, alokasi resource, dan menjaga agar setiap VM tetap terisolasi satu sama lain — persis seperti kepala sekolah yang mengatur jadwal pemakaian lab komputer supaya tidak bentrok antar kelas.</p>
+
+                <p class="font-semibold text-white mt-4 mb-2">Dua Jenis Hypervisor</p>
+                <div class="space-y-3">
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold"><i class="fas fa-server text-secondary mr-2"></i>Type 1 Hypervisor (Bare-Metal)</p>
+                        <p class="text-sm mt-1">Hypervisor yang terpasang <strong class="text-white">langsung di atas hardware fisik</strong>, tanpa memerlukan sistem operasi host di bawahnya. Karena "menempel langsung ke logam" (bare-metal), performanya sangat tinggi dan cocok untuk server produksi skala besar. Contoh: <strong>VMware ESXi</strong>, <strong>Microsoft Hyper-V</strong> (versi server), <strong>Proxmox VE</strong>.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold"><i class="fas fa-laptop text-secondary mr-2"></i>Type 2 Hypervisor (Hosted)</p>
+                        <p class="text-sm mt-1">Hypervisor yang terpasang <strong class="text-white">sebagai aplikasi biasa di atas sistem operasi host</strong> yang sudah ada (misalnya Windows atau macOS). Lebih mudah dipakai untuk belajar dan testing karena tinggal install seperti aplikasi lain. Contoh: <strong>Oracle VirtualBox</strong>, <strong>VMware Workstation</strong>.</p>
+                    </div>
+                </div>
+                <div class="bg-gray-800/50 p-4 rounded-lg border-l-4 border-primary">
+                    <p class="text-sm"><strong class="text-primary">Penting untuk kelas ini:</strong> VirtualBox dan VMware Workstation yang akan kamu pakai untuk praktik adalah contoh <strong class="text-white">virtualisasi desktop bertipe Type 2</strong> — dipasang di atas sistem operasi laptop/PC-mu yang sudah ada.</p>
+                </div>
+
+                <div class="overflow-x-auto mt-4">
+                    <table class="tbl-compare">
+                        <thead>
+                            <tr><th>Aspek</th><th>Type 1 (Bare-Metal)</th><th>Type 2 (Hosted)</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong class="text-white">Posisi</strong></td><td>Langsung di atas hardware fisik, tanpa OS host.</td><td>Berjalan sebagai aplikasi di atas OS host yang sudah ada.</td></tr>
+                            <tr><td><strong class="text-white">Penggunaan</strong></td><td>Server produksi, data center, cloud skala besar.</td><td>Belajar, testing, penggunaan desktop/laptop pribadi.</td></tr>
+                            <tr><td><strong class="text-white">Contoh</strong></td><td>VMware ESXi, Microsoft Hyper-V, Proxmox VE.</td><td>Oracle VirtualBox, VMware Workstation.</td></tr>
+                            <tr><td><strong class="text-white">Kelebihan</strong></td><td>Performa sangat tinggi, cocok banyak VM sekaligus.</td><td>Mudah diinstal & dipakai, cocok untuk pemula.</td></tr>
+                            <tr><td><strong class="text-white">Kekurangan</strong></td><td>Butuh hardware server khusus, instalasi lebih rumit.</td><td>Performa sedikit lebih rendah karena "menumpang" OS host.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. KOMPONEN VIRTUAL MACHINE -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-puzzle-piece"></i></div>
+                <h2 class="text-2xl font-bold text-white">5. Komponen Virtual Machine</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-4 text-gray-300 leading-relaxed">
+                <p>Sama seperti komputer fisik yang punya CPU, RAM, dan storage, Virtual Machine juga punya "versi virtual" dari komponen-komponen tersebut. Berikut komponen penting yang akan kamu atur setiap kali membuat VM baru:</p>
+                <div class="space-y-3">
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold"><i class="fas fa-brain text-secondary mr-2"></i>vCPU (Virtual CPU)</p>
+                        <p class="text-sm mt-1">Jumlah "jatah" prosesor host yang dialokasikan untuk VM. <strong class="text-white">Analogi: vCPU = otak</strong> — semakin banyak vCPU, semakin banyak tugas yang bisa dipikirkan/dikerjakan VM secara bersamaan.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold"><i class="fas fa-table text-secondary mr-2"></i>vRAM (Virtual RAM)</p>
+                        <p class="text-sm mt-1">Jumlah memori host yang dialokasikan untuk VM. <strong class="text-white">Analogi: vRAM = meja kerja</strong> — semakin luas meja, semakin banyak "berkas" (proses) yang bisa dikerjakan sekaligus tanpa harus bongkar-pasang.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold"><i class="fas fa-box-archive text-secondary mr-2"></i>Virtual Disk</p>
+                        <p class="text-sm mt-1">File khusus di storage host yang berperan sebagai "harddisk" VM. <strong class="text-white">Analogi: Virtual Disk = lemari penyimpanan</strong> — tempat VM menyimpan sistem operasi, aplikasi, dan datanya sendiri.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold"><i class="fas fa-ethernet text-secondary mr-2"></i>Virtual Network Adapter</p>
+                        <p class="text-sm mt-1">"Kartu jaringan" versi virtual yang menghubungkan VM ke jaringan (baik ke host maupun ke internet), diatur lewat mode jaringan seperti NAT atau Bridged (dibahas di bagian Networking).</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold"><i class="fas fa-compact-disc text-secondary mr-2"></i>ISO & Virtual CD/DVD</p>
+                        <p class="text-sm mt-1"><strong class="text-white">ISO</strong> adalah file "cetakan" sistem operasi (misalnya Ubuntu Server) yang biasanya diunduh dari internet. File ISO ini "dimasukkan" ke <strong class="text-white">Virtual CD/DVD drive</strong> milik VM, seolah kamu memasukkan kepingan DVD instalasi ke komputer sungguhan.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold"><i class="fas fa-folder-open text-secondary mr-2"></i>Shared Folder</p>
+                        <p class="text-sm mt-1">Folder khusus yang bisa diakses bersama oleh host dan VM, memudahkan memindahkan file antara laptopmu dan sistem di dalam VM tanpa perlu internet.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold"><i class="fas fa-usb text-secondary mr-2"></i>USB</p>
+                        <p class="text-sm mt-1">Pengaturan yang memungkinkan VM mengakses perangkat USB yang tersambung ke host, seperti flashdisk atau perangkat lain.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold"><i class="fas fa-display text-secondary mr-2"></i>Display</p>
+                        <p class="text-sm mt-1">Pengaturan tampilan layar virtual VM, termasuk jumlah memori video (VRAM) yang dialokasikan untuk menampilkan grafis VM.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold"><i class="fas fa-list-ol text-secondary mr-2"></i>Boot Order</p>
+                        <p class="text-sm mt-1">Urutan perangkat yang dicoba VM saat pertama kali dinyalakan (misalnya: coba boot dari Virtual CD/DVD dulu, baru dari Virtual Disk) — penting diatur benar saat instalasi sistem operasi baru.</p>
+                    </div>
+                </div>
+                <div class="bg-gray-800/50 p-4 rounded-lg border-l-4 border-primary mt-2">
+                    <p class="font-semibold text-white text-sm mb-1"><i class="fas fa-lightbulb mr-2 text-primary"></i>Contoh Konfigurasi VM Sederhana untuk Belajar Ubuntu Server</p>
+                    <p class="text-sm">vCPU: 2 core &bull; vRAM: 2 GB &bull; Virtual Disk: 20–25 GB &bull; Network Adapter: NAT &bull; Virtual CD/DVD: ISO Ubuntu Server &bull; Boot Order: Virtual CD/DVD lebih dulu dari Virtual Disk (saat instalasi pertama kali).</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. ORACLE VIRTUALBOX -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-box"></i></div>
+                <h2 class="text-2xl font-bold text-white">6. Oracle VirtualBox</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-4 text-gray-300 leading-relaxed">
+                <p><strong class="text-white">Oracle VirtualBox</strong> adalah software hypervisor Type 2 yang bersifat gratis dan open source, memungkinkan siapa saja membuat dan menjalankan Virtual Machine di atas Windows, macOS, maupun Linux. VirtualBox pertama kali dikembangkan oleh perusahaan Jerman bernama Innotek, sebelum akhirnya dikelola oleh Oracle Corporation.</p>
+                <p class="font-semibold text-white mt-2">Kelebihan:</p>
+                <ul class="space-y-2 list-none">
+                    <li class="flex items-start gap-3"><i class="fas fa-check-circle text-primary mt-1"></i><span>Gratis sepenuhnya, tidak perlu membeli lisensi.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check-circle text-primary mt-1"></i><span>Ringan dan mudah dipasang, cocok untuk laptop dengan spesifikasi standar.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check-circle text-primary mt-1"></i><span>Mendukung banyak sistem operasi tamu (Ubuntu, Debian, Windows, dan lainnya).</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check-circle text-primary mt-1"></i><span>Dokumentasi resmi lengkap dan komunitas besar, memudahkan mencari solusi saat ada kendala.</span></li>
+                </ul>
+                <p class="font-semibold text-white mt-2">Kekurangan:</p>
+                <ul class="space-y-2 list-none">
+                    <li class="flex items-start gap-3"><i class="fas fa-circle-xmark text-red-400 mt-1"></i><span>Performa sedikit lebih rendah dibanding hypervisor Type 1 untuk beban kerja sangat berat.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-circle-xmark text-red-400 mt-1"></i><span>Beberapa fitur lanjutan (misalnya dukungan grafis 3D) belum sekuat software berbayar.</span></li>
+                </ul>
+                <p class="font-semibold text-white mt-2">Kapan digunakan?</p>
+                <p>VirtualBox sangat cocok untuk kebutuhan belajar, seperti yang akan kamu lakukan di kelas ASJ ini — membuat VM Ubuntu Server untuk praktik konfigurasi tanpa risiko merusak laptop pribadi.</p>
+
+                <p class="font-semibold text-white mt-4 mb-2">Istilah Penting di VirtualBox</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                    <div class="bg-gray-800/50 p-3 rounded-lg"><strong class="text-white">New</strong> — tombol untuk membuat Virtual Machine baru dari awal.</div>
+                    <div class="bg-gray-800/50 p-3 rounded-lg"><strong class="text-white">Start</strong> — tombol untuk menyalakan/menjalankan VM yang sudah dibuat.</div>
+                    <div class="bg-gray-800/50 p-3 rounded-lg"><strong class="text-white">Settings</strong> — menu untuk mengatur konfigurasi VM (RAM, CPU, storage, dll).</div>
+                    <div class="bg-gray-800/50 p-3 rounded-lg"><strong class="text-white">Storage</strong> — bagian pengaturan untuk mengatur virtual disk dan ISO.</div>
+                    <div class="bg-gray-800/50 p-3 rounded-lg"><strong class="text-white">Network</strong> — bagian pengaturan untuk memilih mode jaringan VM.</div>
+                    <div class="bg-gray-800/50 p-3 rounded-lg"><strong class="text-white">Snapshot</strong> — fitur menyimpan kondisi VM pada waktu tertentu.</div>
+                    <div class="bg-gray-800/50 p-3 rounded-lg"><strong class="text-white">Clone</strong> — fitur menduplikasi VM menjadi VM baru.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. VMWARE WORKSTATION -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-square"></i></div>
+                <h2 class="text-2xl font-bold text-white">7. VMware Workstation</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-4 text-gray-300 leading-relaxed">
+                <p><strong class="text-white">VMware Workstation</strong> adalah software hypervisor Type 2 buatan VMware (kini bagian dari Broadcom), salah satu perusahaan pionir teknologi virtualisasi sejak akhir 1990-an. VMware Workstation Pro sempat berbayar, namun sejak beberapa tahun terakhir tersedia versi gratis untuk penggunaan pribadi/non-komersial.</p>
+                <p class="font-semibold text-white mt-2">Kelebihan:</p>
+                <ul class="space-y-2 list-none">
+                    <li class="flex items-start gap-3"><i class="fas fa-check-circle text-primary mt-1"></i><span>Performa dan stabilitas sangat baik, terutama untuk VM dengan beban kerja berat.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check-circle text-primary mt-1"></i><span>Dukungan snapshot dan fitur networking yang matang dan andal.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check-circle text-primary mt-1"></i><span>Banyak dipakai di lingkungan profesional/enterprise, sehingga skill ini relevan untuk dunia kerja.</span></li>
+                </ul>
+                <p class="font-semibold text-white mt-2">Kekurangan:</p>
+                <ul class="space-y-2 list-none">
+                    <li class="flex items-start gap-3"><i class="fas fa-circle-xmark text-red-400 mt-1"></i><span>Ukuran instalasi lebih besar dibanding VirtualBox.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-circle-xmark text-red-400 mt-1"></i><span>Beberapa fitur lanjutan tetap memerlukan lisensi berbayar (versi Pro).</span></li>
+                </ul>
+                <p class="font-semibold text-white mt-2">Penggunaan untuk lab virtual</p>
+                <p>VMware Workstation sering dipakai di dunia industri untuk membangun lab virtual pengujian software sebelum diterapkan ke server produksi sungguhan, karena stabilitasnya yang tinggi.</p>
+                <div class="bg-gray-800/50 p-4 rounded-lg border-l-4 border-secondary mt-2">
+                    <p class="text-sm"><strong class="text-secondary">Perbedaan mendasar dengan VirtualBox:</strong> Secara konsep keduanya sama-sama hypervisor Type 2 dengan fitur inti serupa (VM, snapshot, clone, networking). Perbedaan utamanya ada pada performa, harga/lisensi, dan detail antarmuka — bukan pada konsep dasar virtualisasi yang kamu pelajari di bab ini.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. VIRTUALBOX VS VMWARE -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-code-compare"></i></div>
+                <h2 class="text-2xl font-bold text-white">8. VirtualBox vs VMware Workstation</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-4 text-gray-300 leading-relaxed">
+                <div class="overflow-x-auto">
+                    <table class="tbl-compare">
+                        <thead>
+                            <tr><th>Aspek</th><th>Oracle VirtualBox</th><th>VMware Workstation</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong class="text-white">Kemudahan Penggunaan</strong></td><td>Sangat mudah, cocok untuk pemula.</td><td>Mudah, namun sedikit lebih kompleks di beberapa pengaturan.</td></tr>
+                            <tr><td><strong class="text-white">Interface</strong></td><td>Sederhana dan ringan.</td><td>Lebih modern dan kaya fitur visual.</td></tr>
+                            <tr><td><strong class="text-white">Performa</strong></td><td>Baik untuk kebutuhan belajar & VM ringan-menengah.</td><td>Sangat baik, unggul untuk VM dengan beban berat.</td></tr>
+                            <tr><td><strong class="text-white">Networking</strong></td><td>Lengkap (NAT, Bridged, Host-Only, Internal Network).</td><td>Lengkap dan sangat matang, umum dipakai di lab enterprise.</td></tr>
+                            <tr><td><strong class="text-white">Snapshot</strong></td><td>Tersedia, mudah digunakan.</td><td>Tersedia, sangat andal untuk skenario kompleks.</td></tr>
+                            <tr><td><strong class="text-white">Clone</strong></td><td>Tersedia (Full Clone & Linked Clone).</td><td>Tersedia (Full Clone & Linked Clone), lebih sering dipakai di lab profesional.</td></tr>
+                            <tr><td><strong class="text-white">Kompatibilitas</strong></td><td>Windows, macOS, Linux.</td><td>Windows, Linux (VMware Fusion untuk macOS).</td></tr>
+                            <tr><td><strong class="text-white">Penggunaan untuk Pembelajaran</strong></td><td>Sangat direkomendasikan untuk siswa/pemula karena gratis total.</td><td>Baik juga digunakan, terutama versi gratisnya untuk non-komersial.</td></tr>
+                            <tr><td><strong class="text-white">Kebutuhan Hardware</strong></td><td>Ringan, jalan lancar di laptop standar sekolah.</td><td>Sedikit lebih berat, idealnya laptop dengan spesifikasi menengah ke atas.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
+                    <div class="bg-gray-800/50 p-4 rounded-lg border-l-4 border-primary text-sm">
+                        <p class="font-semibold text-primary mb-1"><i class="fas fa-box mr-1"></i> Gunakan VirtualBox jika...</p>
+                        <p>Kamu baru belajar, laptop dengan spesifikasi standar, dan ingin software gratis tanpa batasan lisensi.</p>
+                    </div>
+                    <div class="bg-gray-800/50 p-4 rounded-lg border-l-4 border-secondary text-sm">
+                        <p class="font-semibold text-secondary mb-1"><i class="fas fa-square mr-1"></i> VMware Workstation dapat digunakan jika...</p>
+                        <p>Laptop cukup kuat, ingin mencoba pengalaman yang lebih dekat dengan lingkungan profesional/enterprise.</p>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-400 mt-2">Tidak ada yang "selalu lebih baik" secara mutlak — keduanya sama-sama valid untuk belajar virtualisasi. Kelas ASJ ini akan menggunakan <strong class="text-white">Oracle VirtualBox</strong> sebagai standar praktikum karena gratis total dan ringan untuk laptop siswa.</p>
+            </div>
+        </section>
+
+        <!-- 9. SNAPSHOT -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-camera-retro"></i></div>
+                <h2 class="text-2xl font-bold text-white">9. Snapshot</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-4 text-gray-300 leading-relaxed">
+                <p><strong class="text-white">Snapshot</strong> adalah fitur yang menyimpan "kondisi" sebuah Virtual Machine pada waktu tertentu — termasuk isi disk, konfigurasi, dan status sistem saat itu — sehingga kamu bisa kembali ke kondisi tersebut kapan pun dibutuhkan.</p>
+                <div class="bg-gray-800/50 p-4 rounded-lg border-l-4 border-primary">
+                    <p class="text-sm"><strong class="text-primary">Analogi:</strong> Snapshot itu seperti <em>save point</em> dalam sebuah game. Sebelum menghadapi "boss" yang berisiko (misalnya konfigurasi server yang rumit), kamu simpan progres game dulu. Kalau gagal atau kalah, kamu tinggal <em>load</em> lagi dari save point tadi — tidak perlu main dari awal.</p>
+                </div>
+                <p class="font-semibold text-white mt-2">Contoh Penerapan:</p>
+                <p>Siswa akan melakukan konfigurasi Ubuntu Server yang berisiko (misalnya mengatur firewall atau menghapus user). <strong class="text-white">Sebelum</strong> memulai konfigurasi tersebut, siswa membuat Snapshot terlebih dahulu. Jika konfigurasi ternyata gagal atau sistem menjadi rusak, siswa cukup mengembalikan VM ke kondisi Snapshot tadi — dalam hitungan detik, tanpa perlu install ulang dari nol.</p>
+                <ul class="space-y-3 mt-2">
+                    <li class="flex items-start gap-3"><i class="fas fa-clock text-primary mt-1"></i><span><strong class="text-white">Kapan membuat snapshot?</strong> Sebelum melakukan perubahan besar atau berisiko pada VM (update besar, konfigurasi baru, eksperimen).</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-arrow-rotate-left text-primary mt-1"></i><span><strong class="text-white">Kapan menggunakan snapshot?</strong> Saat perubahan yang dilakukan ternyata gagal atau merusak sistem, dan kamu ingin kembali ke kondisi sebelumnya.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i><span><strong class="text-white">Kelebihan:</strong> cepat dibuat, mudah dikembalikan, sangat membantu proses belajar dan eksperimen.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-triangle-exclamation text-yellow-500 mt-1"></i><span><strong class="text-white">Keterbatasan:</strong> snapshot tersimpan di storage host yang sama dengan VM aslinya — jika harddisk host rusak total, snapshot ikut hilang.</span></li>
+                </ul>
+                <div class="bg-gray-800/50 p-4 rounded-lg border-l-4 border-yellow-500 mt-2">
+                    <p class="font-semibold text-white text-sm mb-1"><i class="fas fa-circle-exclamation mr-2 text-yellow-500"></i>Penting: Snapshot BUKAN pengganti Backup!</p>
+                    <p class="text-sm">Backup adalah salinan data yang disimpan <strong class="text-white">terpisah</strong> dari sistem aslinya (misalnya di harddisk lain atau cloud), sedangkan snapshot biasanya tersimpan menyatu dengan VM di storage host yang sama. Snapshot cocok untuk "uji coba cepat", tapi tetap butuh backup terpisah untuk perlindungan data jangka panjang.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 10. CLONE -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-clone"></i></div>
+                <h2 class="text-2xl font-bold text-white">10. Clone</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-4 text-gray-300 leading-relaxed">
+                <p><strong class="text-white">Clone</strong> adalah fitur untuk menduplikasi sebuah Virtual Machine yang sudah ada menjadi VM baru yang identik, lengkap dengan sistem operasi dan konfigurasinya.</p>
+                <p class="font-semibold text-white mt-2">Contoh Penerapan:</p>
+                <p>Bayangkan kamu sudah membuat satu VM Ubuntu Server yang sudah dikonfigurasi dengan lengkap (update sistem, user, package dasar sudah terpasang). Sekarang kamu ingin membuat 5 VM lain dengan konfigurasi dasar yang persis sama untuk simulasi jaringan. Daripada mengulang instalasi dari nol sebanyak 5 kali (yang memakan waktu berjam-jam), kamu cukup melakukan <strong class="text-white">Clone</strong> pada VM pertama sebanyak 5 kali — jauh lebih cepat dan konsisten.</p>
+                <p class="font-semibold text-white mt-2">Full Clone vs Linked Clone</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold"><i class="fas fa-copy text-secondary mr-2"></i>Full Clone</p>
+                        <p class="text-sm mt-1">Menyalin <strong class="text-white">seluruh data</strong> VM asli menjadi file independen yang terpisah sepenuhnya. VM hasil clone bisa berjalan sendiri walau VM aslinya dihapus, namun memakan ruang penyimpanan lebih besar dan proses pembuatannya lebih lama.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold"><i class="fas fa-link text-secondary mr-2"></i>Linked Clone</p>
+                        <p class="text-sm mt-1">VM hasil clone <strong class="text-white">tetap bergantung</strong> pada file VM induknya, dan hanya menyimpan "perbedaan" data baru. Prosesnya jauh lebih cepat dan hemat ruang, namun VM induk tidak boleh dihapus selama linked clone masih dipakai.</p>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-400 mt-2">Untuk kebutuhan belajar di kelas ASJ, <strong class="text-white">Full Clone</strong> lebih direkomendasikan karena lebih sederhana untuk dipahami pemula dan tidak bergantung pada VM lain.</p>
+            </div>
+        </section>
+
+        <!-- 11. RESOURCE VIRTUAL MACHINE -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-gauge"></i></div>
+                <h2 class="text-2xl font-bold text-white">11. Resource Virtual Machine & Over-Allocation</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-4 text-gray-300 leading-relaxed">
+                <p>Setiap Virtual Machine yang berjalan tetap menggunakan resource dari komputer fisik (host) tempatnya berjalan — mencakup CPU, RAM, storage, display/GPU, dan network. VM tidak menciptakan resource baru dari udara; ia hanya "meminjam" sebagian dari resource host.</p>
+                <p class="font-semibold text-white mt-2">Konsep Over-Allocation</p>
+                <p><strong class="text-white">Over-allocation</strong> terjadi ketika total resource (terutama RAM) yang dialokasikan ke semua VM yang berjalan bersamaan <strong class="text-white">melebihi</strong> kapasitas fisik yang sebenarnya dimiliki host.</p>
+                <div class="bg-gray-800/50 p-4 rounded-lg border-l-4 border-yellow-500 mt-2">
+                    <p class="font-semibold text-white text-sm mb-2"><i class="fas fa-calculator mr-2 text-yellow-500"></i>Contoh Perhitungan</p>
+                    <p class="text-sm">Laptop: <strong class="text-white">CPU 4 Core, RAM 8 GB</strong></p>
+                    <p class="text-sm mt-1">Kemudian dibuat 3 VM sekaligus, masing-masing diberi RAM 2 GB (total 6 GB untuk VM) — sisa 2 GB untuk sistem operasi host itu sendiri. Kondisi ini <strong class="text-white">masih realistis</strong>, karena OS host tetap kebagian resource untuk berjalan normal.</p>
+                    <p class="text-sm mt-2">Namun jika 3 VM tersebut masing-masing diberi RAM 4 GB (total 12 GB), padahal RAM fisik hanya 8 GB, maka terjadi <strong class="text-white">over-allocation</strong>. Akibatnya: host menjadi sangat lambat, VM bisa macet (freeze), bahkan sistem host berisiko crash karena kehabisan memori nyata.</p>
+                </div>
+                <p class="font-semibold text-white mt-4">Rekomendasi Konfigurasi Realistis untuk Laptop Siswa</p>
+                <p>Untuk laptop dengan RAM 8 GB, sebaiknya hanya menjalankan <strong class="text-white">1 VM aktif dalam satu waktu</strong> dengan alokasi sekitar 2 GB RAM dan 2 vCPU, menyisakan cukup resource untuk sistem operasi host dan aplikasi lain (browser, VirtualBox itu sendiri, dll). Jika laptop punya RAM 16 GB ke atas, menjalankan 2 VM ringan secara bersamaan (misalnya untuk simulasi client-server) masih realistis dilakukan.</p>
+            </div>
+        </section>
+
+        <!-- 12. NETWORKING PADA VIRTUAL MACHINE -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-network-wired"></i></div>
+                <h2 class="text-2xl font-bold text-white">12. Networking pada Virtual Machine</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-4 text-gray-300 leading-relaxed">
+                <p>Karena mata pelajaran ini adalah Administrasi <strong class="text-white">Sistem Jaringan</strong>, memahami cara VM terhubung ke jaringan adalah bagian yang sangat penting — dan akan sangat berguna saat kamu mulai konfigurasi server jaringan di bab-bab berikutnya.</p>
+
+                <div class="space-y-4 mt-2">
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold mb-1"><i class="fas fa-route text-secondary mr-2"></i>NAT (Network Address Translation)</p>
+                        <p class="text-sm"><strong class="text-white">Pengertian:</strong> Mode paling sederhana dan default di VirtualBox. VM "menumpang" koneksi internet host, tapi tidak terlihat sebagai perangkat terpisah oleh jaringan luar.</p>
+                        <p class="text-sm mt-1"><strong class="text-white">Cara kerja:</strong> VM → Host → Internet. Semua permintaan dari VM diteruskan lewat host, seolah VM "bersembunyi" di belakang host.</p>
+                        <p class="text-sm mt-1"><strong class="text-white">Kapan digunakan:</strong> Saat VM hanya perlu akses internet untuk update/download, tanpa perlu diakses balik oleh komputer lain.</p>
+                        <p class="text-sm mt-1"><strong class="text-white">Contoh:</strong> VM Ubuntu Server ingin menjalankan <span class="font-mono text-xs bg-gray-800 px-1 rounded">apt update</span> untuk mengunduh paket dari internet.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold mb-1"><i class="fas fa-diagram-project text-secondary mr-2"></i>Bridged Adapter</p>
+                        <p class="text-sm"><strong class="text-white">Pengertian:</strong> Membuat VM seolah-olah menjadi perangkat fisik terpisah yang terhubung langsung ke jaringan/router yang sama dengan host.</p>
+                        <p class="text-sm mt-1"><strong class="text-white">Cara kerja:</strong> VM → Router/LAN → Internet. VM mendapat alamat IP sendiri di jaringan yang sama seperti laptop/HP lain di rumah/sekolah.</p>
+                        <p class="text-sm mt-1"><strong class="text-white">Kapan digunakan:</strong> Saat VM perlu bisa diakses langsung oleh komputer lain di jaringan yang sama, misalnya untuk praktik mengakses server dari client lain.</p>
+                        <p class="text-sm mt-1"><strong class="text-white">Contoh:</strong> VM Ubuntu Server dijadikan web server, dan ingin diakses dari HP siswa lain yang terhubung ke Wi-Fi sekolah yang sama.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold mb-1"><i class="fas fa-house text-secondary mr-2"></i>Host-Only Adapter</p>
+                        <p class="text-sm"><strong class="text-white">Pengertian:</strong> Membuat jaringan privat yang hanya menghubungkan VM dengan host saja, tanpa akses ke internet maupun jaringan fisik luar.</p>
+                        <p class="text-sm mt-1"><strong class="text-white">Cara kerja:</strong> VM ↔ Host. Koneksi hanya terjadi dua arah antara VM dan laptop/PC-mu sendiri.</p>
+                        <p class="text-sm mt-1"><strong class="text-white">Kapan digunakan:</strong> Saat kamu ingin mengakses VM dari host (misalnya lewat SSH) tanpa perlu VM terhubung ke internet sama sekali, cocok untuk latihan yang sifatnya privat/tertutup.</p>
+                        <p class="text-sm mt-1"><strong class="text-white">Contoh:</strong> Mengakses VM Ubuntu Server dari Terminal di laptop host untuk latihan perintah dasar Linux.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg">
+                        <p class="text-white font-semibold mb-1"><i class="fas fa-circle-nodes text-secondary mr-2"></i>Internal Network</p>
+                        <p class="text-sm"><strong class="text-white">Pengertian:</strong> Membuat jaringan privat yang hanya menghubungkan <strong class="text-white">antar-VM</strong>, tanpa melibatkan host maupun jaringan luar sama sekali.</p>
+                        <p class="text-sm mt-1"><strong class="text-white">Cara kerja:</strong> VM 1 ↔ VM 2 ↔ VM 3 (host tidak ikut dalam jaringan ini).</p>
+                        <p class="text-sm mt-1"><strong class="text-white">Kapan digunakan:</strong> Saat kamu ingin simulasi jaringan tertutup antara beberapa VM saja, misalnya simulasi server-client tanpa risiko keluar ke jaringan sekolah.</p>
+                        <p class="text-sm mt-1"><strong class="text-white">Contoh:</strong> Dua VM (satu jadi server, satu jadi client) saling terhubung untuk latihan konfigurasi DHCP/DNS tanpa menyentuh jaringan sekolah sama sekali.</p>
+                    </div>
+                </div>
+                <div class="bg-gray-800/50 p-4 rounded-lg border-l-4 border-primary mt-2">
+                    <p class="text-sm"><strong class="text-primary">Catatan penting:</strong> Pemilihan mode jaringan ini akan sangat menentukan saat kamu mulai belajar konfigurasi DHCP Server, DNS Server, dan Web Server di bab-bab selanjutnya — pastikan kamu benar-benar paham perbedaan keempatnya sebelum lanjut ke Bab 4.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 13. SYSTEM REQUIREMENT -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-list-check"></i></div>
+                <h2 class="text-2xl font-bold text-white">13. System Requirement</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-4 text-gray-300 leading-relaxed">
+                <p>Sebelum membuat Virtual Machine, ada beberapa hal yang perlu dipastikan pada komputer/laptop yang akan dipakai:</p>
+                <ul class="space-y-3">
+                    <li class="flex items-start gap-3"><i class="fas fa-microchip text-primary mt-1"></i><span><strong class="text-white">CPU mendukung virtualisasi</strong> — hampir semua CPU modern (dalam 10 tahun terakhir) sudah mendukung fitur virtualisasi hardware.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-memory text-primary mt-1"></i><span><strong class="text-white">RAM cukup</strong> — idealnya minimal 8 GB RAM total, agar VM dan host sama-sama bisa berjalan nyaman.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-hdd text-primary mt-1"></i><span><strong class="text-white">Storage cukup</strong> — sisakan minimal 30–40 GB ruang kosong untuk menampung file ISO dan virtual disk.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-toggle-on text-primary mt-1"></i><span><strong class="text-white">Virtualization Technology aktif</strong> — fitur hardware yang harus diaktifkan agar hypervisor bisa bekerja optimal.</span></li>
+                    <li class="flex items-start gap-3"><i class="fab fa-intel text-primary mt-1"></i><span><strong class="text-white">Intel VT-x</strong> — nama fitur virtualisasi hardware pada prosesor Intel.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-microchip text-primary mt-1"></i><span><strong class="text-white">AMD-V / AMD SVM</strong> — nama fitur virtualisasi hardware yang setara pada prosesor AMD.</span></li>
+                </ul>
+                <div class="bg-gray-800/50 p-4 rounded-lg border-l-4 border-yellow-500 mt-2">
+                    <p class="text-sm"><i class="fas fa-info-circle text-yellow-500 mr-2"></i>Fitur Intel VT-x/AMD-V biasanya sudah aktif secara default pada kebanyakan laptop modern. Jika VirtualBox menampilkan peringatan terkait virtualisasi tidak aktif, fitur ini perlu diaktifkan lewat menu pengaturan BIOS/UEFI laptop. Karena nama menu dan cara masuk BIOS/UEFI berbeda-beda tergantung merek dan tipe laptop, tanyakan langsung kepada Bapak Khalid Nabawi, S.Kom. jika mengalami kendala ini saat praktik.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 14. TAHUKAH KAMU -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-circle-question"></i></div>
+                <h2 class="text-2xl font-bold text-white">14. Tahukah Kamu?</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 text-gray-300 leading-relaxed">
+                <ol class="space-y-3 list-decimal list-inside">
+                    <li>Konsep "virtual machine" sebenarnya sudah ada sejak era komputer mainframe IBM pada tahun 1960-an, jauh sebelum komputer pribadi seperti sekarang ada.</li>
+                    <li>Oracle VirtualBox awalnya dikembangkan oleh perusahaan Jerman bernama Innotek pada tahun 2007, sebelum diakuisisi Sun Microsystems (2008) dan kemudian Oracle Corporation (2010).</li>
+                    <li>VMware didirikan pada tahun 1998 dan merilis VMware Workstation pertamanya pada tahun 1999, menjadikannya salah satu pionir virtualisasi desktop di dunia.</li>
+                    <li>Teknologi virtualisasi hardware Intel VT-x diperkenalkan pada tahun 2005, disusul teknologi setara dari AMD (AMD-V) pada tahun 2006.</li>
+                    <li>Hypervisor Type 1 disebut juga "bare-metal hypervisor" karena istilah ini menggambarkan software yang terpasang langsung di atas hardware ("logam telanjang"), tanpa OS host di antaranya.</li>
+                    <li>Xen, salah satu hypervisor open source yang populer di dunia cloud computing, awalnya dikembangkan oleh peneliti University of Cambridge pada tahun 2003.</li>
+                    <li>KVM (Kernel-based Virtual Machine) telah menjadi bagian resmi dari kernel Linux sejak tahun 2007, membuat Linux memiliki kemampuan hypervisor bawaan.</li>
+                    <li>Layanan cloud computing raksasa seperti Amazon Web Services (AWS) dan Google Cloud pada dasarnya dibangun di atas jutaan Virtual Machine yang berjalan di atas hypervisor Type 1 di data center mereka.</li>
+                    <li>Snapshot pada VM sebenarnya hanya menyimpan "perbedaan" (delta) dari kondisi disk saat itu, bukan menyalin ulang seluruh isi disk dari awal — itulah sebabnya proses pembuatan snapshot terasa sangat cepat.</li>
+                    <li>Selain virtualisasi berbasis VM, kini berkembang pula teknologi container (seperti Docker) yang jauh lebih ringan karena berbagi kernel sistem operasi host, meski tetap terinspirasi dari konsep isolasi sistem yang sama seperti virtualisasi.</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- 15. TIPS ADMINISTRATOR -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-hand-holding-hand"></i></div>
+                <h2 class="text-2xl font-bold text-white">15. Tips Administrator</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 text-gray-300 leading-relaxed">
+                <ol class="space-y-3 list-decimal list-inside">
+                    <li>Jangan memberikan seluruh RAM host kepada satu VM — sisakan cukup RAM agar sistem operasi host tetap berjalan lancar.</li>
+                    <li>Jangan asal menghapus virtual disk, karena seluruh data dan sistem operasi di dalam VM ikut hilang permanen.</li>
+                    <li>Buat Snapshot sebelum melakukan eksperimen atau konfigurasi besar yang berisiko gagal.</li>
+                    <li>Gunakan nama VM yang jelas dan deskriptif (misalnya "Ubuntu-Server-DHCP") agar tidak bingung saat memiliki banyak VM.</li>
+                    <li>Dokumentasikan konfigurasi setiap VM (vCPU, vRAM, mode jaringan) agar mudah diingat atau dijelaskan ke orang lain.</li>
+                    <li>Matikan VM dengan benar lewat perintah shutdown di dalam sistem operasi guest, bukan langsung menutup jendela VirtualBox secara paksa.</li>
+                    <li>Simpan file ISO di lokasi yang mudah ditemukan kembali, karena akan sering dipakai ulang untuk membuat VM baru.</li>
+                    <li>Periksa mode jaringan VM sebelum praktik yang melibatkan koneksi antar-perangkat, agar tidak bingung saat VM "tidak bisa diakses".</li>
+                    <li>Hapus snapshot lama yang sudah tidak diperlukan secara berkala, karena snapshot yang menumpuk memakan banyak ruang storage.</li>
+                    <li>Selalu cek sisa ruang penyimpanan host sebelum membuat virtual disk baru, agar proses instalasi tidak gagal di tengah jalan.</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- 16. KESALAHAN PEMULA -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-triangle-exclamation"></i></div>
+                <h2 class="text-2xl font-bold text-white">16. Kesalahan Pemula</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-3 text-gray-300 leading-relaxed">
+                <div class="bg-gray-800/40 p-3 rounded-lg text-sm"><strong class="text-white">Memberi RAM VM terlalu besar.</strong> Penyebab: ingin VM terasa cepat. Solusi: alokasikan RAM secukupnya dan sisakan untuk host, sesuai kapasitas RAM fisik yang tersedia.</div>
+                <div class="bg-gray-800/40 p-3 rounded-lg text-sm"><strong class="text-white">Lupa memasukkan ISO sebelum menjalankan VM.</strong> Penyebab: terburu-buru saat setup awal. Solusi: pastikan ISO sudah terpasang di Storage sebelum menekan Start pertama kali.</div>
+                <div class="bg-gray-800/40 p-3 rounded-lg text-sm"><strong class="text-white">Salah memilih mode jaringan.</strong> Penyebab: tidak memahami perbedaan NAT, Bridged, dan Host-Only. Solusi: pahami dulu kebutuhan koneksi VM sebelum memilih mode jaringan.</div>
+                <div class="bg-gray-800/40 p-3 rounded-lg text-sm"><strong class="text-white">Tidak membuat Snapshot sebelum eksperimen berisiko.</strong> Penyebab: merasa yakin konfigurasi akan berhasil. Solusi: biasakan membuat Snapshot sebagai kebiasaan rutin sebelum perubahan besar.</div>
+                <div class="bg-gray-800/40 p-3 rounded-lg text-sm"><strong class="text-white">Mematikan VM secara paksa (force shutdown) terus-menerus.</strong> Penyebab: tidak sabar menunggu proses shutdown normal. Solusi: gunakan perintah shutdown resmi dari dalam sistem operasi guest.</div>
+                <div class="bg-gray-800/40 p-3 rounded-lg text-sm"><strong class="text-white">Menjalankan terlalu banyak VM sekaligus.</strong> Penyebab: tidak memperhitungkan kapasitas RAM/CPU host. Solusi: jalankan hanya VM yang benar-benar dibutuhkan dalam satu waktu (hindari over-allocation).</div>
+                <div class="bg-gray-800/40 p-3 rounded-lg text-sm"><strong class="text-white">Menghapus virtual disk tanpa yakin.</strong> Penyebab: ingin menghemat ruang penyimpanan tanpa cek ulang. Solusi: pastikan data di VM sudah tidak diperlukan lagi sebelum menghapus.</div>
+                <div class="bg-gray-800/40 p-3 rounded-lg text-sm"><strong class="text-white">Tidak memberi nama VM yang jelas.</strong> Penyebab: terburu-buru saat membuat banyak VM. Solusi: biasakan memberi nama deskriptif sejak awal pembuatan VM.</div>
+                <div class="bg-gray-800/40 p-3 rounded-lg text-sm"><strong class="text-white">Mengira Snapshot sama dengan Backup.</strong> Penyebab: belum memahami perbedaan konsep keduanya. Solusi: pelajari kembali bahwa snapshot bukan pengganti backup terpisah.</div>
+                <div class="bg-gray-800/40 p-3 rounded-lg text-sm"><strong class="text-white">Panik saat VM terasa lambat tanpa mengecek penyebabnya.</strong> Penyebab: langsung menyalahkan software tanpa investigasi. Solusi: cek dulu alokasi RAM/CPU dan jumlah VM yang berjalan bersamaan sebelum mengambil kesimpulan.</div>
+            </div>
+        </section>
+
+        <!-- 17. STUDI KASUS -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-magnifying-glass-chart"></i></div>
+                <h2 class="text-2xl font-bold text-white">17. Studi Kasus</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-4 text-gray-300 leading-relaxed">
+                <div class="bg-gray-800/40 p-4 rounded-lg">
+                    <p class="text-white font-semibold mb-1">Kasus 1 — Laptop RAM 8 GB Menjalankan 3 VM</p>
+                    <p class="text-sm">Sebuah laptop memiliki RAM 8 GB. Siswa ingin menjalankan 3 VM sekaligus, masing-masing diberi RAM 3 GB (total 9 GB untuk VM saja). Apakah kondisi ini aman? Jelaskan alasannya berdasarkan konsep over-allocation.</p>
+                </div>
+                <div class="bg-gray-800/40 p-4 rounded-lg">
+                    <p class="text-white font-semibold mb-1">Kasus 2 — VM Bisa Internet Tapi Tidak Bisa Diakses</p>
+                    <p class="text-sm">Sebuah VM dapat mengakses internet dengan lancar, tetapi tidak dapat diakses dari komputer lain di jaringan yang sama. Mode jaringan apa yang kemungkinan besar sedang digunakan VM tersebut, dan mengapa?</p>
+                </div>
+                <div class="bg-gray-800/40 p-4 rounded-lg">
+                    <p class="text-white font-semibold mb-1">Kasus 3 — Konfigurasi Server Gagal Total</p>
+                    <p class="text-sm">Seorang siswa melakukan konfigurasi server yang cukup rumit, namun sistem VM menjadi rusak dan tidak bisa dipakai lagi. Apa manfaat Snapshot dalam situasi ini, seandainya siswa sempat membuatnya sebelum konfigurasi dimulai?</p>
+                </div>
+                <div class="bg-gray-800/40 p-4 rounded-lg">
+                    <p class="text-white font-semibold mb-1">Kasus 4 — Sekolah Butuh 10 VM Identik</p>
+                    <p class="text-sm">Sekolah ingin membuat 10 VM dengan sistem operasi dan konfigurasi dasar yang sama persis untuk keperluan lab jaringan. Fitur virtualisasi apa yang paling efisien digunakan agar tidak perlu install ulang 10 kali dari awal?</p>
+                </div>
+                <div class="bg-gray-800/40 p-4 rounded-lg">
+                    <p class="text-white font-semibold mb-1">Kasus 5 — VM Berjalan Sangat Lambat</p>
+                    <p class="text-sm">Sebuah VM berjalan sangat lambat meskipun laptop host memiliki spesifikasi yang cukup tinggi. Apa saja yang sebaiknya diperiksa administrator untuk mencari penyebab masalah ini?</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 18. PRAKTIKUM -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-flask"></i></div>
+                <h2 class="text-2xl font-bold text-white">18. Praktikum — Membuat Komputer Virtual Pertama</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-3 text-gray-300 leading-relaxed">
+                <p><strong class="text-white">Tujuan:</strong> Siswa mampu membuat Virtual Machine pertamanya dan menjalankannya dengan benar menggunakan Oracle VirtualBox.</p>
+                <p><strong class="text-white">Alat:</strong> Laptop/PC dengan RAM minimal 8 GB, Oracle VirtualBox (atau VMware Workstation), file ISO Linux yang sesuai untuk pembelajaran (misalnya Ubuntu Server).</p>
+                <p class="font-semibold text-white">Langkah Praktikum:</p>
+                <ol class="list-decimal list-inside space-y-2 text-sm">
+                    <li><strong class="text-white">Mengecek spesifikasi komputer</strong> — pastikan RAM, CPU, dan sisa storage laptop mencukupi sesuai System Requirement pada Materi 13.</li>
+                    <li><strong class="text-white">Memastikan virtualisasi tersedia</strong> — cek apakah fitur Intel VT-x/AMD-V sudah aktif (bisa dicek lewat Task Manager pada Windows, bagian Performance → CPU → Virtualization).</li>
+                    <li><strong class="text-white">Membuka VirtualBox/VMware</strong> — jalankan aplikasi yang sudah terinstal di laptop.</li>
+                    <li><strong class="text-white">Membuat VM baru</strong> — klik tombol <span class="font-mono text-xs bg-gray-800 px-1 rounded">New</span> untuk memulai wizard pembuatan VM.</li>
+                    <li><strong class="text-white">Memberikan nama VM</strong> — gunakan nama deskriptif, misalnya "Ubuntu-Server-Praktikum1".</li>
+                    <li><strong class="text-white">Memilih ISO</strong> — arahkan ke lokasi file ISO Ubuntu Server yang sudah diunduh sebelumnya.</li>
+                    <li><strong class="text-white">Mengatur RAM</strong> — alokasikan sekitar 2 GB (2048 MB) sesuai rekomendasi realistis dari Materi 11.</li>
+                    <li><strong class="text-white">Mengatur CPU</strong> — alokasikan 2 vCPU agar proses instalasi dan konfigurasi terasa cukup responsif.</li>
+                    <li><strong class="text-white">Membuat virtual disk</strong> — buat virtual disk baru dengan kapasitas sekitar 20–25 GB.</li>
+                    <li><strong class="text-white">Mengatur Network</strong> — pilih mode NAT untuk tahap awal ini, agar VM bisa mengakses internet untuk update sistem.</li>
+                    <li><strong class="text-white">Menjalankan VM</strong> — klik tombol <span class="font-mono text-xs bg-gray-800 px-1 rounded">Start</span> untuk menyalakan VM yang baru dibuat.</li>
+                    <li><strong class="text-white">Mengamati proses boot</strong> — perhatikan layar VM saat mulai memuat installer Ubuntu Server dari ISO, catat tahapan yang muncul.</li>
+                    <li><strong class="text-white">Mematikan VM dengan benar</strong> — gunakan opsi shutdown resmi (bukan menutup paksa jendela VirtualBox) untuk mengakhiri sesi praktikum.</li>
+                </ol>
+                <p><strong class="text-white">Hasil yang Diharapkan:</strong> Siswa berhasil membuat satu Virtual Machine dari awal hingga bisa dinyalakan dan menampilkan proses boot installer Ubuntu Server, sebagai persiapan langsung menuju praktik instalasi penuh di Bab 4.</p>
+            </div>
+        </section>
+
+        <!-- 19. TUGAS OBSERVASI -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-clipboard-list"></i></div>
+                <h2 class="text-2xl font-bold text-white">19. Tugas Observasi — Kenali Komputer Virtualmu</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-4 text-gray-300 leading-relaxed">
+                <p>Setelah menyelesaikan praktikum, catat data berikut ke dalam tabel sederhana di buku catatanmu:</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                    <div class="bg-gray-800/50 p-3 rounded-lg"><i class="fas fa-desktop text-secondary mr-2"></i>CPU host (jenis & jumlah core)</div>
+                    <div class="bg-gray-800/50 p-3 rounded-lg"><i class="fas fa-memory text-secondary mr-2"></i>RAM host (total kapasitas)</div>
+                    <div class="bg-gray-800/50 p-3 rounded-lg"><i class="fas fa-hdd text-secondary mr-2"></i>Storage host (kapasitas & sisa ruang)</div>
+                    <div class="bg-gray-800/50 p-3 rounded-lg"><i class="fas fa-window-restore text-secondary mr-2"></i>OS host (Windows/macOS/Linux & versinya)</div>
+                    <div class="bg-gray-800/50 p-3 rounded-lg"><i class="fas fa-box text-secondary mr-2"></i>Software virtualisasi yang dipakai</div>
+                    <div class="bg-gray-800/50 p-3 rounded-lg"><i class="fas fa-brain text-secondary mr-2"></i>RAM VM yang dialokasikan</div>
+                    <div class="bg-gray-800/50 p-3 rounded-lg"><i class="fas fa-microchip text-secondary mr-2"></i>CPU VM (jumlah vCPU)</div>
+                    <div class="bg-gray-800/50 p-3 rounded-lg"><i class="fas fa-box-archive text-secondary mr-2"></i>Virtual Disk VM (kapasitas)</div>
+                    <div class="bg-gray-800/50 p-3 rounded-lg sm:col-span-2"><i class="fas fa-network-wired text-secondary mr-2"></i>Network Mode VM yang dipakai</div>
+                </div>
+                <p class="font-semibold text-white mt-4">Pertanyaan Analisis:</p>
+                <ol class="list-decimal list-inside space-y-2 text-sm">
+                    <li>Mengapa Virtual Machine membutuhkan alokasi RAM tersendiri, padahal RAM tersebut sebenarnya "meminjam" dari host?</li>
+                    <li>Mengapa Virtual Machine membutuhkan storage (virtual disk) tersendiri, terpisah dari storage host?</li>
+                    <li>Apa yang akan terjadi jika RAM yang dialokasikan ke host terlalu kecil sementara banyak VM dijalankan sekaligus?</li>
+                    <li>Berdasarkan pengalaman praktikummu, apa perbedaan paling terasa antara komputer fisik dan Virtual Machine?</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- 20. RINGKASAN -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-list-check"></i></div>
+                <h2 class="text-2xl font-bold text-white">20. Ringkasan</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 text-gray-300 leading-relaxed">
+                <ul class="space-y-2 list-none">
+                    <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i><span><strong class="text-white">Virtualisasi</strong> memungkinkan satu hardware fisik (Host) menjalankan banyak komputer virtual (Guest) sekaligus, mengubah cara kita membangun dan belajar server.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i><span><strong class="text-white">Hypervisor</strong> adalah software pengatur Virtual Machine, terbagi menjadi <strong class="text-white">Type 1</strong> (bare-metal, untuk server produksi) dan <strong class="text-white">Type 2</strong> (hosted, untuk belajar/desktop seperti VirtualBox dan VMware Workstation).</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i><span>Setiap VM memiliki komponen virtual sendiri: <strong class="text-white">vCPU, vRAM, Virtual Disk</strong>, dan Virtual Network Adapter, yang semuanya "meminjam" resource dari host.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i><span><strong class="text-white">Snapshot</strong> menyimpan kondisi VM pada waktu tertentu (seperti save point game) namun bukan pengganti backup, sedangkan <strong class="text-white">Clone</strong> menduplikasi VM untuk mempercepat pembuatan VM baru yang serupa.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i><span><strong class="text-white">Over-allocation</strong> terjadi jika resource yang dialokasikan ke semua VM melebihi kapasitas fisik host, menyebabkan sistem menjadi lambat.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i><span>Empat mode jaringan VM utama: <strong class="text-white">NAT</strong> (internet lewat host), <strong class="text-white">Bridged</strong> (VM jadi perangkat terpisah di jaringan fisik), <strong class="text-white">Host-Only</strong> (VM hanya terhubung ke host), dan <strong class="text-white">Internal Network</strong> (hanya antar-VM).</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i><span>Bab 3 ini menjadi jembatan penting: setelah memahami hardware & OS server di Bab 2, kini kamu siap membuat Virtual Machine sebagai wadah aman untuk instalasi Ubuntu Server di Bab 4.</span></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 21. REFLEKSI -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-comment-dots"></i></div>
+                <h2 class="text-2xl font-bold text-white">21. Refleksi</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 text-gray-300 leading-relaxed">
+                <ol class="space-y-2 list-decimal list-inside text-sm">
+                    <li>Jika satu komputer dapat menjalankan beberapa VM sekaligus, mengapa kita masih membutuhkan komputer fisik?</li>
+                    <li>Jelaskan dengan bahasamu sendiri perbedaan antara Host dan Guest.</li>
+                    <li>Menurutmu, mengapa hypervisor Type 1 lebih cocok untuk server produksi dibanding Type 2?</li>
+                    <li>Ceritakan pengalamanmu saat pertama kali membuat Virtual Machine di praktikum — bagian mana yang paling membingungkan?</li>
+                    <li>Mengapa Snapshot sangat membantu proses belajar, terutama saat kamu melakukan kesalahan konfigurasi?</li>
+                    <li>Jelaskan dengan kata-katamu sendiri kapan sebaiknya menggunakan mode jaringan NAT dibanding Bridged.</li>
+                    <li>Apa yang akan kamu lakukan jika laptopmu terasa sangat lambat saat menjalankan Virtual Machine?</li>
+                    <li>Menurutmu, mengapa perusahaan besar lebih memilih menyewa Virtual Machine di cloud dibanding membeli banyak server fisik sendiri?</li>
+                    <li>Bagian mana dari Bab 3 ini yang menurutmu paling penting untuk dikuasai sebelum lanjut ke instalasi Ubuntu Server di Bab 4? Jelaskan alasannya.</li>
+                    <li>Apa satu hal baru yang paling mengejutkan buatmu dari materi virtualisasi ini?</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- QUIZ SECTION -->
+        <section id="quiz-section">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-secondary/20 text-secondary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-clipboard-question"></i></div>
+                <h2 class="text-2xl font-bold text-white">22. Kuis Bab 3</h2>
+            </div>
+
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 mb-6">
+                <label class="block text-sm text-gray-400 mb-2">Nama Siswa</label>
+                <input id="nama-siswa" type="text" placeholder="Tulis nama lengkap kamu di sini..." class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary">
+            </div>
+
+            <form id="quiz-form" class="space-y-6">
+
+                <!-- Q1 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">1. Apa yang dimaksud dengan Virtual Machine (VM)?</p>
+                    <div class="space-y-2" data-question="1" data-correct="b">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q1" value="a" class="accent-primary"> <span>Komputer fisik tambahan yang harus dibeli terpisah</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q1" value="b" class="accent-primary"> <span>Komputer virtual yang berjalan di atas komputer fisik menggunakan software</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q1" value="c" class="accent-primary"> <span>Aplikasi pengolah kata</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q1" value="d" class="accent-primary"> <span>Jenis kabel jaringan</span></label>
+                    </div>
+                </div>
+
+                <!-- Q2 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">2. Komputer fisik tempat Virtual Machine dijalankan disebut...</p>
+                    <div class="space-y-2" data-question="2" data-correct="a">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q2" value="a" class="accent-primary"> <span>Host</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q2" value="b" class="accent-primary"> <span>Guest</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q2" value="c" class="accent-primary"> <span>Clone</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q2" value="d" class="accent-primary"> <span>Snapshot</span></label>
+                    </div>
+                </div>
+
+                <!-- Q3 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">3. Sistem operasi yang berjalan di dalam Virtual Machine disebut...</p>
+                    <div class="space-y-2" data-question="3" data-correct="c">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q3" value="a" class="accent-primary"> <span>Host</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q3" value="b" class="accent-primary"> <span>Hypervisor</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q3" value="c" class="accent-primary"> <span>Guest</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q3" value="d" class="accent-primary"> <span>BIOS</span></label>
+                    </div>
+                </div>
+
+                <!-- Q4 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">4. Software yang bertugas menciptakan dan mengatur Virtual Machine disebut...</p>
+                    <div class="space-y-2" data-question="4" data-correct="b">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q4" value="a" class="accent-primary"> <span>Browser</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q4" value="b" class="accent-primary"> <span>Hypervisor</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q4" value="c" class="accent-primary"> <span>Antivirus</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q4" value="d" class="accent-primary"> <span>Firewall</span></label>
+                    </div>
+                </div>
+
+                <!-- Q5 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">5. Oracle VirtualBox termasuk contoh hypervisor jenis...</p>
+                    <div class="space-y-2" data-question="5" data-correct="b">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q5" value="a" class="accent-primary"> <span>Type 1 (Bare-Metal)</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q5" value="b" class="accent-primary"> <span>Type 2 (Hosted)</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q5" value="c" class="accent-primary"> <span>Type 3</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q5" value="d" class="accent-primary"> <span>Bukan hypervisor</span></label>
+                    </div>
+                </div>
+
+                <!-- Q6 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">6. Berikut ini yang BUKAN termasuk manfaat virtualisasi adalah...</p>
+                    <div class="space-y-2" data-question="6" data-correct="d">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q6" value="a" class="accent-primary"> <span>Menghemat hardware dan biaya</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q6" value="b" class="accent-primary"> <span>Memudahkan pengujian dan pembelajaran</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q6" value="c" class="accent-primary"> <span>Isolasi sistem antar VM</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q6" value="d" class="accent-primary"> <span>Menambah jumlah komputer fisik yang harus dibeli</span></label>
+                    </div>
+                </div>
+
+                <!-- Q7 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">7. Fitur yang berfungsi seperti "save point" dalam game, menyimpan kondisi VM pada waktu tertentu, disebut...</p>
+                    <div class="space-y-2" data-question="7" data-correct="a">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q7" value="a" class="accent-primary"> <span>Snapshot</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q7" value="b" class="accent-primary"> <span>Clone</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q7" value="c" class="accent-primary"> <span>Firewall</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q7" value="d" class="accent-primary"> <span>ISO</span></label>
+                    </div>
+                </div>
+
+                <!-- Q8 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">8. Proses menyalin sebuah VM yang sudah dikonfigurasi menjadi VM baru disebut...</p>
+                    <div class="space-y-2" data-question="8" data-correct="c">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q8" value="a" class="accent-primary"> <span>Snapshot</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q8" value="b" class="accent-primary"> <span>Backup</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q8" value="c" class="accent-primary"> <span>Clone</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q8" value="d" class="accent-primary"> <span>Boot</span></label>
+                    </div>
+                </div>
+
+                <!-- Q9 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">9. Hypervisor Type 1 berjalan langsung di atas...</p>
+                    <div class="space-y-2" data-question="9" data-correct="b">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q9" value="a" class="accent-primary"> <span>Sistem operasi host seperti Windows</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q9" value="b" class="accent-primary"> <span>Hardware fisik, tanpa OS host di antaranya</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q9" value="c" class="accent-primary"> <span>Browser internet</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q9" value="d" class="accent-primary"> <span>Aplikasi office</span></label>
+                    </div>
+                </div>
+
+                <!-- Q10 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">10. Manakah yang termasuk contoh Hypervisor Type 1?</p>
+                    <div class="space-y-2" data-question="10" data-correct="c">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q10" value="a" class="accent-primary"> <span>Oracle VirtualBox</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q10" value="b" class="accent-primary"> <span>VMware Workstation</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q10" value="c" class="accent-primary"> <span>VMware ESXi</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q10" value="d" class="accent-primary"> <span>Google Chrome</span></label>
+                    </div>
+                </div>
+
+                <!-- Q11 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">11. vCPU pada Virtual Machine dianalogikan sebagai...</p>
+                    <div class="space-y-2" data-question="11" data-correct="a">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q11" value="a" class="accent-primary"> <span>Otak</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q11" value="b" class="accent-primary"> <span>Meja kerja</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q11" value="c" class="accent-primary"> <span>Lemari penyimpanan</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q11" value="d" class="accent-primary"> <span>Kartu jaringan</span></label>
+                    </div>
+                </div>
+
+                <!-- Q12 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">12. Mode jaringan VM yang membuat VM seolah menjadi perangkat terpisah di jaringan fisik yang sama dengan host disebut...</p>
+                    <div class="space-y-2" data-question="12" data-correct="b">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q12" value="a" class="accent-primary"> <span>NAT</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q12" value="b" class="accent-primary"> <span>Bridged Adapter</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q12" value="c" class="accent-primary"> <span>Host-Only Adapter</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q12" value="d" class="accent-primary"> <span>Internal Network</span></label>
+                    </div>
+                </div>
+
+                <!-- Q13 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">13. Mode jaringan VM paling sederhana, di mana VM mengakses internet lewat host tanpa terlihat oleh perangkat lain di jaringan, disebut...</p>
+                    <div class="space-y-2" data-question="13" data-correct="a">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q13" value="a" class="accent-primary"> <span>NAT</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q13" value="b" class="accent-primary"> <span>Bridged Adapter</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q13" value="c" class="accent-primary"> <span>Internal Network</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q13" value="d" class="accent-primary"> <span>USB Passthrough</span></label>
+                    </div>
+                </div>
+
+                <!-- Q14 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">14. Sebelum membuat Virtual Machine, komputer sebaiknya mendukung fitur virtualisasi hardware seperti...</p>
+                    <div class="space-y-2" data-question="14" data-correct="d">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q14" value="a" class="accent-primary"> <span>Bluetooth</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q14" value="b" class="accent-primary"> <span>Wi-Fi 6</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q14" value="c" class="accent-primary"> <span>USB 3.0</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q14" value="d" class="accent-primary"> <span>Intel VT-x / AMD-V</span></label>
+                    </div>
+                </div>
+
+                <!-- Q15 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">15. Snapshot BUKAN pengganti dari...</p>
+                    <div class="space-y-2" data-question="15" data-correct="c">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q15" value="a" class="accent-primary"> <span>Clone</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q15" value="b" class="accent-primary"> <span>ISO</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q15" value="c" class="accent-primary"> <span>Backup</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q15" value="d" class="accent-primary"> <span>Boot Order</span></label>
+                    </div>
+                </div>
+
+                <!-- Q16 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">16. Full Clone berbeda dengan Linked Clone karena...</p>
+                    <div class="space-y-2" data-question="16" data-correct="a">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q16" value="a" class="accent-primary"> <span>Full Clone menyalin seluruh data secara independen, Linked Clone tetap bergantung pada VM induk</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q16" value="b" class="accent-primary"> <span>Full Clone tidak membutuhkan storage sama sekali</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q16" value="c" class="accent-primary"> <span>Linked Clone selalu lebih besar ukurannya</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q16" value="d" class="accent-primary"> <span>Keduanya persis sama tanpa perbedaan</span></label>
+                    </div>
+                </div>
+
+                <!-- Q17 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">17. Jika RAM host adalah 8 GB dan tiga VM masing-masing dialokasikan 4 GB (total 12 GB), kondisi ini disebut...</p>
+                    <div class="space-y-2" data-question="17" data-correct="b">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q17" value="a" class="accent-primary"> <span>Snapshot</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q17" value="b" class="accent-primary"> <span>Over-allocation</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q17" value="c" class="accent-primary"> <span>Bridged Adapter</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q17" value="d" class="accent-primary"> <span>Clone</span></label>
+                    </div>
+                </div>
+
+                <!-- Q18 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">18. Sebuah laptop dengan RAM 8 GB menjalankan 3 VM sekaligus, masing-masing diberi RAM 4 GB. Apa yang PALING MUNGKIN terjadi pada host?</p>
+                    <div class="space-y-2" data-question="18" data-correct="c">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q18" value="a" class="accent-primary"> <span>Semua VM berjalan sempurna tanpa masalah</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q18" value="b" class="accent-primary"> <span>RAM host bertambah otomatis</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q18" value="c" class="accent-primary"> <span>Performa host dan VM menjadi sangat lambat karena RAM yang dialokasikan melebihi kapasitas fisik</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q18" value="d" class="accent-primary"> <span>Jaringan internet otomatis terputus</span></label>
+                    </div>
+                </div>
+
+                <!-- Q19 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">19. VM dapat mengakses internet tetapi tidak dapat diakses dari komputer lain di jaringan yang sama. Mode jaringan yang kemungkinan besar digunakan adalah...</p>
+                    <div class="space-y-2" data-question="19" data-correct="a">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q19" value="a" class="accent-primary"> <span>NAT</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q19" value="b" class="accent-primary"> <span>Bridged Adapter</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q19" value="c" class="accent-primary"> <span>Internal Network</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q19" value="d" class="accent-primary"> <span>Tidak ada network adapter</span></label>
+                    </div>
+                </div>
+
+                <!-- Q20 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">20. Siswa akan melakukan konfigurasi server yang berisiko pada sebuah VM. Langkah paling tepat sebelum memulai adalah...</p>
+                    <div class="space-y-2" data-question="20" data-correct="b">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q20" value="a" class="accent-primary"> <span>Menghapus virtual disk terlebih dahulu</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q20" value="b" class="accent-primary"> <span>Membuat Snapshot terlebih dahulu</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q20" value="c" class="accent-primary"> <span>Mematikan laptop host sepenuhnya</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q20" value="d" class="accent-primary"> <span>Mencabut kabel jaringan sekolah</span></label>
+                    </div>
+                </div>
+
+                <!-- Q21 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">21. Sekolah ingin membuat 10 VM dengan konfigurasi dasar yang sama persis. Fitur yang paling efisien digunakan adalah...</p>
+                    <div class="space-y-2" data-question="21" data-correct="d">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q21" value="a" class="accent-primary"> <span>Snapshot</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q21" value="b" class="accent-primary"> <span>Bridged Adapter</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q21" value="c" class="accent-primary"> <span>Boot Order</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q21" value="d" class="accent-primary"> <span>Clone</span></label>
+                    </div>
+                </div>
+
+                <!-- Q22 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">22. Sebuah VM berjalan sangat lambat meskipun host memiliki spesifikasi cukup tinggi. Manakah yang PALING PERLU diperiksa pertama kali?</p>
+                    <div class="space-y-2" data-question="22" data-correct="a">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q22" value="a" class="accent-primary"> <span>Alokasi RAM/CPU VM dan jumlah VM yang berjalan bersamaan</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q22" value="b" class="accent-primary"> <span>Warna tema desktop VM</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q22" value="c" class="accent-primary"> <span>Merek mouse yang dipakai</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q22" value="d" class="accent-primary"> <span>Nama file ISO</span></label>
+                    </div>
+                </div>
+
+                <!-- Q23 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">23. Seorang siswa ingin dua VM (server dan client) bisa saling terhubung tanpa terhubung ke jaringan fisik luar sama sekali. Mode jaringan paling tepat adalah...</p>
+                    <div class="space-y-2" data-question="23" data-correct="b">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q23" value="a" class="accent-primary"> <span>NAT</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q23" value="b" class="accent-primary"> <span>Internal Network</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q23" value="c" class="accent-primary"> <span>Bridged Adapter</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q23" value="d" class="accent-primary"> <span>USB Passthrough</span></label>
+                    </div>
+                </div>
+
+                <!-- Q24 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">24. Sebuah perusahaan ingin menguji sistem operasi baru tanpa mengganggu sistem produksi yang sedang berjalan. Konsep virtualisasi yang paling mendukung kebutuhan ini adalah...</p>
+                    <div class="space-y-2" data-question="24" data-correct="c">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q24" value="a" class="accent-primary"> <span>Boot Order</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q24" value="b" class="accent-primary"> <span>Shared Folder</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q24" value="c" class="accent-primary"> <span>Isolasi sistem antar VM</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q24" value="d" class="accent-primary"> <span>Display VRAM</span></label>
+                    </div>
+                </div>
+
+                <!-- Q25 -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-4">25. Mengapa mempelajari virtualisasi penting sebelum instalasi Ubuntu Server pada mata pelajaran ini?</p>
+                    <div class="space-y-2" data-question="25" data-correct="d">
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q25" value="a" class="accent-primary"> <span>Karena virtualisasi mengganti kebutuhan belajar Linux sepenuhnya</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q25" value="b" class="accent-primary"> <span>Karena laptop siswa wajib diganti dengan server fisik</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q25" value="c" class="accent-primary"> <span>Karena virtualisasi tidak berkaitan dengan instalasi server</span></label>
+                        <label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer"><input type="radio" name="q25" value="d" class="accent-primary"> <span>Karena VM memungkinkan siswa praktik instalasi dan konfigurasi server tanpa risiko merusak komputer fisik</span></label>
+                    </div>
+                </div>
+
+                <!-- Praktik / Essay -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-2">26. (Praktik Reflektif) Jelaskan dalam 2-3 kalimat rencana konfigurasi VM (vCPU, vRAM, Virtual Disk, dan mode jaringan) yang akan kamu gunakan untuk instalasi Ubuntu Server di Bab 4, beserta alasannya.</p>
+                    <p class="text-xs text-gray-500 mb-3">*Jawaban ini akan dinilai langsung oleh Guru, bukan otomatis oleh sistem.</p>
+                    <textarea id="essay-jawaban" rows="4" placeholder="Tulis jawabanmu di sini..." class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-secondary"></textarea>
+                </div>
+
+                <button type="submit" id="submit-btn" class="w-full bg-primary text-darker font-bold py-4 rounded-xl hover:bg-emerald-400 transition-colors text-lg">
+                    <i class="fas fa-paper-plane mr-2"></i> Kumpulkan Jawaban
+                </button>
+            </form>
+
+            <!-- RESULT CARD -->
+            <div id="result-card" class="hidden mt-8 bg-gradient-to-br from-dark to-gray-900 border-2 border-primary rounded-2xl p-8 text-center shadow-2xl">
+                <i class="fas fa-award text-5xl text-yellow-400 mb-4"></i>
+                <p class="text-gray-400 mb-1">Hasil Kuis Bab 3 atas nama</p>
+                <p id="result-nama" class="text-xl font-bold text-white mb-4">-</p>
+                <p class="text-6xl font-extrabold text-primary mb-2" id="result-score">0</p>
+                <p class="text-gray-400 mb-6">dari 100 (Pilihan Ganda: <span id="result-fraction">0/5</span> benar)</p>
+                <div class="bg-gray-800/60 rounded-lg p-4 text-sm text-gray-300 mb-6 text-left">
+                    <i class="fas fa-info-circle text-secondary mr-2"></i>
+                    Tunjukkan/screenshot layar ini kepada Bapak Khalid Nabawi, S.Kom. sebagai bukti nilai kuis kamu. Jawaban nomor 26 akan dinilai terpisah oleh Guru.
+                </div>
+                <button onclick="salinHasil()" id="copy-btn" class="bg-secondary text-white font-semibold px-6 py-3 rounded-full hover:bg-blue-600 transition-colors">
+                    <i class="fas fa-copy mr-2"></i> Salin Hasil untuk Dikirim ke Guru
+                </button>
+            </div>
+        </section>
+
+        <!-- 23. KUNCI JAWABAN -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-key"></i></div>
+                <h2 class="text-2xl font-bold text-white">23. Kunci Jawaban & Pembahasan Singkat</h2>
+            </div>
+            <details class="jawaban-box bg-dark border border-gray-800 rounded-xl p-6 text-gray-300 leading-relaxed">
+                <summary class="font-semibold text-white">Klik untuk membuka pembahasan (kerjakan kuis dulu sebelum melihat ini!)</summary>
+                <ol class="space-y-2 list-decimal list-inside text-sm mt-4">
+                    <li><strong class="text-primary">B.</strong> VM adalah komputer virtual yang berjalan di atas komputer fisik menggunakan software.</li>
+                    <li><strong class="text-primary">A.</strong> Host adalah komputer fisik tempat VM dijalankan.</li>
+                    <li><strong class="text-primary">C.</strong> Guest adalah sistem operasi yang berjalan di dalam VM.</li>
+                    <li><strong class="text-primary">B.</strong> Hypervisor menciptakan dan mengatur Virtual Machine.</li>
+                    <li><strong class="text-primary">B.</strong> VirtualBox termasuk hypervisor Type 2 (Hosted).</li>
+                    <li><strong class="text-primary">D.</strong> Virtualisasi justru mengurangi kebutuhan membeli banyak hardware fisik, bukan menambah.</li>
+                    <li><strong class="text-primary">A.</strong> Snapshot bekerja seperti save point dalam game.</li>
+                    <li><strong class="text-primary">C.</strong> Clone adalah proses menyalin VM menjadi VM baru.</li>
+                    <li><strong class="text-primary">B.</strong> Hypervisor Type 1 berjalan langsung di atas hardware fisik.</li>
+                    <li><strong class="text-primary">C.</strong> VMware ESXi adalah contoh Hypervisor Type 1.</li>
+                    <li><strong class="text-primary">A.</strong> vCPU dianalogikan sebagai otak VM.</li>
+                    <li><strong class="text-primary">B.</strong> Bridged Adapter membuat VM seperti perangkat terpisah di jaringan fisik.</li>
+                    <li><strong class="text-primary">A.</strong> NAT adalah mode jaringan paling sederhana lewat host.</li>
+                    <li><strong class="text-primary">D.</strong> Intel VT-x/AMD-V adalah fitur virtualisasi hardware yang dibutuhkan.</li>
+                    <li><strong class="text-primary">C.</strong> Snapshot bukan pengganti Backup.</li>
+                    <li><strong class="text-primary">A.</strong> Full Clone independen, Linked Clone tetap bergantung pada VM induk.</li>
+                    <li><strong class="text-primary">B.</strong> Alokasi RAM melebihi kapasitas fisik disebut over-allocation.</li>
+                    <li><strong class="text-primary">C.</strong> Over-allocation membuat performa host dan VM menjadi sangat lambat.</li>
+                    <li><strong class="text-primary">A.</strong> VM yang bisa internet tapi tidak bisa diakses balik biasanya memakai mode NAT.</li>
+                    <li><strong class="text-primary">B.</strong> Snapshot sebaiknya dibuat sebelum konfigurasi berisiko.</li>
+                    <li><strong class="text-primary">D.</strong> Clone adalah fitur paling efisien untuk membuat banyak VM identik.</li>
+                    <li><strong class="text-primary">A.</strong> Alokasi RAM/CPU dan jumlah VM aktif adalah hal pertama yang perlu diperiksa saat VM lambat.</li>
+                    <li><strong class="text-primary">B.</strong> Internal Network menghubungkan antar-VM tanpa melibatkan jaringan luar.</li>
+                    <li><strong class="text-primary">C.</strong> Isolasi sistem memungkinkan pengujian tanpa mengganggu sistem produksi.</li>
+                    <li><strong class="text-primary">D.</strong> VM memungkinkan praktik instalasi server tanpa risiko merusak komputer fisik.</li>
+                </ol>
+            </details>
+        </section>
+
+        <!-- 24. GLOSARIUM -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-book"></i></div>
+                <h2 class="text-2xl font-bold text-white">24. Glosarium</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 text-gray-300 leading-relaxed">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 text-sm">
+                    <p><strong class="text-white">Virtualisasi</strong> — teknologi membagi satu hardware fisik menjadi beberapa komputer virtual.</p>
+                    <p><strong class="text-white">Virtual Machine (VM)</strong> — komputer virtual yang berjalan di atas komputer fisik.</p>
+                    <p><strong class="text-white">Host</strong> — komputer fisik yang menjalankan Virtual Machine.</p>
+                    <p><strong class="text-white">Guest</strong> — sistem operasi yang berjalan di dalam Virtual Machine.</p>
+                    <p><strong class="text-white">Hypervisor</strong> — software pengatur dan pencipta Virtual Machine.</p>
+                    <p><strong class="text-white">Type 1 Hypervisor</strong> — hypervisor bare-metal, berjalan langsung di atas hardware.</p>
+                    <p><strong class="text-white">Type 2 Hypervisor</strong> — hypervisor hosted, berjalan di atas sistem operasi host.</p>
+                    <p><strong class="text-white">Oracle VirtualBox</strong> — software hypervisor Type 2 gratis dan open source.</p>
+                    <p><strong class="text-white">VMware Workstation</strong> — software hypervisor Type 2 buatan VMware/Broadcom.</p>
+                    <p><strong class="text-white">vCPU</strong> — prosesor virtual yang dialokasikan untuk VM.</p>
+                    <p><strong class="text-white">vRAM</strong> — memori virtual yang dialokasikan untuk VM.</p>
+                    <p><strong class="text-white">Virtual Disk</strong> — file yang berperan sebagai harddisk VM.</p>
+                    <p><strong class="text-white">Virtual Network Adapter</strong> — kartu jaringan virtual milik VM.</p>
+                    <p><strong class="text-white">ISO</strong> — file cetakan sistem operasi yang dipakai untuk instalasi VM.</p>
+                    <p><strong class="text-white">Shared Folder</strong> — folder yang dapat diakses bersama oleh host dan VM.</p>
+                    <p><strong class="text-white">Boot Order</strong> — urutan perangkat yang dicoba VM saat dinyalakan.</p>
+                    <p><strong class="text-white">Snapshot</strong> — fitur menyimpan kondisi VM pada waktu tertentu.</p>
+                    <p><strong class="text-white">Clone</strong> — fitur menduplikasi VM menjadi VM baru.</p>
+                    <p><strong class="text-white">Full Clone</strong> — hasil clone yang menyalin seluruh data secara independen.</p>
+                    <p><strong class="text-white">Linked Clone</strong> — hasil clone yang tetap bergantung pada VM induk.</p>
+                    <p><strong class="text-white">Over-allocation</strong> — alokasi resource ke VM yang melebihi kapasitas fisik host.</p>
+                    <p><strong class="text-white">NAT</strong> — mode jaringan VM lewat host tanpa terlihat jaringan luar.</p>
+                    <p><strong class="text-white">Bridged Adapter</strong> — mode jaringan VM sebagai perangkat terpisah di jaringan fisik.</p>
+                    <p><strong class="text-white">Host-Only Adapter</strong> — mode jaringan yang hanya menghubungkan VM dengan host.</p>
+                    <p><strong class="text-white">Internal Network</strong> — mode jaringan yang hanya menghubungkan antar-VM.</p>
+                    <p><strong class="text-white">Isolasi Sistem</strong> — pemisahan antar VM agar masalah di satu VM tidak menyebar.</p>
+                    <p><strong class="text-white">Intel VT-x</strong> — fitur virtualisasi hardware pada prosesor Intel.</p>
+                    <p><strong class="text-white">AMD-V / AMD SVM</strong> — fitur virtualisasi hardware pada prosesor AMD.</p>
+                    <p><strong class="text-white">Physical Machine</strong> — komputer fisik sungguhan.</p>
+                    <p><strong class="text-white">Data Center</strong> — fasilitas berisi banyak server yang menjalankan ribuan VM.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 25. REFERENSI -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-link"></i></div>
+                <h2 class="text-2xl font-bold text-white">25. Referensi</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 text-gray-300 leading-relaxed">
+                <p class="text-sm mb-3">Materi Bab 3 disusun dengan mensintesis dan menulis ulang informasi dari berbagai sumber resmi, di antaranya:</p>
+                <ul class="space-y-1 text-sm list-disc list-inside">
+                    <li>Oracle VirtualBox Documentation — "Oracle VM VirtualBox User Manual", virtualbox.org/manual (diakses 2026)</li>
+                    <li>Broadcom/VMware Documentation — "VMware Workstation Pro Documentation", docs.vmware.com (diakses 2026)</li>
+                    <li>Ubuntu Documentation — "Ubuntu Server Documentation", ubuntu.com/server/docs (diakses 2026)</li>
+                    <li>Red Hat Documentation — "Virtualization Getting Started Guide", access.redhat.com/documentation (diakses 2026)</li>
+                    <li>Microsoft Learn — "Hyper-V Technology Overview", learn.microsoft.com (diakses 2026)</li>
+                    <li>IBM Documentation — "Introduction to Virtualization", ibm.com/docs (diakses 2026)</li>
+                    <li>Linux Foundation — "KVM: Kernel-based Virtual Machine", linuxfoundation.org (diakses 2026)</li>
+                    <li>Oracle Documentation — "Virtualization Technologies Overview", docs.oracle.com (diakses 2026)</li>
+                    <li>Buku Administrasi Sistem Jaringan SMK Kurikulum Merdeka</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Navigation -->
+        <div class="flex justify-between items-center pt-8 border-t border-gray-800">
+            <a href="index.html" class="text-gray-400 hover:text-primary transition-colors flex items-center gap-2">
+                <i class="fas fa-map-signs"></i> Roadmap
+            </a>
+            <a href="belum-tersedia.html?bab=Bab%204&judul=Instalasi%20Ubuntu%20Server" class="text-gray-400 hover:text-primary transition-colors flex items-center gap-2">
+                Bab 4 <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </main>
+
+    <footer class="bg-darker border-t border-gray-800 py-8 text-center text-gray-500 text-sm">
+        <p>&copy; 2026/2027 SMK Bintang Raudloh. ASJ Kelas XI.</p>
+    </footer>
+
+    <script>
+        const form = document.getElementById('quiz-form');
+        const resultCard = document.getElementById('result-card');
+        let lastResultText = '';
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const namaInput = document.getElementById('nama-siswa').value.trim();
+            if (!namaInput) {
+                alert('Mohon isi nama kamu terlebih dahulu sebelum mengumpulkan jawaban.');
+                document.getElementById('nama-siswa').focus();
+                return;
+            }
+
+            const groups = document.querySelectorAll('[data-question]');
+            let unanswered = [];
+            groups.forEach(g => {
+                const qNum = g.getAttribute('data-question');
+                const checked = g.querySelector('input[type="radio"]:checked');
+                if (!checked) unanswered.push(qNum);
+            });
+            if (unanswered.length > 0) {
+                alert('Masih ada soal pilihan ganda yang belum dijawab (nomor: ' + unanswered.join(', ') + ').');
+                return;
+            }
+
+            let correctCount = 0;
+            const total = groups.length;
+
+            groups.forEach(g => {
+                const correctVal = g.getAttribute('data-correct');
+                const checked = g.querySelector('input[type="radio"]:checked');
+                const labels = g.querySelectorAll('label.quiz-option');
+
+                labels.forEach(lbl => {
+                    lbl.classList.add('locked');
+                    const input = lbl.querySelector('input');
+                    if (input.value === correctVal) {
+                        lbl.classList.add('correct-answer');
+                    } else if (input.checked && input.value !== correctVal) {
+                        lbl.classList.add('wrong-answer');
+                    }
+                });
+
+                if (checked && checked.value === correctVal) correctCount++;
+            });
+
+            const score = Math.round((correctCount / total) * 100);
+
+            document.getElementById('result-nama').textContent = namaInput;
+            document.getElementById('result-score').textContent = score;
+            document.getElementById('result-fraction').textContent = correctCount + '/' + total;
+            resultCard.classList.remove('hidden');
+            document.getElementById('submit-btn').disabled = true;
+            document.getElementById('submit-btn').classList.add('opacity-50', 'cursor-not-allowed');
+
+            const essay = document.getElementById('essay-jawaban').value.trim();
+            lastResultText =
+                'HASIL KUIS - BAB 3 (Virtualisasi)\n' +
+                'Nama: ' + namaInput + '\n' +
+                'Nilai Pilihan Ganda: ' + score + ' (' + correctCount + '/' + total + ' benar)\n' +
+                'Jawaban No.26 (Reflektif): ' + (essay || '-(kosong)-');
+
+            resultCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+
+        function salinHasil() {
+            navigator.clipboard.writeText(lastResultText).then(() => {
+                const btn = document.getElementById('copy-btn');
+                const original = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check mr-2"></i> Tersalin!';
+                setTimeout(() => { btn.innerHTML = original; }, 2000);
+            }).catch(() => {
+                alert('Gagal menyalin otomatis. Silahkan screenshot layar hasil kuis ini.');
+            });
+        }
+    </script>
+</body>
+</html>
