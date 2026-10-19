@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bab 4 – Instalasi Ubuntu Server | ASJ Kelas XI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        dark: '#0f172a',
+                        darker: '#020617',
+                        primary: '#10b981',
+                        secondary: '#3b82f6',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #020617; color: #e2e8f0; }
+        .bg-grid {
+            background-image: linear-gradient(to right, #1e293b 1px, transparent 1px),
+                              linear-gradient(to bottom, #1e293b 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #10b981; border-radius: 5px; }
+
+        .quiz-option { transition: all .2s ease; }
+        .quiz-option:hover { border-color: #10b981; }
+        .quiz-option.selected { border-color: #10b981; background-color: rgba(16, 185, 129, 0.1); }
+        .quiz-option.correct-answer { border-color: #10b981 !important; background-color: rgba(16, 185, 129, 0.15) !important; }
+        .quiz-option.wrong-answer { border-color: #ef4444 !important; background-color: rgba(239, 68, 68, 0.1) !important; }
+        .quiz-option.locked { pointer-events: none; }
+        details.jawaban-box summary { cursor: pointer; }
+        details.jawaban-box[open] summary { color: #10b981; }
+        details.kasus-box summary { cursor: pointer; }
+        details.kasus-box[open] summary { color: #10b981; }
+
+        .tbl-compare { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+        .tbl-compare th, .tbl-compare td { border: 1px solid #1e293b; padding: 10px 12px; text-align: left; vertical-align: top; }
+        .tbl-compare th { background-color: rgba(30, 41, 59, 0.6); color: #fff; font-weight: 600; }
+        .tbl-compare tr:nth-child(even) td { background-color: rgba(30, 41, 59, 0.25); }
+
+        /* Blok terminal (tambahan untuk contoh perintah) */
+        pre.term {
+            background-color: #020617; border: 1px solid #1e293b; border-left: 4px solid #10b981;
+            border-radius: 8px; padding: 14px 16px; overflow-x: auto; font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem; line-height: 1.6; color: #a7f3d0; white-space: pre;
+        }
+        code.cmd { font-family: 'JetBrains Mono', monospace; background: rgba(30,41,59,.8); color: #6ee7b7; padding: 1px 6px; border-radius: 4px; font-size: 0.85em; }
+        .fb-box { display: none; }
+        .fb-box.show { display: block; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Navbar -->
+    <nav class="bg-dark border-b border-gray-800 py-4 sticky top-0 z-30">
+        <div class="container mx-auto px-6 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-2 text-gray-300 hover:text-primary transition-colors">
+                <i class="fas fa-arrow-left"></i>
+                <span class="font-semibold hidden sm:inline">Kembali ke Roadmap</span>
+            </a>
+            <div class="flex items-center gap-2 text-sm text-gray-400 font-mono">
+                <i class="fas fa-server text-primary"></i>
+                <span>Bab 4 / 18</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="bg-grid relative overflow-hidden py-16 border-b border-gray-800">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-darker"></div>
+        <div class="container mx-auto px-6 relative z-10 max-w-4xl text-center">
+            <span class="bg-primary/20 text-primary py-1 px-4 rounded-full text-sm font-bold tracking-wider mb-4 inline-block">SEMESTER GANJIL &bull; BAB 4</span>
+            <h1 class="text-3xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+                Instalasi Ubuntu Server
+            </h1>
+            <p class="text-gray-400 text-lg">Output: Satu VM Ubuntu Server yang berhasil diinstal, dapat diakses lewat terminal lokal, dan konfigurasinya dapat diperiksa.</p>
+            <p class="text-gray-500 text-sm mt-3">Guru Pengampu: Khalid Nabawi, S.Kom. &bull; XI TJKT &bull; SMK Bintang Raudloh</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 max-w-4xl py-16 space-y-16">
+
+        <!-- 1. PEMBUKA -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-flag-checkered"></i></div>
+                <h2 class="text-2xl font-bold text-white">1. Pendahuluan dan Apersepsi</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-4 text-gray-300 leading-relaxed">
+                <div class="bg-gray-800/50 p-4 rounded-lg border-l-4 border-primary">
+                    <p class="italic text-white">"Pada bab sebelumnya, kita sudah belajar membuat komputer virtual. Sekarang, bagaimana cara mengubah komputer virtual tersebut menjadi server Linux yang benar-benar dapat digunakan?"</p>
+                </div>
+                <p>Di Bab 3, kamu sudah membuat <strong class="text-white">Virtual Machine (VM)</strong>. Tapi VM yang baru dibuat itu masih "kosong", seperti gedung baru yang belum ada perabotnya: ada ruangan (CPU, RAM, disk), tetapi belum ada sistem operasi yang mengatur semuanya. Di bab inilah kita "mengisi" gedung itu dengan <strong class="text-white">Ubuntu Server</strong>.</p>
+
+                <p class="font-semibold text-white">Peta perjalanan belajarmu</p>
+                <div class="flex flex-wrap items-center gap-2 text-sm">
+                    <span class="bg-gray-800/60 px-3 py-2 rounded-lg"><i class="fas fa-microchip text-secondary mr-1"></i> Hardware server</span><i class="fas fa-arrow-right text-gray-600"></i>
+                    <span class="bg-gray-800/60 px-3 py-2 rounded-lg"><i class="fas fa-cubes text-secondary mr-1"></i> Virtualisasi</span><i class="fas fa-arrow-right text-gray-600"></i>
+                    <span class="bg-gray-800/60 px-3 py-2 rounded-lg"><i class="fas fa-desktop text-secondary mr-1"></i> Virtual Machine</span><i class="fas fa-arrow-right text-gray-600"></i>
+                    <span class="bg-primary/20 text-primary px-3 py-2 rounded-lg font-semibold"><i class="fas fa-compact-disc mr-1"></i> Instalasi Ubuntu Server</span><i class="fas fa-arrow-right text-gray-600"></i>
+                    <span class="bg-gray-800/60 px-3 py-2 rounded-lg"><i class="fas fa-terminal text-secondary mr-1"></i> Login terminal</span>
+                </div>
+
+                <p class="font-semibold text-white mt-2">Tujuan pembelajaran</p>
+                <p class="text-sm">Setelah mempelajari bab ini, kamu mampu:</p>
+                <ol class="list-decimal list-inside space-y-1 text-sm">
+                    <li>Menjelaskan fungsi Ubuntu Server.</li>
+                    <li>Menyiapkan kebutuhan instalasi sistem operasi server.</li>
+                    <li>Memahami pilihan partisi disk saat instalasi.</li>
+                    <li>Mengatur hostname server.</li>
+                    <li>Memahami konfigurasi jaringan server.</li>
+                    <li>Memahami fungsi OpenSSH Server dan opsi instalasinya.</li>
+                    <li>Menyelesaikan instalasi Ubuntu Server.</li>
+                    <li>Melakukan login ke server melalui terminal.</li>
+                    <li>Memverifikasi bahwa sistem berhasil diinstal.</li>
+                </ol>
+
+                <div class="bg-gray-800/50 p-4 rounded-lg border-l-4 border-secondary">
+                    <p class="text-sm"><strong class="text-secondary">Proyek mini kamu:</strong> membangun server bernama <code class="cmd">asj-server01</code> di dalam VM. Di akhir bab, kamu harus bisa membuka terminalnya, login, dan membuktikan dengan beberapa perintah bahwa server itu benar-benar hidup: nama hostnya benar, versi Ubuntu-nya terbaca, dan punya alamat IP. Hasilnya kamu dokumentasikan dalam laporan sederhana (lihat bagian Output Akhir).</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. MENGENAL UBUNTU SERVER -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fab fa-ubuntu"></i></div>
+                <h2 class="text-2xl font-bold text-white">2. Mengenal Ubuntu Server</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-4 text-gray-300 leading-relaxed">
+                <p><strong class="text-white">Ubuntu</strong> adalah salah satu distribusi (distro) Linux yang dikembangkan oleh perusahaan Canonical bersama komunitas open source. Ubuntu tersedia dalam beberapa edisi; dua yang paling sering dibahas adalah <em>Desktop</em> dan <em>Server</em>.</p>
+                <p><strong class="text-white">Ubuntu Server</strong> adalah edisi Ubuntu yang dirancang untuk menjalankan layanan (web, file, database, dan sebagainya). Secara bawaan ia tidak memiliki tampilan grafis; kamu mengendalikannya lewat <em>terminal</em> berbasis teks. Contoh: ketika kamu membuka website sekolah, di belakangnya bisa saja ada Ubuntu Server yang menyajikan halaman itu.</p>
+
+                <div class="overflow-x-auto">
+                    <table class="tbl-compare">
+                        <thead><tr><th>Aspek</th><th>Ubuntu Desktop</th><th>Ubuntu Server</th></tr></thead>
+                        <tbody>
+                            <tr><td><strong class="text-white">Tujuan</strong></td><td>Dipakai sehari-hari oleh manusia: browsing, mengetik, belajar.</td><td>Menjalankan layanan untuk dipakai komputer/pengguna lain lewat jaringan.</td></tr>
+                            <tr><td><strong class="text-white">Tampilan</strong></td><td>Grafis (desktop, jendela, ikon).</td><td>Teks (terminal), tanpa desktop secara bawaan.</td></tr>
+                            <tr><td><strong class="text-white">Kebutuhan sumber daya</strong></td><td>Lebih besar karena ada lingkungan grafis.</td><td>Lebih kecil karena tidak memuat tampilan grafis.</td></tr>
+                            <tr><td><strong class="text-white">Cara dikelola</strong></td><td>Klik menu dan jendela.</td><td>Mengetik perintah, sering dari jarak jauh lewat SSH.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p class="font-semibold text-white">Analogi: hardware, sistem operasi, dan aplikasi server</p>
+                <div class="bg-gray-800/50 p-4 rounded-lg border-l-4 border-primary text-sm space-y-1">
+                    <p>Bayangkan sebuah <strong>restoran</strong>. <strong>Hardware</strong> adalah gedung dan dapurnya. <strong>Sistem operasi</strong> (Ubuntu Server) adalah manajer yang mengatur siapa memakai kompor, kapan bahan diambil, dan menjaga kelancaran dapur. <strong>Aplikasi server</strong> (misalnya web server) adalah koki spesialis yang menyiapkan menu tertentu. Tanpa manajer, koki dan dapur tidak bisa bekerja teratur.</p>
+                </div>
+
+                <p class="font-semibold text-white">Fungsi sistem operasi pada server</p>
+                <ul class="list-disc list-inside text-sm space-y-1">
+                    <li>Mengatur pemakaian CPU, RAM, dan disk oleh banyak proses.</li>
+                    <li>Mengelola pengguna dan hak akses (siapa boleh melakukan apa).</li>
+                    <li>Mengelola koneksi jaringan.</li>
+                    <li>Menjadi "landasan" tempat aplikasi server dipasang.</li>
+                </ul>
+
+                <p class="font-semibold text-white">Mengapa Linux banyak dipakai pada server?</p>
+                <p class="text-sm">Linux bersifat open source sehingga tidak memerlukan biaya lisensi sistem operasinya, dapat dikonfigurasi sangat fleksibel, bisa berjalan tanpa tampilan grafis, dan didukung komunitas besar. Ini alasan yang masuk akal, tetapi bukan berarti Linux (atau Ubuntu) <em>otomatis</em> lebih cepat atau lebih aman daripada sistem operasi lain. Kecepatan dan keamanan sangat bergantung pada kebutuhan, konfigurasi, dan cara administrator merawatnya.</p>
+
+                <p class="font-semibold text-white">Hubungan dengan pekerjaan System Administrator</p>
+                <p class="text-sm">Seorang System Administrator memasang, mengonfigurasi, memantau, dan merawat server. Instalasi sistem operasi adalah langkah pertama dari seluruh pekerjaan itu. Bab ini melatih fondasinya.</p>
+
+                <p class="font-semibold text-white">Contoh penggunaan Ubuntu Server</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                    <div class="bg-gray-800/40 p-4 rounded-lg"><p class="text-white font-semibold"><i class="fas fa-school text-secondary mr-2"></i>Sekolah</p><p>Server e-learning, file sharing, atau lab praktik jaringan.</p></div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg"><p class="text-white font-semibold"><i class="fas fa-building text-secondary mr-2"></i>Kantor</p><p>Server berkas bersama, server intranet, atau server backup.</p></div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg"><p class="text-white font-semibold"><i class="fas fa-globe text-secondary mr-2"></i>Hosting</p><p>Menjalankan website dan aplikasi web pelanggan.</p></div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg"><p class="text-white font-semibold"><i class="fas fa-warehouse text-secondary mr-2"></i>Data center</p><p>Menjadi dasar server fisik, VM, atau cloud skala besar.</p></div>
+                </div>
+
+                <div class="bg-gray-800/50 p-4 rounded-lg border-l-4 border-yellow-500 text-sm">
+                    <p><strong class="text-yellow-400">Versi LTS.</strong> Untuk bab ini kita memakai <strong class="text-white">Ubuntu Server 26.04 LTS (Resolute Raccoon)</strong>, yang dirilis 23 April 2026 dan didukung hingga April 2031. <em>LTS</em> (Long Term Support) berarti rilis dengan dukungan pembaruan keamanan jangka panjang, sehingga cocok untuk server. Jika kelasmu memakai ISO 24.04 LTS, langkah dasarnya sangat mirip; perbedaan tampilan kecil akan disebut di tiap tahap.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. PERSIAPAN INSTALASI -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-clipboard-check"></i></div>
+                <h2 class="text-2xl font-bold text-white">3. Persiapan Instalasi</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-4 text-gray-300 leading-relaxed">
+                <p>Sebelum memulai, pastikan semua bahan siap, seperti memeriksa bahan masakan sebelum memasak.</p>
+                <ul class="space-y-3">
+                    <li class="flex items-start gap-3"><i class="fas fa-laptop text-primary mt-1"></i><span><strong class="text-white">Laptop atau komputer</strong> — sebagai <em>host</em> (komputer asli yang menjalankan VM).</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-cubes text-primary mt-1"></i><span><strong class="text-white">Oracle VirtualBox atau VMware Workstation</strong> — aplikasi virtualisasi dari Bab 3. Panduan di bab ini memakai istilah VirtualBox; VMware sangat mirip.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-compact-disc text-primary mt-1"></i><span><strong class="text-white">File ISO Ubuntu Server</strong> — media instalasi, diunduh dari situs resmi.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-microchip text-primary mt-1"></i><span><strong class="text-white">CPU dengan dukungan virtualisasi</strong> — fitur seperti Intel VT-x atau AMD-V harus aktif di BIOS/UEFI agar VM 64-bit berjalan baik.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-memory text-primary mt-1"></i><span><strong class="text-white">RAM</strong> — sebagian RAM laptop akan "dipinjamkan" ke VM.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-hdd text-primary mt-1"></i><span><strong class="text-white">Ruang penyimpanan</strong> — untuk file ISO dan virtual disk VM.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-wifi text-primary mt-1"></i><span><strong class="text-white">Koneksi internet</strong> — dibutuhkan untuk mengunduh ISO, dan membantu installer mengambil pembaruan paket.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-book-open text-primary mt-1"></i><span><strong class="text-white">Pengetahuan dasar VM</strong> — cara membuat VM, mengatur RAM/CPU/disk, dan menjalankannya (Bab 3).</span></li>
+                </ul>
+
+                <p class="font-semibold text-white">Apa itu file ISO?</p>
+                <p class="text-sm"><strong class="text-white">ISO</strong> adalah satu file yang berisi salinan lengkap isi sebuah cakram instalasi (CD/DVD). Di komputer fisik, ISO biasanya dituliskan ke flashdisk bootable. Di VM, ISO cukup "dipasang" ke <em>virtual optical drive</em> seolah-olah itu DVD sungguhan. Contoh nama file untuk rilis ini: <code class="cmd">ubuntu-26.04-live-server-amd64.iso</code>.</p>
+
+                <p class="font-semibold text-white">Cara memperoleh ISO dari situs resmi</p>
+                <ol class="list-decimal list-inside text-sm space-y-1">
+                    <li>Buka <a class="text-secondary underline" href="https://ubuntu.com/download/server" target="_blank" rel="noopener">ubuntu.com/download/server</a>.</li>
+                    <li>Pilih rilis LTS yang ditentukan gurumu, lalu unduh <em>Server install image</em> untuk arsitektur <code class="cmd">amd64</code> (laptop Intel/AMD pada umumnya).</li>
+                    <li>Simpan di folder yang mudah ditemukan, misalnya <code class="cmd">Downloads/ISO</code>.</li>
+                    <li>Alternatif: daftar semua rilis tersedia di <a class="text-secondary underline" href="https://releases.ubuntu.com/" target="_blank" rel="noopener">releases.ubuntu.com</a>. Di sana ada juga berkas <code class="cmd">SHA256SUMS</code> untuk memeriksa checksum.</li>
+                </ol>
+                <p class="text-sm text-gray-400">Catatan: ISO berukuran besar (beberapa GB), jadi unduh saat koneksi stabil. Waspadai situs tidak resmi yang menyediakan ISO, karena file bisa saja sudah diubah.</p>
+
+                <p class="font-semibold text-white">VM vs komputer fisik</p>
+                <div class="overflow-x-auto">
+                    <table class="tbl-compare">
+                        <thead><tr><th>Aspek</th><th>Instalasi di Virtual Machine</th><th>Instalasi di komputer fisik</th></tr></thead>
+                        <tbody>
+                            <tr><td><strong class="text-white">Media boot</strong></td><td>File ISO dipasang ke drive optik virtual.</td><td>Flashdisk bootable atau DVD.</td></tr>
+                            <tr><td><strong class="text-white">Disk</strong></td><td>Virtual disk berupa file, terpisah dari sistem utama.</td><td>Disk fisik sungguhan; salah pilih bisa menghapus data.</td></tr>
+                            <tr><td><strong class="text-white">Risiko</strong></td><td>Rendah: jika gagal, VM bisa dihapus dan dibuat ulang.</td><td>Lebih tinggi: berdampak pada perangkat dan data asli.</td></tr>
+                            <tr><td><strong class="text-white">Cocok untuk</strong></td><td>Belajar dan latihan.</td><td>Server produksi yang sebenarnya.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="text-sm">Untuk pembelajaran awal ini kita <strong class="text-white">memakai VM</strong> agar kamu bebas berlatih tanpa mengubah sistem operasi utama laptopmu.</p>
+
+                <p class="font-semibold text-white">Rekomendasi konfigurasi VM untuk laptop siswa</p>
+                <div class="overflow-x-auto">
+                    <table class="tbl-compare">
+                        <thead><tr><th>Komponen</th><th>Rekomendasi latihan</th><th>Catatan</th></tr></thead>
+                        <tbody>
+                            <tr><td><strong class="text-white">CPU</strong></td><td>1–2 core</td><td>Jangan melebihi jumlah core laptop.</td></tr>
+                            <tr><td><strong class="text-white">RAM</strong></td><td>2 GB (ideal 3–4 GB jika laptop mampu)</td><td>Dokumentasi Ubuntu menyebut minimum sekitar 1,5 GB untuk instalasi dari ISO, dan menyarankan 3 GB atau lebih agar lebih longgar.</td></tr>
+                            <tr><td><strong class="text-white">Virtual disk</strong></td><td>20–25 GB, <em>dynamically allocated</em></td><td>Dokumentasi menyarankan 25 GB atau lebih; minimum teknis lebih kecil, tetapi kurang nyaman.</td></tr>
+                            <tr><td><strong class="text-white">Jaringan</strong></td><td>NAT (awal)</td><td>Lihat penjelasan mode jaringan di Bagian 4.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="bg-gray-800/50 p-4 rounded-lg border-l-4 border-yellow-500 text-sm">
+                    <p><strong class="text-yellow-400">Penting:</strong> angka di atas adalah titik awal, bukan aturan universal. Kebutuhan sebenarnya bergantung pada versi Ubuntu, layanan yang dijalankan, dan kemampuan laptopmu. Selalu cek dokumentasi untuk versi yang kamu pakai (lihat Referensi).</p>
+                </div>
+
+                <p class="font-semibold text-white">Checklist persiapan</p>
+                <ul class="space-y-2 text-sm">
+                    <li class="flex items-center gap-3"><input type="checkbox" class="accent-primary"> VirtualBox/VMware sudah terpasang dan bisa dibuka.</li>
+                    <li class="flex items-center gap-3"><input type="checkbox" class="accent-primary"> Virtualisasi CPU aktif (VT-x/AMD-V) atau VM 64-bit bisa dijalankan.</li>
+                    <li class="flex items-center gap-3"><input type="checkbox" class="accent-primary"> File ISO Ubuntu Server resmi sudah selesai diunduh utuh.</li>
+                    <li class="flex items-center gap-3"><input type="checkbox" class="accent-primary"> Ruang kosong di laptop cukup untuk virtual disk.</li>
+                    <li class="flex items-center gap-3"><input type="checkbox" class="accent-primary"> Sudah menentukan hostname, username, dan password <em>latihan</em> (dicatat di lembar kerja, bukan password pribadi).</li>
+                    <li class="flex items-center gap-3"><input type="checkbox" class="accent-primary"> Koneksi internet tersedia.</li>
+                    <li class="flex items-center gap-3"><input type="checkbox" class="accent-primary"> Lembar kerja dokumentasi siap diisi.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 4. MEMPERSIAPKAN VM -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-desktop"></i></div>
+                <h2 class="text-2xl font-bold text-white">4. Mempersiapkan Virtual Machine</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-4 text-gray-300 leading-relaxed">
+                <p>Tampilan menu dapat sedikit berbeda antar versi VirtualBox atau VMware. Pahami <em>fungsi</em> tiap pengaturan, bukan sekadar menghafal letak tombolnya.</p>
+                <ol class="space-y-3 text-sm">
+                    <li class="bg-gray-800/40 p-4 rounded-lg"><strong class="text-white">1. Buka VirtualBox/VMware.</strong> Pastikan aplikasi berjalan normal. Bila VM Bab 3 masih ada dan kosong (belum berisi OS), kamu boleh memakainya; jika ragu, buat VM baru agar bersih.</li>
+                    <li class="bg-gray-800/40 p-4 rounded-lg"><strong class="text-white">2. Buat VM baru</strong> (di VirtualBox: tombol <em>New</em>).</li>
+                    <li class="bg-gray-800/40 p-4 rounded-lg"><strong class="text-white">3. Beri nama VM</strong>, misalnya <code class="cmd">Ubuntu-Server-ASJ</code>. <em>Fungsi:</em> pembeda antar VM di daftar. Hindari spasi berlebihan dan nama yang membingungkan.</li>
+                    <li class="bg-gray-800/40 p-4 rounded-lg"><strong class="text-white">4. Pilih tipe OS:</strong> Type <code class="cmd">Linux</code>, Version <code class="cmd">Ubuntu (64-bit)</code>. <em>Fungsi:</em> VirtualBox menyesuaikan pengaturan bawaan dengan jenis OS. Bila VirtualBox versi 7 menampilkan opsi <em>Skip Unattended Installation</em>, centang opsi itu supaya kamu menjalani installer secara manual dan benar-benar belajar tiap langkahnya.</li>
+                    <li class="bg-gray-800/40 p-4 rounded-lg"><strong class="text-white">5. Atur RAM dan CPU</strong> (lihat rekomendasi di Bagian 3). <em>Fungsi:</em> menentukan "tenaga" VM. Terlalu kecil membuat installer gagal atau sangat lambat; terlalu besar membuat laptop macet.</li>
+                    <li class="bg-gray-800/40 p-4 rounded-lg"><strong class="text-white">6. Buat virtual disk</strong> (ukuran 20–25 GB, format VDI, <em>dynamically allocated</em>). <em>Fungsi:</em> "harddisk" milik VM yang sebenarnya hanyalah sebuah file di laptopmu. <span class="text-yellow-400">Gunakan hanya virtual disk baru ini. Jangan memilih disk fisik laptop.</span></li>
+                    <li class="bg-gray-800/40 p-4 rounded-lg"><strong class="text-white">7. Pasang ISO sebagai media boot.</strong> Buka <em>Settings → Storage</em>, klik ikon disk kosong (Empty) di bawah <em>Controller</em>, pilih <em>Choose a disk file</em>, lalu pilih file ISO Ubuntu Server. <em>Fungsi:</em> memberi tahu VM bahwa ada "DVD instalasi" di drive optiknya. Di <em>Settings → System</em>, pastikan urutan boot memuat Optical di atas Hard Disk.</li>
+                    <li class="bg-gray-800/40 p-4 rounded-lg"><strong class="text-white">8. Pilih mode jaringan awal</strong> (<em>Settings → Network</em>). Pilihan umum:
+                        <ul class="list-disc list-inside mt-2 text-gray-400">
+                            <li><strong class="text-white">NAT</strong>: VM berada di jaringan privat milik VirtualBox dan biasanya bisa mengakses internet lewat laptop. Sederhana, tetapi VM tidak mudah diakses dari komputer lain.</li>
+                            <li><strong class="text-white">Bridged Adapter</strong>: VM tampil seperti perangkat tersendiri di jaringan yang sama dengan laptop dan bisa memperoleh IP dari router/DHCP jaringan itu (bergantung kebijakan jaringan sekolah/Wi-Fi).</li>
+                            <li><strong class="text-white">Host-only / Internal Network</strong>: jaringan terbatas untuk eksperimen; dipakai pada bab-bab berikutnya.</li>
+                        </ul>
+                        Untuk Bab 4, <strong class="text-white">NAT</strong> adalah pilihan awal yang aman. Jangan menganggap semua VM otomatis mendapat IP dari jaringan fisik; hasilnya dipengaruhi mode yang dipilih.
+                    </li>
+                    <li class="bg-gray-800/40 p-4 rounded-lg"><strong class="text-white">9. Periksa kembali konfigurasi.</strong> Cek nama, RAM, CPU, ukuran disk, ISO terpasang, dan mode jaringan sebelum dijalankan. Tangkap layar ringkasannya untuk dokumentasi.</li>
+                    <li class="bg-gray-800/40 p-4 rounded-lg"><strong class="text-white">10. Jalankan VM</strong> (tombol <em>Start</em>). Jendela VM akan terbuka dan installer Ubuntu mulai dimuat.</li>
+                </ol>
+
+                <div class="bg-gray-800/50 p-4 rounded-lg border-l-4 border-primary text-sm">
+                    <p><strong class="text-primary">Tips:</strong> klik di dalam jendela VM untuk "menangkap" keyboard/mouse. Untuk mengeluarkan kursor dari VM, VirtualBox memakai tombol <em>Host Key</em> (bawaannya Right Ctrl). Mouse sering tidak berfungsi di installer teks; pakai keyboard.</p>
+                </div>
+
+                <p class="font-semibold text-white">Troubleshooting persiapan VM</p>
+                <div class="overflow-x-auto">
+                    <table class="tbl-compare">
+                        <thead><tr><th>Masalah</th><th>Kemungkinan penyebab</th><th>Cek / solusi</th></tr></thead>
+                        <tbody>
+                            <tr><td>VM gagal boot / tidak mau menyala</td><td>Virtualisasi CPU nonaktif, RAM VM terlalu besar, atau bentrok dengan fitur Windows (Hyper-V).</td><td>Baca pesan error, kecilkan RAM VM, aktifkan VT-x/AMD-V di BIOS/UEFI, tanyakan guru jika bentrok Hyper-V.</td></tr>
+                            <tr><td>ISO tidak terdeteksi</td><td>ISO belum dipasang di drive optik, path salah, atau file ISO rusak.</td><td>Buka Settings → Storage, pasang ulang ISO; cek ukuran dan checksum file.</td></tr>
+                            <tr><td>RAM tidak mencukupi</td><td>Installer macet atau error karena RAM VM terlalu kecil.</td><td>Matikan VM, naikkan RAM (misalnya 2 GB), jalankan lagi.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. PROSES INSTALASI -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-compact-disc"></i></div>
+                <h2 class="text-2xl font-bold text-white">5. Proses Instalasi Ubuntu Server</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-6 text-gray-300 leading-relaxed">
+                <p>Installer Ubuntu Server berbasis teks. Navigasinya: <strong class="text-white">panah atas/bawah</strong> berpindah pilihan, <strong class="text-white">Tab</strong> berpindah antar bagian layar, <strong class="text-white">Spasi</strong> mencentang kotak, <strong class="text-white">Enter</strong> mengonfirmasi (tombol <em>Done</em>/<em>Continue</em>). Urutan dan nama layar dapat berbeda sedikit antar versi (24.04 vs 26.04); jika ada layar yang tidak muncul, baca tulisannya dan lanjutkan dengan pilihan paling aman.</p>
+
+                <!-- A -->
+                <div class="bg-gray-800/40 p-4 rounded-lg space-y-2">
+                    <h3 class="text-white font-bold"><i class="fas fa-play text-primary mr-2"></i>A. Memulai installer</h3>
+                    <p class="text-sm">Saat VM menyala, ISO di-<em>boot</em> dan menu awal muncul. Pilih <strong class="text-white">Try or Install Ubuntu Server</strong>, lalu tekan Enter. Tunggu teks bergulir; installer akan dimuat dan layar pertama (pemilihan bahasa) tampil. Pada beberapa versi muncul layar <em>Installer update available</em>; memilih memperbarui installer akan mengunduh versi baru dan mengulang proses di titik yang sama (butuh internet). Jika internet belum tersedia, pilih lanjut tanpa memperbarui.</p>
+                </div>
+
+                <!-- B -->
+                <div class="bg-gray-800/40 p-4 rounded-lg space-y-2">
+                    <h3 class="text-white font-bold"><i class="fas fa-keyboard text-primary mr-2"></i>B. Bahasa dan keyboard</h3>
+                    <p class="text-sm">Pilih bahasa (umumnya <em>English</em>, agar pesan error mudah dicari di internet) dan layout keyboard (laptop di Indonesia umumnya <em>English (US)</em>).</p>
+                    <p class="text-sm"><strong class="text-yellow-400">Tips:</strong> layout yang salah membuat simbol tertukar (misalnya <code class="cmd">@</code> dan <code class="cmd">"</code>). Pada layar keyboard ada kolom uji ketik; coba ketik beberapa simbol sebelum lanjut. Hindari password dengan banyak simbol saat latihan, supaya kamu tidak terkunci karena salah layout.</p>
+                </div>
+
+                <!-- Jenis instalasi -->
+                <div class="bg-gray-800/40 p-4 rounded-lg space-y-2">
+                    <h3 class="text-white font-bold"><i class="fas fa-list-check text-primary mr-2"></i>Pilihan jenis instalasi</h3>
+                    <p class="text-sm">Biasanya ada <em>Ubuntu Server</em> (standar) dan <em>Ubuntu Server (minimized)</em> (lebih ringkas, umumnya untuk cloud/kontainer). Untuk latihan pilih <strong class="text-white">Ubuntu Server</strong> standar.</p>
+                </div>
+
+                <!-- C -->
+                <div class="bg-gray-800/40 p-4 rounded-lg space-y-3">
+                    <h3 class="text-white font-bold"><i class="fas fa-network-wired text-primary mr-2"></i>C. Network Configuration</h3>
+                    <ul class="text-sm space-y-2 list-disc list-inside">
+                        <li><strong class="text-white">Network interface</strong>: "port" jaringan milik komputer (di VM berupa kartu jaringan virtual). Contoh nama: <code class="cmd">enp0s3</code> (nama bisa berbeda).</li>
+                        <li><strong class="text-white">IP Address</strong>: "alamat rumah" komputer di jaringan, misalnya <code class="cmd">10.0.2.15</code> (contoh umum pada mode NAT VirtualBox).</li>
+                        <li><strong class="text-white">DHCP</strong>: layanan yang otomatis membagikan IP dan pengaturan jaringan ke perangkat yang meminta. Cara kerja sederhananya: perangkat "berteriak" meminta alamat, server DHCP menjawab dengan alamat yang tersedia, lalu perangkat memakainya untuk sementara waktu.</li>
+                        <li><strong class="text-white">IP statis</strong>: alamat yang kamu tetapkan manual. Berguna untuk server yang alamatnya harus tetap, tetapi mudah salah jika belum paham pengalamatan.</li>
+                    </ul>
+                    <div class="overflow-x-auto">
+                        <table class="tbl-compare">
+                            <thead><tr><th>Aspek</th><th>DHCP (otomatis)</th><th>IP statis (manual)</th></tr></thead>
+                            <tbody>
+                                <tr><td>Cara</td><td>Alamat diberikan otomatis.</td><td>Alamat, gateway, DNS diisi sendiri.</td></tr>
+                                <tr><td>Kelebihan</td><td>Mudah, cepat, cocok untuk latihan awal.</td><td>Alamat konsisten, mudah diingat/diakses.</td></tr>
+                                <tr><td>Kekurangan</td><td>Alamat dapat berubah.</td><td>Salah isi = tidak terhubung.</td></tr>
+                                <tr><td>Kapan dipakai</td><td>Praktikum awal, jaringan yang memiliki DHCP.</td><td>Server layanan tetap atau jaringan tanpa DHCP.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="text-sm"><strong class="text-white">Cara membaca layar jaringan:</strong> installer menampilkan daftar interface. Jika DHCP berhasil, di samping interface terlihat metode <em>DHCPv4</em> beserta alamat IP-nya (catat alamat itu). Jika masih menunggu, tunggu beberapa detik. Jika tetap kosong, lihat bagian Troubleshooting.</p>
+                    <p class="text-sm"><strong class="text-white">Untuk praktikum awal gunakan DHCP</strong> bila tersedia. Konfigurasi manual diperlukan bila jaringan tidak memiliki DHCP atau server wajib berada di alamat tertentu. Hasilnya bisa berbeda tergantung versi installer dan lingkungan virtualisasi: pada NAT biasanya VM mendapat IP privat dari VirtualBox, sedangkan pada Bridged IP berasal dari jaringan fisik (jika jaringan itu mengizinkan).</p>
+                    <p class="text-sm text-gray-400">Istilah lain yang akan sering kamu temui: <strong class="text-white">gateway</strong> (pintu keluar menuju jaringan lain, mis. internet) dan <strong class="text-white">DNS</strong> (penerjemah nama seperti ubuntu.com menjadi alamat IP). Konfigurasi manualnya baru dipelajari di bab berikutnya.</p>
+                </div>
+
+                <!-- D -->
+                <div class="bg-gray-800/40 p-4 rounded-lg space-y-2">
+                    <h3 class="text-white font-bold"><i class="fas fa-route text-primary mr-2"></i>D. Proxy Configuration</h3>
+                    <p class="text-sm"><strong class="text-white">Proxy</strong> adalah perantara antara komputer dan internet; beberapa jaringan kantor atau sekolah mewajibkan lalu lintas internet melewatinya. Contoh: jaringan sekolah yang memfilter situs lewat server proxy. Jika jaringanmu tidak memakai proxy, <strong class="text-white">biarkan kolom kosong</strong> lalu pilih Done. Isi hanya jika gurumu memberi alamat proxy.</p>
+                </div>
+
+                <!-- E -->
+                <div class="bg-gray-800/40 p-4 rounded-lg space-y-2">
+                    <h3 class="text-white font-bold"><i class="fas fa-boxes-stacked text-primary mr-2"></i>E. Ubuntu Archive Mirror</h3>
+                    <p class="text-sm"><strong class="text-white">Repository</strong> adalah gudang paket perangkat lunak Ubuntu, dan <strong class="text-white">mirror</strong> adalah salinan gudang itu di server lain agar unduhan lebih dekat dan cepat. Installer membutuhkan sumber paket ini untuk mengambil pembaruan dan komponen tambahan. Installer biasanya memilih mirror bawaan sesuai lokasi dan mengujinya; jika tes lulus, pilih Done.</p>
+                    <p class="text-sm"><strong class="text-white">Jika mirror tidak dapat dijangkau:</strong> periksa koneksi internet (kembali ke layar jaringan), cek apakah memakai proxy, lalu coba mirror lain atau ulangi beberapa saat kemudian. Jika memang tidak ada internet, instalasi dasar dari ISO masih dapat dilanjutkan, dan pembaruan bisa dilakukan nanti setelah jaringan siap.</p>
+                </div>
+
+                <!-- F -->
+                <div class="bg-gray-800/40 p-4 rounded-lg space-y-3">
+                    <h3 class="text-white font-bold"><i class="fas fa-hard-drive text-primary mr-2"></i>F. Storage Configuration dan Partisi Disk</h3>
+                    <ul class="text-sm space-y-2 list-disc list-inside">
+                        <li><strong class="text-white">Disk</strong>: perangkat penyimpan data (fisik, atau file virtual pada VM).</li>
+                        <li><strong class="text-white">Partisi</strong>: bagian terpisah dari sebuah disk, seperti sekat ruangan dalam satu gedung.</li>
+                        <li><strong class="text-white">Filesystem</strong>: aturan penataan data dalam sebuah partisi, seperti sistem rak dan label di lemari arsip (contoh: ext4).</li>
+                        <li><strong class="text-white">Mount point</strong>: "pintu" tempat sebuah partisi dipasang ke struktur direktori Linux.</li>
+                        <li><strong class="text-white">Root filesystem <code class="cmd">/</code></strong>: titik awal seluruh pohon direktori; semua folder lain berada di bawahnya.</li>
+                        <li><strong class="text-white"><code class="cmd">/boot</code></strong>: tempat file yang dipakai saat proses booting (kernel). Pada beberapa susunan ia berupa partisi terpisah; pada pengaturan otomatis installer akan mengaturnya sesuai kebutuhan.</li>
+                        <li><strong class="text-white">Swap</strong>: ruang di disk yang dipakai sebagai "cadangan" RAM ketika memori hampir penuh. Lebih lambat dari RAM. Ubuntu dapat memakai file atau partisi swap tergantung pengaturan dan versi.</li>
+                    </ul>
+                    <div class="bg-gray-800/50 p-4 rounded-lg border-l-4 border-primary text-sm">
+                        <p><strong class="text-primary">Analogi:</strong> disk itu seperti sebuah lemari besar. Partisi adalah rak-raknya, filesystem adalah aturan cara menyusun barang di rak, dan mount point adalah label pintu rak agar mudah dicari. Swap seperti kardus tambahan di gudang ketika meja kerjamu (RAM) sudah penuh.</p>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="tbl-compare">
+                            <thead><tr><th>Pilihan</th><th>Penjelasan</th><th>Cocok untuk</th></tr></thead>
+                            <tbody>
+                                <tr><td><strong class="text-white">Use an entire disk (guided)</strong></td><td>Installer memakai seluruh disk yang kamu pilih dan menyusun partisi otomatis. Biasanya ada opsi tambahan seperti LVM yang dapat dibiarkan bawaan.</td><td>Pemula, VM dengan virtual disk baru.</td></tr>
+                                <tr><td><strong class="text-white">Custom storage layout (manual)</strong></td><td>Kamu membuat sendiri partisi, ukuran, filesystem, dan mount point.</td><td>Administrator yang paham kebutuhan; latihan lanjutan pada disk khusus.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="text-sm"><strong class="text-white">Virtual disk vs disk fisik:</strong> virtual disk hanyalah sebuah file di laptop, sehingga jika salah, tinggal buat ulang. Disk fisik adalah perangkat sungguhan; salah konfigurasi dapat menghapus data penting.</p>
+                    <p class="text-sm"><strong class="text-white">Untuk siswa pemula di VM:</strong> pilih konfigurasi otomatis pada virtual disk baru dan biarkan pengaturan bawaan. Setelah itu installer menampilkan <em>ringkasan penyimpanan</em>. Baca ringkasan itu: pastikan hanya ada satu disk dengan ukuran sesuai virtual disk yang kamu buat. Pilih Done, lalu konfirmasi dengan <em>Continue</em> pada peringatan.</p>
+                    <div class="bg-red-900/20 p-4 rounded-lg border-l-4 border-red-500 text-sm">
+                        <p><strong class="text-red-400"><i class="fas fa-triangle-exclamation mr-1"></i>Peringatan penting:</strong> konfigurasi storage yang salah pada komputer fisik dapat menghapus data. <strong class="text-white">Jangan mengubah partisi komputer utamamu.</strong> Semua latihan partisi dilakukan hanya pada virtual disk khusus yang tidak berisi data penting. Setelah kamu menekan <em>Continue</em> pada konfirmasi, disk tujuan akan dihapus dan diformat.</p>
+                    </div>
+                </div>
+
+                <!-- G -->
+                <div class="bg-gray-800/40 p-4 rounded-lg space-y-3">
+                    <h3 class="text-white font-bold"><i class="fas fa-user-gear text-primary mr-2"></i>G. Profile Setup</h3>
+                    <ul class="text-sm space-y-2 list-disc list-inside">
+                        <li><strong class="text-white">Your name</strong>: nama tampilan pemilik akun (boleh nama lengkap).</li>
+                        <li><strong class="text-white">Your server's name (hostname)</strong>: nama identitas server di jaringan. Contoh latihan: <code class="cmd">asj-server01</code>. Aturan praktis: huruf kecil, angka, dan tanda hubung, tanpa spasi, mudah dikenali.</li>
+                        <li><strong class="text-white">Username</strong>: nama akun untuk login. Contoh latihan: <code class="cmd">khalid</code> atau <code class="cmd">adminlab</code>.</li>
+                        <li><strong class="text-white">Password</strong>: kata sandi akun tersebut. Installer meminta kamu mengetiknya dua kali untuk konfirmasi.</li>
+                    </ul>
+                    <p class="text-sm">Semua contoh di atas <strong class="text-white">hanya untuk latihan</strong>; pakai nama sesuai instruksi gurumu bila berbeda.</p>
+                    <div class="bg-gray-800/50 p-4 rounded-lg border-l-4 border-secondary text-sm">
+                        <p><strong class="text-secondary">Hostname vs username:</strong> hostname adalah nama <em>komputernya</em> (siapa servernya), sedangkan username adalah nama <em>orangnya</em> yang masuk. Analogi: hostname seperti nama gedung, username seperti nama pegawai yang masuk ke gedung itu. Pada prompt <code class="cmd">khalid@asj-server01</code>, <em>khalid</em> adalah username dan <em>asj-server01</em> adalah hostname.</p>
+                    </div>
+                    <p class="font-semibold text-white text-sm">Aturan password yang kuat</p>
+                    <ul class="text-sm list-disc list-inside space-y-1">
+                        <li>Cukup panjang (disarankan 12 karakter atau lebih) dan tidak mudah ditebak.</li>
+                        <li>Campur huruf besar/kecil, angka; simbol boleh tetapi pastikan layout keyboard benar.</li>
+                        <li>Jangan memakai nama, tanggal lahir, atau password akun pribadimu (e-mail, media sosial).</li>
+                        <li>Jangan menuliskan password di laporan, dokumentasi, atau screenshot.</li>
+                        <li>Catat password <em>latihan</em> di tempat aman yang hanya kamu ketahui, bukan di grup kelas.</li>
+                    </ul>
+                </div>
+
+                <!-- H -->
+                <div class="bg-gray-800/40 p-4 rounded-lg space-y-2">
+                    <h3 class="text-white font-bold"><i class="fas fa-certificate text-primary mr-2"></i>H. Ubuntu Pro dan opsi tambahan</h3>
+                    <p class="text-sm"><strong class="text-white">Ubuntu Pro</strong> adalah layanan berlangganan dari Canonical yang menambah cakupan pembaruan keamanan (pada paket tertentu) dan fitur kepatuhan. Pada beberapa versi installer, layar ini muncul. Untuk latihan di sekolah, <strong class="text-white">kamu tidak wajib mendaftar</strong>: pilih <em>Skip for now</em> (atau opsi serupa) lalu lanjut.</p>
+                </div>
+
+                <!-- I -->
+                <div class="bg-gray-800/40 p-4 rounded-lg space-y-2">
+                    <h3 class="text-white font-bold"><i class="fas fa-lock text-primary mr-2"></i>I. SSH Setup</h3>
+                    <ul class="text-sm space-y-1 list-disc list-inside">
+                        <li><strong class="text-white">SSH (Secure Shell)</strong>: protokol untuk masuk dan mengendalikan komputer lain lewat jaringan secara terenkripsi. <strong class="text-white">OpenSSH</strong> adalah perangkat lunak yang mengimplementasikannya. Pada server, bagian yang "menunggu tamu" disebut OpenSSH Server.</li>
+                        <li><strong class="text-white">Login lokal vs remote:</strong> login lokal berarti kamu duduk di depan layar/konsol server (atau VM). Login remote berarti masuk dari komputer lain lewat jaringan.</li>
+                        <li><strong class="text-white">Mengapa berguna untuk ASJ:</strong> administrator jarang berdiri di depan server; mereka mengelolanya dari jauh. Dengan SSH kamu bisa menyalin perintah, memakai terminal host yang lebih nyaman, dan berlatih seperti kondisi nyata.</li>
+                        <li><strong class="text-white">Kapan opsi ini dipilih:</strong> centang <em>Install OpenSSH server</em> jika opsi tersedia dan kelas membutuhkannya. Bab ini tidak mengharuskan koneksi SSH berhasil, tetapi memasangnya sekarang memudahkan bab berikutnya. Pada instalasi bawaan Ubuntu, tanpa opsi ini tidak ada port yang terbuka untuk SSH.</li>
+                    </ul>
+                    <div class="bg-yellow-900/20 p-4 rounded-lg border-l-4 border-yellow-500 text-sm">
+                        <p>Keberhasilan SSH juga bergantung pada layanan SSH yang berjalan, alamat IP yang benar, aturan firewall, dan konektivitas jaringan (misalnya pada mode NAT, host tidak bisa langsung menjangkau VM tanpa pengaturan tambahan). <strong class="text-white">Jangan membuka akses server ke internet publik</strong> tanpa kebutuhan dan pengamanan yang sesuai.</p>
+                    </div>
+                </div>
+
+                <!-- J -->
+                <div class="bg-gray-800/40 p-4 rounded-lg space-y-2">
+                    <h3 class="text-white font-bold"><i class="fas fa-cubes-stacked text-primary mr-2"></i>J. Featured Server Snaps</h3>
+                    <p class="text-sm"><em>Snap</em> adalah format paket aplikasi. Jika ada koneksi jaringan, installer dapat menampilkan daftar snap populer untuk server (misalnya alat kontainer atau database). <strong class="text-white">Untuk Bab 4, jangan pilih apa pun</strong>: kita belum membutuhkan layanan tambahan, dan menambah paket membuat instalasi lebih lama. Pilih Done tanpa mencentang.</p>
+                </div>
+
+                <!-- K -->
+                <div class="bg-gray-800/40 p-4 rounded-lg space-y-2">
+                    <h3 class="text-white font-bold"><i class="fas fa-hourglass-half text-primary mr-2"></i>K. Instalasi selesai</h3>
+                    <p class="text-sm">Setelah konfirmasi, installer menyalin sistem ke disk, memasang paket, dan (jika internet ada) memasang pembaruan keamanan. Layar menampilkan log yang bergulir. Tunggu sampai muncul pesan <em>Install complete!</em> dan tombol <strong class="text-white">Reboot Now</strong>. Jangan mematikan VM paksa selama proses berlangsung.</p>
+                    <p class="text-sm"><strong class="text-white">Melepas ISO:</strong> setelah restart, VM harus <em>boot dari virtual disk</em>, bukan dari ISO lagi. Biasanya installer meminta kamu melepas media instalasi lalu menekan Enter. Di VirtualBox kamu bisa memakai menu <em>Devices → Optical Drives → Remove disk from virtual drive</em> (atau melepasnya di Settings → Storage saat VM mati). Jika tidak dilepas dan VM kembali masuk installer, matikan VM, lepas ISO, lalu jalankan lagi.</p>
+                </div>
+
+                <!-- L -->
+                <div class="bg-gray-800/40 p-4 rounded-lg space-y-2">
+                    <h3 class="text-white font-bold"><i class="fas fa-right-to-bracket text-primary mr-2"></i>L. Login pertama</h3>
+                    <p class="text-sm">Setelah reboot dan teks booting selesai, kamu akan melihat prompt login. Ketik username lalu Enter, kemudian ketik password lalu Enter.</p>
+                    <div class="bg-yellow-900/20 p-4 rounded-lg border-l-4 border-yellow-500 text-sm">
+                        <p><strong class="text-yellow-400">Jangan panik:</strong> saat mengetik password di terminal Linux, karakter biasanya <strong class="text-white">tidak tampil sama sekali</strong> (tidak ada bintang atau titik). Itu bukan berarti keyboard rusak; itu fitur keamanan. Ketik dengan tenang lalu tekan Enter.</p>
+                    </div>
+                    <p class="text-sm">Contoh sesi (ilustrasi; tampilan bisa berbeda pada versi lain):</p>
+<pre class="term">asj-server01 login: khalid
+Password:            &lt;-- tidak ada karakter yang tampil
+...
+khalid@asj-server01:~$ </pre>
+                    <p class="text-sm font-semibold text-white">Membaca prompt <code class="cmd">khalid@asj-server01:~$</code></p>
+                    <ul class="text-sm list-disc list-inside space-y-1">
+                        <li><code class="cmd">khalid</code> — username yang sedang aktif.</li>
+                        <li><code class="cmd">@</code> — "di", pemisah antara pengguna dan komputer.</li>
+                        <li><code class="cmd">asj-server01</code> — hostname server.</li>
+                        <li><code class="cmd">~</code> — direktori aktif; tanda ini berarti <em>home directory</em> milik pengguna.</li>
+                        <li><code class="cmd">$</code> — tanda siap menerima perintah sebagai pengguna biasa (bukan administrator penuh).</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. TERMINAL & VERIFIKASI -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-terminal"></i></div>
+                <h2 class="text-2xl font-bold text-white">6. Mengenal Terminal dan Verifikasi Instalasi</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-4 text-gray-300 leading-relaxed">
+                <p><strong class="text-white">Terminal</strong> adalah jendela tempat kamu mengetik perintah untuk dikerjakan komputer. Di bab ini kamu hanya memakai perintah <em>membaca informasi</em> (aman, tidak mengubah sistem). Semua perintah Linux lainnya dipelajari di Bab 5.</p>
+                <div class="bg-yellow-900/20 p-4 rounded-lg border-l-4 border-yellow-500 text-sm">
+                    <p>Output di bawah hanyalah <strong class="text-white">contoh ilustrasi</strong>. Hasil di komputermu bisa berbeda (nama interface, angka, versi kernel, ukuran disk) dan itu normal.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="bg-gray-800/40 p-4 rounded-lg space-y-2">
+                        <p class="text-white font-semibold"><code class="cmd">whoami</code> — memeriksa username aktif</p>
+                        <pre class="term">$ whoami
+khalid</pre>
+                        <p class="text-sm">Menampilkan nama akun yang sedang kamu pakai.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg space-y-2">
+                        <p class="text-white font-semibold"><code class="cmd">hostname</code> — memeriksa nama server</p>
+                        <pre class="term">$ hostname
+asj-server01</pre>
+                        <p class="text-sm">Harus sama dengan hostname yang kamu isi di installer.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg space-y-2">
+                        <p class="text-white font-semibold"><code class="cmd">pwd</code> — melihat lokasi direktori aktif</p>
+                        <pre class="term">$ pwd
+/home/khalid</pre>
+                        <p class="text-sm">Singkatan dari <em>print working directory</em>. Menunjukkan "kamu sedang berada di folder mana".</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg space-y-2">
+                        <p class="text-white font-semibold"><code class="cmd">ip a</code> — memeriksa interface dan alamat IP</p>
+<pre class="term">$ ip a
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; ...
+    inet 127.0.0.1/8 scope host lo
+2: enp0s3: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; ...
+    inet 10.0.2.15/24 ... scope global enp0s3</pre>
+                        <p class="text-sm"><code class="cmd">lo</code> adalah interface internal milik komputer itu sendiri (loopback, selalu <code class="cmd">127.0.0.1</code>). Interface lain (misalnya <code class="cmd">enp0s3</code>) adalah kartu jaringan; baris <code class="cmd">inet</code> berisi alamat IPv4 dan angka setelah garis miring adalah panjang prefix jaringan. Jika interface <em>UP</em> tetapi tidak ada baris <code class="cmd">inet</code>, berarti belum mendapat alamat IPv4.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg space-y-2">
+                        <p class="text-white font-semibold"><code class="cmd">df -h</code> — memeriksa kapasitas penyimpanan</p>
+<pre class="term">$ df -h
+Filesystem   Size  Used Avail Use% Mounted on
+/dev/...      12G  3.5G  7.5G  32% /</pre>
+                        <p class="text-sm">Opsi <code class="cmd">-h</code> membuat ukuran mudah dibaca (G, M). Kolom <em>Mounted on</em> menunjukkan mount point; baris dengan <code class="cmd">/</code> adalah root filesystem. Kapasitas yang terlihat bisa lebih kecil dari ukuran virtual disk karena pembagian oleh installer (misalnya struktur LVM) dan ruang sistem.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg space-y-2">
+                        <p class="text-white font-semibold"><code class="cmd">free -h</code> — memeriksa penggunaan memori</p>
+<pre class="term">$ free -h
+               total   used   free  ...
+Mem:           1.9Gi  250Mi  1.2Gi
+Swap:          ...</pre>
+                        <p class="text-sm">Baris <em>Mem</em> menunjukkan RAM yang dikenali sistem; angkanya sedikit lebih kecil dari RAM yang kamu atur di VM karena sebagian dipakai sistem. Baris <em>Swap</em> menunjukkan ruang swap (bisa nol bila tidak ada).</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg space-y-2">
+                        <p class="text-white font-semibold"><code class="cmd">uname -r</code> — memeriksa versi kernel</p>
+<pre class="term">$ uname -r
+&lt;versi-kernel&gt;-generic</pre>
+                        <p class="text-sm"><strong class="text-white">Kernel</strong> adalah inti sistem operasi yang berhubungan langsung dengan hardware. Nomor versinya berbeda tiap rilis Ubuntu dan tiap pembaruan.</p>
+                    </div>
+                    <div class="bg-gray-800/40 p-4 rounded-lg space-y-2">
+                        <p class="text-white font-semibold"><code class="cmd">cat /etc/os-release</code> — memeriksa versi Ubuntu</p>
+<pre class="term">$ cat /etc/os-release
+PRETTY_NAME="Ubuntu 26.04 LTS"
+NAME="Ubuntu"
+VERSION_ID="26.04"
+...</pre>
+                        <p class="text-sm"><code class="cmd">cat</code> menampilkan isi file; <code class="cmd">/etc/os-release</code> adalah file berisi identitas sistem operasi. Perhatikan <em>PRETTY_NAME</em> dan <em>VERSION_ID</em>.</p>
+                    </div>
+                </div>
+
+                <p class="font-semibold text-white">Pemeriksaan jaringan yang aman</p>
+<pre class="term">$ ip route
+default via 10.0.2.2 dev enp0s3 ...
+
+$ ping -c 4 8.8.8.8
+$ ping -c 4 ubuntu.com</pre>
+                <ul class="text-sm list-disc list-inside space-y-1">
+                    <li><code class="cmd">ip route</code> menampilkan jalur jaringan; baris <em>default via</em> menunjukkan gateway.</li>
+                    <li><code class="cmd">ping -c 4 8.8.8.8</code> mengirim 4 paket uji ke sebuah alamat IP internet. Jika berhasil, jalur ke internet bekerja. Opsi <code class="cmd">-c 4</code> membatasi jumlah paket agar perintah berhenti sendiri.</li>
+                    <li><code class="cmd">ping -c 4 ubuntu.com</code> menguji sekaligus penerjemahan nama (DNS). Jika ping ke IP berhasil tetapi ke nama gagal, kemungkinan masalah ada pada DNS. Pada sebagian jaringan, ping sengaja diblokir, jadi gagal ping belum tentu berarti tidak ada internet.</li>
+                </ul>
+                <p class="text-sm font-semibold text-white mt-2">Cara memeriksa shutdown yang benar</p>
+                <p class="text-sm">Untuk mematikan server dengan benar dari terminal, gunakan <code class="cmd">sudo poweroff</code> (<em>sudo</em> berarti menjalankan sebagai administrator sementara, dan akan meminta password akunmu). Hindari menekan tombol power secara paksa. Jangan menjalankan perintah yang menghapus file atau mengubah konfigurasi sebelum kamu memahaminya.</p>
+            </div>
+        </section>
+
+        <!-- 7. PRAKTIKUM -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-flask"></i></div>
+                <h2 class="text-2xl font-bold text-white">7. Praktikum Utama</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-4 text-gray-300 leading-relaxed">
+                <h3 class="text-xl font-bold text-primary">Praktik: Instalasi Ubuntu Server hingga Berhasil Login</h3>
+                <p><strong class="text-white">Tujuan:</strong> Siswa mampu menginstal Ubuntu Server pada VM dan melakukan login pertama melalui terminal.</p>
+                <p><strong class="text-white">Alat dan bahan:</strong> Laptop/PC; VirtualBox atau VMware; ISO Ubuntu Server resmi; virtual disk kosong; lembar kerja siswa.</p>
+                <p class="font-semibold text-white">Langkah kerja</p>
+                <div id="praktik-steps" class="space-y-3"></div>
+
+                <p class="font-semibold text-white mt-4">Checklist keberhasilan</p>
+                <ul class="space-y-2 text-sm">
+                    <li class="flex items-center gap-3"><input type="checkbox" class="accent-primary"> VM berhasil dibuat.</li>
+                    <li class="flex items-center gap-3"><input type="checkbox" class="accent-primary"> ISO berhasil di-boot.</li>
+                    <li class="flex items-center gap-3"><input type="checkbox" class="accent-primary"> Installer berjalan.</li>
+                    <li class="flex items-center gap-3"><input type="checkbox" class="accent-primary"> Konfigurasi storage selesai.</li>
+                    <li class="flex items-center gap-3"><input type="checkbox" class="accent-primary"> Hostname berhasil ditetapkan.</li>
+                    <li class="flex items-center gap-3"><input type="checkbox" class="accent-primary"> Konfigurasi jaringan selesai.</li>
+                    <li class="flex items-center gap-3"><input type="checkbox" class="accent-primary"> Instalasi selesai.</li>
+                    <li class="flex items-center gap-3"><input type="checkbox" class="accent-primary"> Siswa berhasil login.</li>
+                    <li class="flex items-center gap-3"><input type="checkbox" class="accent-primary"> Perintah <code class="cmd">hostname</code> berjalan.</li>
+                    <li class="flex items-center gap-3"><input type="checkbox" class="accent-primary"> Perintah <code class="cmd">ip a</code> menampilkan informasi interface.</li>
+                    <li class="flex items-center gap-3"><input type="checkbox" class="accent-primary"> Informasi OS dapat diperiksa.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 8. TROUBLESHOOTING -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-screwdriver-wrench"></i></div>
+                <h2 class="text-2xl font-bold text-white">8. Troubleshooting Instalasi</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-4 text-gray-300 leading-relaxed">
+                <p class="text-sm"><strong class="text-white">Prinsip:</strong> jangan langsung menginstal ulang. Baca pesan, periksa langkah sederhana dulu, ubah satu hal pada satu waktu, lalu coba lagi. Instal ulang adalah pilihan terakhir.</p>
+                <div class="overflow-x-auto">
+                    <table class="tbl-compare">
+                        <thead><tr><th>No</th><th>Masalah</th><th>Kemungkinan penyebab</th><th>Langkah pemeriksaan</th></tr></thead>
+                        <tbody>
+                            <tr><td>1</td><td>VM tidak mau menyala</td><td>Virtualisasi CPU nonaktif, RAM terlalu besar, bentrok dengan fitur lain, atau konfigurasi VM rusak.</td><td>Baca pesan error; kecilkan RAM/CPU VM; periksa VT-x/AMD-V; tutup VM lain.</td></tr>
+                            <tr><td>2</td><td>ISO tidak ditemukan</td><td>ISO belum dipasang, file dipindah, atau unduhan tidak lengkap.</td><td>Settings → Storage, pasang ulang ISO; cek ukuran file dan checksum.</td></tr>
+                            <tr><td>3</td><td>VM masuk kembali ke installer</td><td>ISO masih terpasang dan urutan boot memprioritaskan drive optik.</td><td>Lepas ISO dari virtual drive atau pindahkan Hard Disk ke urutan boot teratas, lalu mulai ulang.</td></tr>
+                            <tr><td>4</td><td>Instalasi berjalan lambat</td><td>RAM/CPU VM kecil, laptop sibuk, mirror/pembaruan sedang diunduh, atau koneksi lambat.</td><td>Beri RAM lebih, tutup aplikasi berat, tunggu proses unduh; pastikan internet stabil.</td></tr>
+                            <tr><td>5</td><td>Tidak memperoleh IP Address</td><td>Kabel virtual tidak terhubung, mode jaringan tidak sesuai, DHCP tidak tersedia.</td><td>Pastikan adapter jaringan VM aktif (Cable connected); coba NAT; baca status di layar jaringan.</td></tr>
+                            <tr><td>6</td><td>Tidak bisa terhubung ke internet</td><td>Laptop host offline, memakai proxy, DNS bermasalah, atau jaringan memblokir.</td><td>Cek internet laptop; <code class="cmd">ip route</code>; <code class="cmd">ping -c 4</code> ke IP lalu ke nama; tanyakan guru soal proxy.</td></tr>
+                            <tr><td>7</td><td>Salah memilih konfigurasi disk</td><td>Terburu-buru, tidak membaca ringkasan, atau memilih manual tanpa paham.</td><td>Jika belum menekan Continue, kembali dan perbaiki. Jika sudah, pada VM latihan cukup buat ulang virtual disk. Jangan pernah mencoba pada disk fisik.</td></tr>
+                            <tr><td>8</td><td>Lupa username atau password latihan</td><td>Tidak dicatat di lembar kerja.</td><td>Periksa catatan; tanyakan guru. Jika VM hanya latihan tanpa data penting, instal ulang adalah opsi terakhir. Biasakan mencatat.</td></tr>
+                            <tr><td>9</td><td>Login gagal</td><td>Salah ketik, layout keyboard berbeda, Caps Lock, atau username salah.</td><td>Periksa Caps Lock dan layout; ketik username persis (huruf besar/kecil berpengaruh); coba lagi pelan-pelan.</td></tr>
+                            <tr><td>10</td><td>Terminal tidak menampilkan karakter saat mengetik password</td><td>Perilaku normal Linux.</td><td>Tetap ketik lalu tekan Enter; ini bukan kerusakan.</td></tr>
+                            <tr><td>11</td><td><code class="cmd">ip a</code> tidak menampilkan alamat IPv4 yang diharapkan</td><td>DHCP belum berhasil, interface DOWN, mode jaringan tidak cocok, atau memang memakai alamat yang berbeda dari perkiraan.</td><td>Cek status interface (UP/DOWN); cek adapter VM; bedakan <em>inet</em> (IPv4) dan <em>inet6</em>; ingat mode NAT biasanya memberi IP privat seperti 10.0.2.x.</td></tr>
+                            <tr><td>12</td><td>SSH belum bisa digunakan setelah instalasi</td><td>OpenSSH tidak dipasang, layanan tidak jalan, IP tidak terjangkau dari host (NAT), firewall.</td><td>Pastikan opsi OpenSSH dipilih saat instalasi; cek IP dengan <code class="cmd">ip a</code>; pertimbangkan Bridged atau port forwarding; periksa firewall. Detail SSH dipelajari lebih lanjut kemudian.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 9. STUDI KASUS -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-magnifying-glass-chart"></i></div>
+                <h2 class="text-2xl font-bold text-white">9. Studi Kasus</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-4 text-gray-300 leading-relaxed">
+                <p class="text-sm">Coba jawab sendiri dulu, lalu buka petunjuk dan pembahasan.</p>
+
+                <div class="bg-gray-800/40 p-4 rounded-lg space-y-2">
+                    <p class="text-white font-semibold">Kasus 1 — Memilih disk yang salah</p>
+                    <p class="text-sm">Seorang siswa hampir menekan Continue pada konfirmasi storage, namun baru sadar ada dua disk di daftar dan ia tidak yakin mana yang virtual disk latihan. <strong class="text-white">Pertanyaan:</strong> Apa tindakan pencegahan yang seharusnya dilakukan?</p>
+                    <details class="kasus-box"><summary class="text-sm text-gray-400">Petunjuk &amp; pembahasan</summary>
+                        <p class="text-sm mt-2"><strong class="text-white">Petunjuk:</strong> Ukuran disk dan sumber disk bisa menjadi pembeda.</p>
+                        <p class="text-sm mt-1"><strong class="text-white">Pembahasan:</strong> Berhenti dulu dan jangan lanjut sebelum yakin. Bandingkan ukuran dan nama disk dengan virtual disk yang dibuat di VM; pada VM latihan seharusnya hanya ada satu disk virtual. Jika ada disk lain, tanyakan guru. Pencegahan: tulis ukuran virtual disk di lembar kerja sebelum memulai, dan selalu baca ringkasan storage sebelum Continue. Pada komputer fisik, jangan latihan di disk yang berisi data.</p>
+                    </details>
+                </div>
+
+                <div class="bg-gray-800/40 p-4 rounded-lg space-y-2">
+                    <p class="text-white font-semibold">Kasus 2 — Login berhasil tetapi tidak ada IP Address</p>
+                    <p class="text-sm">Sebuah VM bisa login, tetapi <code class="cmd">ip a</code> hanya menampilkan <code class="cmd">lo</code> dengan 127.0.0.1, sedangkan interface lain tanpa alamat. <strong class="text-white">Pertanyaan:</strong> Apa penyebab yang mungkin dan apa yang diperiksa?</p>
+                    <details class="kasus-box"><summary class="text-sm text-gray-400">Petunjuk &amp; pembahasan</summary>
+                        <p class="text-sm mt-2"><strong class="text-white">Petunjuk:</strong> Periksa pengaturan adapter jaringan VM dan status interface.</p>
+                        <p class="text-sm mt-1"><strong class="text-white">Pembahasan:</strong> Kemungkinan adapter jaringan VM dinonaktifkan atau kabel virtual tidak terhubung, mode jaringan tidak menyediakan DHCP, atau interface belum terkonfigurasi untuk DHCP. Matikan VM, cek Settings → Network (adapter aktif, coba NAT), jalankan lagi, dan periksa ulang <code class="cmd">ip a</code>. Memperbaiki konfigurasi jaringan secara manual dipelajari pada bab-bab berikut.</p>
+                    </details>
+                </div>
+
+                <div class="bg-gray-800/40 p-4 rounded-lg space-y-2">
+                    <p class="text-white font-semibold">Kasus 3 — Lupa hostname</p>
+                    <p class="text-sm">Seorang siswa akan mengisi laporan dokumentasi, tetapi lupa hostname yang ia pakai. <strong class="text-white">Pertanyaan:</strong> Bagaimana cara mengetahuinya tanpa menginstal ulang?</p>
+                    <details class="kasus-box"><summary class="text-sm text-gray-400">Petunjuk &amp; pembahasan</summary>
+                        <p class="text-sm mt-2"><strong class="text-white">Petunjuk:</strong> Lihat prompt terminal atau perintah yang menampilkan nama server.</p>
+                        <p class="text-sm mt-1"><strong class="text-white">Pembahasan:</strong> Login, lalu lihat prompt (<code class="cmd">username@hostname:~$</code>) atau jalankan <code class="cmd">hostname</code>. Tidak perlu instal ulang. Pelajaran: dokumentasikan hostname sejak awal.</p>
+                    </details>
+                </div>
+
+                <div class="bg-gray-800/40 p-4 rounded-lg space-y-2">
+                    <p class="text-white font-semibold">Kasus 4 — VM terus masuk ke installer setelah restart</p>
+                    <p class="text-sm">Instalasi sudah selesai dan VM restart, tetapi yang muncul lagi layar awal installer. <strong class="text-white">Pertanyaan:</strong> Mengapa terjadi dan bagaimana mengatasinya?</p>
+                    <details class="kasus-box"><summary class="text-sm text-gray-400">Petunjuk &amp; pembahasan</summary>
+                        <p class="text-sm mt-2"><strong class="text-white">Petunjuk:</strong> Dari mana VM melakukan boot?</p>
+                        <p class="text-sm mt-1"><strong class="text-white">Pembahasan:</strong> ISO masih terpasang di virtual optical drive dan diprioritaskan saat boot. Matikan VM, lepas ISO (Settings → Storage) atau ubah urutan boot agar Hard Disk di atas, lalu jalankan lagi. Pastikan juga instalasi benar-benar selesai sebelum restart.</p>
+                    </details>
+                </div>
+
+                <div class="bg-gray-800/40 p-4 rounded-lg space-y-2">
+                    <p class="text-white font-semibold">Kasus 5 — Bisa login lokal, tetapi SSH belum berhasil</p>
+                    <p class="text-sm">Siswa dapat login di jendela VM, tetapi ketika mencoba terhubung lewat SSH dari laptop, koneksi gagal. VM memakai mode NAT. <strong class="text-white">Pertanyaan:</strong> Faktor apa yang perlu diperiksa?</p>
+                    <details class="kasus-box"><summary class="text-sm text-gray-400">Petunjuk &amp; pembahasan</summary>
+                        <p class="text-sm mt-2"><strong class="text-white">Petunjuk:</strong> Ada beberapa lapis: layanan, alamat, jalur jaringan, firewall.</p>
+                        <p class="text-sm mt-1"><strong class="text-white">Pembahasan:</strong> (1) Apakah OpenSSH Server terpasang saat instalasi? (2) Berapa IP VM dari <code class="cmd">ip a</code>? (3) Pada NAT, VM berada di jaringan privat sehingga host tidak langsung menjangkaunya; dibutuhkan port forwarding atau mode lain seperti Bridged/Host-only. (4) Apakah ada firewall? Jangan membuka akses ke internet publik untuk "memaksa" bisa. Konfigurasi SSH lebih lanjut dipelajari kemudian.</p>
+                    </details>
+                </div>
+
+                <div class="bg-gray-800/40 p-4 rounded-lg space-y-2">
+                    <p class="text-white font-semibold">Kasus 6 — Instalasi sangat lambat dan hampir berhenti</p>
+                    <p class="text-sm">VM diberi RAM sangat kecil (512 MB) dan installer macet. <strong class="text-white">Pertanyaan:</strong> Apa yang perlu diubah?</p>
+                    <details class="kasus-box"><summary class="text-sm text-gray-400">Petunjuk &amp; pembahasan</summary>
+                        <p class="text-sm mt-2"><strong class="text-white">Petunjuk:</strong> Bandingkan dengan kebutuhan yang disebutkan dokumentasi.</p>
+                        <p class="text-sm mt-1"><strong class="text-white">Pembahasan:</strong> Dokumentasi menyebut minimum sekitar 1,5 GB RAM untuk instalasi dari ISO dan menyarankan 3 GB atau lebih. Matikan VM, naikkan RAM (misalnya 2 GB atau lebih sesuai kemampuan laptop), lalu ulangi.</p>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+        <!-- 10. TIPS -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-hand-holding-hand"></i></div>
+                <h2 class="text-2xl font-bold text-white">10. Tips Administrator Pemula</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 text-gray-300 leading-relaxed">
+                <ol class="space-y-3 list-decimal list-inside text-sm">
+                    <li><strong class="text-white">Unduh ISO hanya dari situs resmi.</strong> File dari sumber tidak jelas bisa saja sudah dimodifikasi.</li>
+                    <li><strong class="text-white">Periksa checksum bila tersedia.</strong> Checksum (misalnya SHA256) membuktikan file utuh dan tidak berubah; berkas <code class="cmd">SHA256SUMS</code> tersedia di situs rilis.</li>
+                    <li><strong class="text-white">Buat snapshot VM sebelum eksperimen penting.</strong> Snapshot memungkinkan kembali ke kondisi sehat jika percobaan gagal.</li>
+                    <li><strong class="text-white">Pilih hostname yang mudah dikenali</strong> (<code class="cmd">asj-server01</code>), agar tidak tertukar ketika server makin banyak.</li>
+                    <li><strong class="text-white">Catat konfigurasi IP</strong> beserta mode jaringan, supaya mudah diperiksa saat ada masalah.</li>
+                    <li><strong class="text-white">Jaga kerahasiaan password</strong> dan jangan memakai password pribadi untuk latihan.</li>
+                    <li><strong class="text-white">Periksa konfigurasi sebelum menekan konfirmasi storage.</strong> Pada tahap itu disk tujuan akan diformat.</li>
+                    <li><strong class="text-white">Simpan dokumentasi instalasi</strong> (screenshot ringkasan, catatan langkah), karena memudahkan penelusuran dan pengulangan.</li>
+                    <li><strong class="text-white">Jangan sembarangan memakai <code class="cmd">sudo</code>.</strong> Perintah dengan hak administrator bisa mengubah atau merusak sistem; pahami dulu apa yang dilakukan perintah.</li>
+                    <li><strong class="text-white">Matikan server dengan benar</strong> (<code class="cmd">sudo poweroff</code>), bukan mematikan paksa, agar data tidak rusak.</li>
+                    <li><strong class="text-white">Baca pesan di layar installer.</strong> Banyak kesalahan dapat dicegah dengan membaca peringatan.</li>
+                    <li><strong class="text-white">Ubah satu hal pada satu waktu saat troubleshooting</strong>, supaya penyebab masalah mudah diketahui.</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- 11. RINGKASAN -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-list-check"></i></div>
+                <h2 class="text-2xl font-bold text-white">11. Ringkasan</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 text-gray-300 leading-relaxed">
+                <ul class="space-y-2 list-none">
+                    <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i><span><strong class="text-white">Ubuntu Server:</strong> edisi Ubuntu (Linux) untuk menjalankan layanan, umumnya tanpa tampilan grafis dan dikelola lewat terminal. Rilis LTS cocok karena didukung lama (26.04 LTS sampai April 2031).</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i><span><strong class="text-white">Persiapan:</strong> laptop, VirtualBox/VMware, ISO resmi, virtualisasi CPU aktif, RAM dan ruang disk cukup, internet, checklist.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i><span><strong class="text-white">File ISO:</strong> salinan media instalasi dalam satu file; dipasang ke drive optik virtual.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i><span><strong class="text-white">Virtual Machine:</strong> komputer virtual dengan CPU, RAM, virtual disk, dan jaringan yang diatur; aman untuk berlatih.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i><span><strong class="text-white">Partisi dan filesystem:</strong> partisi membagi disk, filesystem mengatur data, mount point menghubungkan ke struktur direktori; <code class="cmd">/</code> adalah root. Pemula memakai konfigurasi otomatis pada virtual disk baru.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i><span><strong class="text-white">Hostname:</strong> nama server (contoh <code class="cmd">asj-server01</code>), berbeda dari username.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i><span><strong class="text-white">Network, DHCP, dan IP Address:</strong> IP adalah alamat di jaringan; DHCP memberikannya otomatis; IP statis diatur manual; hasil bergantung mode NAT/Bridged.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i><span><strong class="text-white">OpenSSH Server:</strong> memungkinkan login remote terenkripsi; dipilih saat instalasi bila dibutuhkan, tetapi keberhasilan tergantung layanan, IP, firewall, dan jaringan.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i><span><strong class="text-white">Proses instalasi:</strong> boot ISO → bahasa/keyboard → jaringan → proxy → mirror → storage → profil → Pro (opsional) → SSH → snaps (lewati) → instal → reboot dan lepas ISO.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i><span><strong class="text-white">Login terminal:</strong> password tidak tampil saat diketik; prompt <code class="cmd">user@host:~$</code>.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i><span><strong class="text-white">Verifikasi sistem:</strong> <code class="cmd">whoami</code>, <code class="cmd">hostname</code>, <code class="cmd">pwd</code>, <code class="cmd">ip a</code>, <code class="cmd">df -h</code>, <code class="cmd">free -h</code>, <code class="cmd">uname -r</code>, <code class="cmd">cat /etc/os-release</code>.</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i><span><strong class="text-white">Troubleshooting dasar:</strong> periksa dulu hal sederhana (ISO, urutan boot, adapter jaringan, layout keyboard) sebelum instal ulang.</span></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 12. REFLEKSI -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-comment-dots"></i></div>
+                <h2 class="text-2xl font-bold text-white">12. Refleksi</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 text-gray-300 leading-relaxed">
+                <p class="text-sm mb-3">Jawab dengan bahasamu sendiri, berdasarkan pengalaman praktikmu.</p>
+                <ol class="space-y-2 list-decimal list-inside text-sm">
+                    <li>Mengapa kita menggunakan Virtual Machine untuk latihan instalasi Ubuntu Server?</li>
+                    <li>Apa perbedaan hostname dan username? Berikan contoh dari server yang kamu buat.</li>
+                    <li>Mengapa konfigurasi disk harus diperiksa sebelum instalasi dilanjutkan?</li>
+                    <li>Apa yang dapat kita lakukan jika server tidak memperoleh alamat IP?</li>
+                    <li>Mengapa administrator perlu mendokumentasikan konfigurasi server?</li>
+                    <li>Bagian instalasi mana yang paling membingungkan bagimu? Bagaimana kamu mengatasinya?</li>
+                    <li>Mengapa password tidak tampil saat diketik di terminal, dan apa dampaknya jika kamu salah menyimpulkan?</li>
+                    <li>Menurutmu, kapan OpenSSH Server perlu dipasang saat instalasi? Jelaskan alasannya.</li>
+                    <li>Jika kamu harus mengajari teman memasang Ubuntu Server, urutan langkah apa yang akan kamu jelaskan dan mengapa?</li>
+                    <li>Apa satu kesalahan yang kamu buat (atau hampir kamu buat) saat praktik, dan apa pelajarannya?</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- 13. OUTPUT AKHIR -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-bullseye"></i></div>
+                <h2 class="text-2xl font-bold text-white">13. Output Akhir Pembelajaran</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 space-y-4 text-gray-300 leading-relaxed">
+                <div class="bg-gray-800/50 p-4 rounded-lg border-l-4 border-primary text-sm">
+                    <p><strong class="text-primary">Hasil akhir Bab 4:</strong> satu VM Ubuntu Server yang berhasil diinstal, dapat diakses melalui terminal lokal, dan memiliki hostname serta konfigurasi jaringan yang dapat diperiksa.</p>
+                </div>
+                <p class="font-semibold text-white">Dokumentasi sederhana yang diserahkan</p>
+                <ul class="list-disc list-inside text-sm space-y-1">
+                    <li>Nama VM.</li>
+                    <li>Versi Ubuntu Server.</li>
+                    <li>Hostname.</li>
+                    <li>Username latihan.</li>
+                    <li>Konfigurasi RAM dan CPU VM.</li>
+                    <li>Kapasitas virtual disk.</li>
+                    <li>Mode jaringan.</li>
+                    <li>Hasil pemeriksaan <code class="cmd">ip a</code>.</li>
+                    <li>Hasil pemeriksaan <code class="cmd">cat /etc/os-release</code>.</li>
+                    <li>Screenshot terminal setelah login.</li>
+                </ul>
+                <div class="bg-red-900/20 p-4 rounded-lg border-l-4 border-red-500 text-sm">
+                    <p><strong class="text-red-400">Ingat:</strong> jangan menuliskan password ke dalam laporan, dan pastikan password tidak terlihat di screenshot.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- QUIZ SECTION -->
+        <section id="quiz-section">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-secondary/20 text-secondary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-clipboard-question"></i></div>
+                <h2 class="text-2xl font-bold text-white">14. Kuis Bab 4</h2>
+            </div>
+
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 mb-6">
+                <label class="block text-sm text-gray-400 mb-2">Nama Siswa</label>
+                <input id="nama-siswa" type="text" placeholder="Tulis nama lengkap kamu di sini..." class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary">
+            </div>
+
+            <form id="quiz-form" class="space-y-6">
+                <div id="quiz-container" class="space-y-6"></div>
+
+                <!-- Praktik / Essay -->
+                <div class="bg-dark border border-gray-800 rounded-xl p-6">
+                    <p class="font-semibold text-white mb-2">26. (Praktik Reflektif) Ceritakan secara singkat satu kendala yang kamu alami (atau mungkin terjadi) saat menginstal Ubuntu Server di VM, dan jelaskan langkah pemeriksaan yang akan kamu lakukan sebelum memutuskan instal ulang.</p>
+                    <p class="text-xs text-gray-500 mb-3">*Jawaban ini akan dinilai langsung oleh Guru, bukan otomatis oleh sistem.</p>
+                    <textarea id="essay-jawaban" rows="4" placeholder="Tulis jawabanmu di sini..." class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-secondary"></textarea>
+                </div>
+
+                <button type="submit" id="submit-btn" class="w-full bg-primary text-darker font-bold py-4 rounded-xl hover:bg-emerald-400 transition-colors text-lg">
+                    <i class="fas fa-paper-plane mr-2"></i> Kumpulkan Jawaban
+                </button>
+            </form>
+
+            <!-- RESULT CARD -->
+            <div id="result-card" class="hidden mt-8 bg-gradient-to-br from-dark to-gray-900 border-2 border-primary rounded-2xl p-8 text-center shadow-2xl">
+                <i class="fas fa-award text-5xl text-yellow-400 mb-4"></i>
+                <p class="text-gray-400 mb-1">Hasil Kuis Bab 4 atas nama</p>
+                <p id="result-nama" class="text-xl font-bold text-white mb-4">-</p>
+                <p class="text-6xl font-extrabold text-primary mb-2" id="result-score">0</p>
+                <p class="text-gray-400 mb-6">dari 100 (Pilihan Ganda: <span id="result-fraction">0/25</span> benar)</p>
+                <div class="bg-gray-800/60 rounded-lg p-4 text-sm text-gray-300 mb-6 text-left">
+                    <i class="fas fa-info-circle text-secondary mr-2"></i>
+                    Tunjukkan/screenshot layar ini kepada Bapak Khalid Nabawi, S.Kom. sebagai bukti nilai kuis kamu. Jawaban nomor 26 akan dinilai terpisah oleh Guru. Pembahasan tiap soal tampil di bawah masing-masing soal.
+                </div>
+                <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                    <button onclick="salinHasil()" id="copy-btn" class="bg-secondary text-white font-semibold px-6 py-3 rounded-full hover:bg-blue-600 transition-colors">
+                        <i class="fas fa-copy mr-2"></i> Salin Hasil untuk Dikirim ke Guru
+                    </button>
+                    <button onclick="ulangiKuis()" id="retry-btn" class="bg-gray-700 text-white font-semibold px-6 py-3 rounded-full hover:bg-gray-600 transition-colors">
+                        <i class="fas fa-rotate-right mr-2"></i> Ulangi Kuis
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- KUNCI JAWABAN -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-key"></i></div>
+                <h2 class="text-2xl font-bold text-white">15. Kunci Jawaban &amp; Pembahasan Singkat</h2>
+            </div>
+            <details class="jawaban-box bg-dark border border-gray-800 rounded-xl p-6 text-gray-300 leading-relaxed">
+                <summary class="font-semibold text-white">Klik untuk membuka pembahasan (kerjakan kuis dulu sebelum melihat ini!)</summary>
+                <ol id="kunci-list" class="space-y-2 list-decimal list-inside text-sm mt-4"></ol>
+            </details>
+        </section>
+
+        <!-- GLOSARIUM -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-book"></i></div>
+                <h2 class="text-2xl font-bold text-white">16. Glosarium</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 text-gray-300 leading-relaxed">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 text-sm">
+                    <p><strong class="text-white">Ubuntu Server</strong> — edisi Ubuntu untuk menjalankan layanan, umumnya tanpa tampilan grafis.</p>
+                    <p><strong class="text-white">LTS</strong> — Long Term Support, rilis dengan dukungan pembaruan jangka panjang.</p>
+                    <p><strong class="text-white">ISO</strong> — satu file berisi salinan isi media instalasi.</p>
+                    <p><strong class="text-white">Installer</strong> — program yang memandu pemasangan sistem operasi.</p>
+                    <p><strong class="text-white">Virtual Machine</strong> — komputer virtual yang berjalan di dalam komputer fisik.</p>
+                    <p><strong class="text-white">Host</strong> — komputer fisik yang menjalankan VM.</p>
+                    <p><strong class="text-white">Guest</strong> — sistem operasi/VM yang berjalan di dalam host.</p>
+                    <p><strong class="text-white">CPU</strong> — prosesor, "otak" yang mengeksekusi instruksi.</p>
+                    <p><strong class="text-white">RAM</strong> — memori sementara tempat data yang sedang diproses.</p>
+                    <p><strong class="text-white">Virtual disk</strong> — harddisk virtual milik VM yang berupa file di host.</p>
+                    <p><strong class="text-white">Disk</strong> — perangkat penyimpan data permanen.</p>
+                    <p><strong class="text-white">Partisi</strong> — bagian terpisah dari sebuah disk.</p>
+                    <p><strong class="text-white">Filesystem</strong> — aturan penataan dan penyimpanan data pada partisi.</p>
+                    <p><strong class="text-white">Mount point</strong> — direktori tempat partisi dipasang ke struktur folder.</p>
+                    <p><strong class="text-white">Root filesystem (/)</strong> — titik awal seluruh struktur direktori Linux.</p>
+                    <p><strong class="text-white">Swap</strong> — ruang disk yang dipakai sebagai cadangan saat RAM penuh.</p>
+                    <p><strong class="text-white">LVM</strong> — Logical Volume Management, cara fleksibel mengatur ruang disk; sering menjadi pilihan penyimpanan otomatis.</p>
+                    <p><strong class="text-white">Hostname</strong> — nama identitas komputer/server di jaringan.</p>
+                    <p><strong class="text-white">Username</strong> — nama akun pengguna untuk login.</p>
+                    <p><strong class="text-white">Password</strong> — kata sandi untuk membuktikan identitas pemilik akun.</p>
+                    <p><strong class="text-white">IP Address</strong> — alamat numerik perangkat di jaringan.</p>
+                    <p><strong class="text-white">DHCP</strong> — layanan yang membagikan alamat IP dan pengaturan jaringan otomatis.</p>
+                    <p><strong class="text-white">Network interface</strong> — antarmuka/kartu jaringan tempat IP dipasang.</p>
+                    <p><strong class="text-white">NAT</strong> — mode jaringan VM yang berbagi koneksi host lewat jaringan privat.</p>
+                    <p><strong class="text-white">Bridged</strong> — mode VM tampil sebagai perangkat sendiri di jaringan fisik.</p>
+                    <p><strong class="text-white">DNS</strong> — sistem penerjemah nama domain menjadi alamat IP.</p>
+                    <p><strong class="text-white">Gateway</strong> — pintu keluar menuju jaringan lain, mis. internet.</p>
+                    <p><strong class="text-white">Proxy</strong> — perantara antara komputer dan internet.</p>
+                    <p><strong class="text-white">SSH</strong> — protokol akses jarak jauh yang terenkripsi.</p>
+                    <p><strong class="text-white">OpenSSH</strong> — perangkat lunak yang mengimplementasikan SSH.</p>
+                    <p><strong class="text-white">Terminal</strong> — antarmuka teks untuk mengetik perintah.</p>
+                    <p><strong class="text-white">Prompt</strong> — teks penanda terminal siap menerima perintah.</p>
+                    <p><strong class="text-white">Kernel</strong> — inti sistem operasi yang berhubungan langsung dengan hardware.</p>
+                    <p><strong class="text-white">Repository</strong> — gudang paket perangkat lunak.</p>
+                    <p><strong class="text-white">Mirror</strong> — salinan repository di server lain untuk unduhan lebih cepat.</p>
+                    <p><strong class="text-white">Boot</strong> — proses menyalakan komputer dan memuat sistem operasi.</p>
+                    <p><strong class="text-white">Reboot</strong> — memulai ulang komputer.</p>
+                    <p><strong class="text-white">Login</strong> — proses masuk ke sistem dengan akun dan password.</p>
+                    <p><strong class="text-white">Checksum</strong> — nilai pemeriksa keutuhan file.</p>
+                    <p><strong class="text-white">Snapshot</strong> — rekaman kondisi VM pada satu waktu agar dapat dikembalikan.</p>
+                    <p><strong class="text-white">Snap</strong> — format paket aplikasi yang dipakai Ubuntu.</p>
+                    <p><strong class="text-white">Ubuntu Pro</strong> — layanan berlangganan tambahan untuk keamanan dan kepatuhan.</p>
+                    <p><strong class="text-white">Troubleshooting</strong> — proses mencari dan memperbaiki penyebab masalah secara sistematis.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- REFERENSI -->
+        <section>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-primary/20 text-primary w-10 h-10 rounded-lg flex items-center justify-center text-lg"><i class="fas fa-link"></i></div>
+                <h2 class="text-2xl font-bold text-white">17. Referensi</h2>
+            </div>
+            <div class="bg-dark border border-gray-800 rounded-xl p-6 text-gray-300 leading-relaxed">
+                <p class="text-sm mb-3">Materi Bab 4 disusun dengan mensintesis informasi dari dokumentasi resmi berikut (diakses Oktober 2026). Tampilan installer dapat berbeda antar versi.</p>
+                <ul class="space-y-2 text-sm list-disc list-inside">
+                    <li>Ubuntu 26.04 LTS release notes: <a class="text-secondary underline break-all" href="https://documentation.ubuntu.com/release-notes/26.04/" target="_blank" rel="noopener">https://documentation.ubuntu.com/release-notes/26.04/</a></li>
+                    <li>Ubuntu Server – System requirements: <a class="text-secondary underline break-all" href="https://ubuntu.com/server/docs/reference/installation/system-requirements/" target="_blank" rel="noopener">https://ubuntu.com/server/docs/reference/installation/system-requirements/</a></li>
+                    <li>Ubuntu Server – Basic installation (tutorial): <a class="text-secondary underline break-all" href="https://ubuntu.com/server/docs/tutorial/basic-installation/" target="_blank" rel="noopener">https://ubuntu.com/server/docs/tutorial/basic-installation/</a></li>
+                    <li>Subiquity – Screen-by-screen installer walk-through: <a class="text-secondary underline break-all" href="https://canonical-subiquity.readthedocs-hosted.com/en/latest/tutorial/screen-by-screen.html" target="_blank" rel="noopener">https://canonical-subiquity.readthedocs-hosted.com/en/latest/tutorial/screen-by-screen.html</a></li>
+                    <li>Ubuntu Server – Welcome to the terminal: <a class="text-secondary underline break-all" href="https://ubuntu.com/server/docs/tutorial/welcome-to-the-terminal/" target="_blank" rel="noopener">https://ubuntu.com/server/docs/tutorial/welcome-to-the-terminal/</a></li>
+                    <li>Ubuntu Server – OpenSSH: <a class="text-secondary underline break-all" href="https://ubuntu.com/server/docs/how-to/security/openssh-server/" target="_blank" rel="noopener">https://ubuntu.com/server/docs/how-to/security/openssh-server/</a></li>
+                    <li>Ubuntu Server – About DHCP: <a class="text-secondary underline break-all" href="https://ubuntu.com/server/docs/explanation/networking/about-dhcp/" target="_blank" rel="noopener">https://ubuntu.com/server/docs/explanation/networking/about-dhcp/</a></li>
+                    <li>Ubuntu Server – About Netplan: <a class="text-secondary underline break-all" href="https://ubuntu.com/server/docs/explanation/networking/about-netplan/" target="_blank" rel="noopener">https://ubuntu.com/server/docs/explanation/networking/about-netplan/</a></li>
+                    <li>Ubuntu Server – About LVM: <a class="text-secondary underline break-all" href="https://ubuntu.com/server/docs/explanation/storage/about-lvm/" target="_blank" rel="noopener">https://ubuntu.com/server/docs/explanation/storage/about-lvm/</a></li>
+                    <li>Unduh Ubuntu Server: <a class="text-secondary underline break-all" href="https://ubuntu.com/download/server" target="_blank" rel="noopener">https://ubuntu.com/download/server</a></li>
+                    <li>Ubuntu Releases: <a class="text-secondary underline break-all" href="https://releases.ubuntu.com/" target="_blank" rel="noopener">https://releases.ubuntu.com/</a></li>
+                    <li>Oracle VirtualBox User Manual: <a class="text-secondary underline break-all" href="https://www.virtualbox.org/manual/" target="_blank" rel="noopener">https://www.virtualbox.org/manual/</a></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Navigation -->
+        <div class="flex justify-between items-center pt-8 border-t border-gray-800">
+            <a href="bab3.html" class="text-gray-400 hover:text-primary transition-colors flex items-center gap-2">
+                <i class="fas fa-arrow-left"></i> Bab 3
+            </a>
+            <a href="index.html" class="text-gray-400 hover:text-primary transition-colors flex items-center gap-2">
+                <i class="fas fa-map-signs"></i> Roadmap
+            </a>
+            <a href="belum-tersedia.html?bab=Bab%205&judul=Linux%20Fundamental" class="text-gray-400 hover:text-primary transition-colors flex items-center gap-2">
+                Bab 5 <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </main>
+
+    <footer class="bg-darker border-t border-gray-800 py-8 text-center text-gray-500 text-sm">
+        <p>&copy; 2026/2027 SMK Bintang Raudloh. ASJ Kelas XI.</p>
+    </footer>
+
+    <script>
+        /* ================= DATA PRAKTIKUM ================= */
+        const PRAKTIK = [
+            { t: 'Menyiapkan alat dan ISO',
+              tujuan: 'Memastikan semua bahan siap sebelum membuat VM.',
+              aksi: 'Buka VirtualBox/VMware, pastikan file ISO Ubuntu Server resmi tersedia, siapkan lembar kerja.',
+              perhatian: 'ISO harus utuh dan dari situs resmi; periksa checksum bila memungkinkan.',
+              hasil: 'ISO tersimpan, aplikasi virtualisasi terbuka, checklist persiapan terisi.',
+              salah: 'ISO tidak lengkap karena unduhan terputus. Solusi: unduh ulang dan cek ukuran file.' },
+            { t: 'Membuat VM baru',
+              tujuan: 'Menyiapkan komputer virtual kosong.',
+              aksi: 'Klik New, beri nama Ubuntu-Server-ASJ, pilih Linux dan Ubuntu (64-bit). Centang Skip Unattended Installation bila ada.',
+              perhatian: 'Nama VM jelas; tipe OS 64-bit.',
+              hasil: 'VM muncul di daftar VM.',
+              salah: 'Pilihan 64-bit tidak muncul. Solusi: periksa virtualisasi CPU di BIOS/UEFI.' },
+            { t: 'Mengatur RAM, CPU, dan virtual disk',
+              tujuan: 'Memberi sumber daya yang cukup untuk installer.',
+              aksi: 'Atur RAM (misalnya 2 GB atau lebih), CPU 1–2 core, buat virtual disk 20–25 GB (dynamically allocated).',
+              perhatian: 'Jangan melebihi kemampuan laptop. Hanya gunakan virtual disk baru, bukan disk fisik.',
+              hasil: 'Ringkasan VM menampilkan RAM, CPU, dan disk sesuai rencana.',
+              salah: 'RAM terlalu kecil sehingga installer macet. Solusi: naikkan RAM VM.' },
+            { t: 'Memasang ISO dan memilih mode jaringan',
+              tujuan: 'Menjadikan ISO sebagai media boot dan menyiapkan jaringan.',
+              aksi: 'Settings → Storage: pasang ISO pada drive optik. Settings → Network: pilih NAT (atau sesuai instruksi guru).',
+              perhatian: 'Urutan boot: Optical sebelum Hard Disk.',
+              hasil: 'ISO terdeteksi pada drive optik virtual; adapter jaringan aktif.',
+              salah: 'ISO tidak terdeteksi karena belum dipilih. Solusi: pasang ulang file ISO.' },
+            { t: 'Menjalankan VM dan memulai installer',
+              tujuan: 'Boot dari ISO dan membuka installer.',
+              aksi: 'Start VM, pilih Try or Install Ubuntu Server, tekan Enter, tunggu installer terbuka.',
+              perhatian: 'Gunakan keyboard untuk navigasi; sabar menunggu teks bergulir.',
+              hasil: 'Layar pemilihan bahasa installer muncul.',
+              salah: 'VM tidak boot dari ISO. Solusi: cek urutan boot dan pemasangan ISO.' },
+            { t: 'Bahasa, keyboard, jaringan, proxy, dan mirror',
+              tujuan: 'Menyiapkan dasar installer dan koneksi sumber paket.',
+              aksi: 'Pilih bahasa dan layout keyboard, pilih jenis instalasi Ubuntu Server, biarkan DHCP, kosongkan proxy (jika tidak dipakai), tunggu tes mirror lulus.',
+              perhatian: 'Catat alamat IP DHCP yang tampil. Uji ketik pada layar keyboard.',
+              hasil: 'Interface mendapat alamat DHCPv4; mirror lulus tes.',
+              salah: 'Tidak ada IP / mirror gagal. Solusi: cek adapter jaringan VM dan koneksi internet host.' },
+            { t: 'Mengatur storage',
+              tujuan: 'Menentukan penyimpanan tujuan instalasi dengan aman.',
+              aksi: 'Pilih penggunaan seluruh disk (konfigurasi otomatis) pada virtual disk baru, tinjau ringkasan, pilih Done lalu Continue.',
+              perhatian: 'Pastikan hanya virtual disk latihan yang dipilih. Setelah Continue, disk dihapus dan diformat.',
+              hasil: 'Ringkasan storage sesuai ukuran virtual disk; instalasi dimulai.',
+              salah: 'Ragu terhadap disk yang dipilih. Solusi: berhenti, bandingkan ukuran dengan virtual disk, tanya guru.' },
+            { t: 'Profile setup',
+              tujuan: 'Menetapkan identitas server dan akun latihan.',
+              aksi: 'Isi nama, hostname (misalnya asj-server01), username latihan (misalnya adminlab), dan password latihan yang kuat.',
+              perhatian: 'Catat di lembar kerja; jangan pakai password pribadi. Hostname tanpa spasi.',
+              hasil: 'Profil terisi dan diterima installer.',
+              salah: 'Hostname mengandung spasi atau simbol tak valid. Solusi: pakai huruf kecil, angka, dan tanda hubung.' },
+            { t: 'Ubuntu Pro, OpenSSH, dan snaps lalu menunggu instalasi',
+              tujuan: 'Menyelesaikan opsi tambahan dan menunggu proses pemasangan.',
+              aksi: 'Lewati Ubuntu Pro (skip), centang Install OpenSSH server bila diminta, jangan pilih snaps apa pun, lalu tunggu sampai instalasi selesai.',
+              perhatian: 'Jangan mematikan VM paksa selama instalasi dan pembaruan.',
+              hasil: 'Muncul pesan instalasi selesai dan tombol Reboot Now.',
+              salah: 'Instalasi tampak berhenti. Solusi: tunggu beberapa menit, cek log di layar, pastikan RAM cukup.' },
+            { t: 'Reboot, melepas ISO, login, dan verifikasi',
+              tujuan: 'Membuktikan server berhasil dibuat.',
+              aksi: 'Pilih Reboot Now, lepas ISO bila diminta, login dengan akun latihan, lalu jalankan: hostname, whoami, pwd, ip a, df -h, free -h, uname -r, cat /etc/os-release. Ambil screenshot dan isi lembar dokumentasi.',
+              perhatian: 'Password tidak tampil saat diketik. Pastikan password tidak terlihat di screenshot.',
+              hasil: 'Prompt username@hostname muncul; semua perintah menampilkan informasi yang sesuai.',
+              salah: 'VM kembali ke installer atau login gagal. Solusi: lepas ISO / periksa Caps Lock dan layout keyboard.' }
+        ];
+        (function renderPraktik() {
+            const wrap = document.getElementById('praktik-steps');
+            PRAKTIK.forEach((s, i) => {
+                const d = document.createElement('div');
+                d.className = 'bg-gray-800/40 p-4 rounded-lg space-y-1 text-sm';
+                d.innerHTML =
+                    '<p class="text-white font-semibold">Langkah ' + (i + 1) + ' — ' + s.t + '</p>' +
+                    '<p><strong class="text-primary">Tujuan:</strong> ' + s.tujuan + '</p>' +
+                    '<p><strong class="text-primary">Tindakan:</strong> ' + s.aksi + '</p>' +
+                    '<p><strong class="text-primary">Perhatikan:</strong> ' + s.perhatian + '</p>' +
+                    '<p><strong class="text-primary">Hasil yang diharapkan:</strong> ' + s.hasil + '</p>' +
+                    '<p><strong class="text-yellow-400">Kesalahan umum &amp; solusi:</strong> ' + s.salah + '</p>';
+                wrap.appendChild(d);
+            });
+        })();
+
+        /* ================= DATA KUIS (25 SOAL) ================= */
+        // a = indeks jawaban benar (0=A, 1=B, 2=C, 3=D)
+        const QUIZ = [
+            // ---- MUDAH (1-8)
+            { q: 'Ubuntu Server adalah...', o: ['Aplikasi pengolah kata untuk kantor', 'Sistem operasi Linux untuk menjalankan layanan server, umumnya tanpa tampilan grafis bawaan', 'Perangkat keras penyimpan data', 'Aplikasi pemutar video'], a: 1, e: 'Ubuntu Server adalah edisi Ubuntu (Linux) untuk server yang dikelola lewat terminal.' },
+            { q: 'File yang berisi salinan media instalasi sistem operasi dan dapat dipasang ke drive optik virtual disebut...', o: ['ISO', 'PDF', 'JPG', 'TXT'], a: 0, e: 'File ISO adalah salinan isi cakram instalasi yang dipakai sebagai media boot.' },
+            { q: 'Pada VM, file ISO biasanya dipasang ke...', o: ['Kartu jaringan virtual', 'Virtual optical drive', 'Port USB laptop yang berisi data', 'RAM host'], a: 1, e: 'ISO dipasang di virtual optical drive agar VM bisa boot dari "DVD" tersebut.' },
+            { q: 'Nama identitas sebuah komputer/server di jaringan disebut...', o: ['Username', 'Password', 'Hostname', 'Mirror'], a: 2, e: 'Hostname adalah nama server, misalnya asj-server01.' },
+            { q: 'Layanan yang otomatis membagikan alamat IP kepada perangkat yang memintanya adalah...', o: ['SSH', 'DHCP', 'ISO', 'Swap'], a: 1, e: 'DHCP memberikan alamat IP dan pengaturan jaringan secara otomatis.' },
+            { q: 'SSH digunakan untuk...', o: ['Mengunduh file ISO', 'Membagi disk menjadi partisi', 'Mengakses dan mengelola komputer lain dari jarak jauh secara terenkripsi', 'Menambah RAM VM'], a: 2, e: 'SSH (Secure Shell) memungkinkan login remote yang aman.' },
+            { q: 'Pada prompt khalid@asj-server01:~$, bagian "asj-server01" menunjukkan...', o: ['Username', 'Password', 'Versi kernel', 'Hostname'], a: 3, e: 'Setelah tanda @ adalah hostname; sebelum @ adalah username.' },
+            { q: 'Perintah untuk menampilkan nama host (hostname) server adalah...', o: ['pwd', 'hostname', 'df -h', 'free -h'], a: 1, e: 'Perintah hostname menampilkan nama server.' },
+            // ---- SEDANG (9-17)
+            { q: 'Mengapa Virtual Machine dipakai untuk latihan instalasi Ubuntu Server?', o: ['Karena VM selalu lebih cepat dari komputer fisik', 'Karena VM aman dipakai berlatih tanpa mengubah sistem operasi utama', 'Karena VM tidak memerlukan RAM', 'Karena VM tidak butuh ISO'], a: 1, e: 'VM memakai virtual disk terpisah sehingga kesalahan tidak merusak sistem utama.' },
+            { q: 'Root filesystem pada Linux ditandai dengan mount point...', o: ['/boot', '/home', '/swap', '/'], a: 3, e: 'Root filesystem berada di "/" dan menjadi titik awal seluruh struktur direktori.' },
+            { q: 'Fungsi swap secara umum adalah...', o: ['Menyimpan password pengguna', 'Menjadi ruang disk cadangan ketika RAM hampir penuh', 'Mempercepat internet', 'Menggantikan kernel'], a: 1, e: 'Swap adalah ruang di disk yang dipakai sebagai cadangan bagi RAM.' },
+            { q: 'Saat mengetik password di terminal Linux, tidak ada karakter yang tampil. Hal ini...', o: ['Menandakan keyboard rusak', 'Perilaku normal sebagai bentuk keamanan', 'Menandakan password salah', 'Menandakan instalasi gagal'], a: 1, e: 'Terminal Linux sengaja tidak menampilkan karakter password; tetap ketik lalu tekan Enter.' },
+            { q: 'Perintah untuk melihat informasi versi sistem operasi (misalnya Ubuntu 26.04 LTS) adalah...', o: ['whoami', 'ip a', 'cat /etc/os-release', 'pwd'], a: 2, e: 'File /etc/os-release berisi identitas OS, ditampilkan dengan cat.' },
+            { q: 'Pada VirtualBox, mode jaringan yang membuat VM berada di jaringan privat milik VirtualBox dan umumnya bisa keluar ke internet lewat host adalah...', o: ['NAT', 'Tanpa adapter', 'Mode swap', 'Mode ISO'], a: 0, e: 'NAT memberi VM jaringan privat dengan akses keluar lewat host.' },
+            { q: 'Kolom proxy pada installer sebaiknya...', o: ['Wajib diisi alamat acak', 'Dikosongkan jika jaringan tidak memakai proxy', 'Diisi password pribadi', 'Diisi nama hostname'], a: 1, e: 'Jika tidak memakai proxy, kolom dibiarkan kosong.' },
+            { q: 'Fungsi Ubuntu archive mirror pada installer adalah...', o: ['Menyimpan password', 'Menjadi sumber paket perangkat lunak yang diambil installer', 'Mengubah layout keyboard', 'Membagi RAM'], a: 1, e: 'Mirror adalah salinan repository paket Ubuntu yang dipakai installer.' },
+            { q: 'Perintah df -h dipakai untuk melihat...', o: ['Penggunaan dan kapasitas penyimpanan disk', 'Alamat IP', 'Versi kernel', 'Nama pengguna aktif'], a: 0, e: 'df -h menampilkan penggunaan disk dalam satuan yang mudah dibaca.' },
+            // ---- PENERAPAN & TROUBLESHOOTING (18-25)
+            { q: 'Setelah instalasi selesai dan restart, VM kembali menampilkan layar installer. Penyebab paling mungkin adalah...', o: ['Virtual disk terlalu besar', 'ISO masih terpasang dan diprioritaskan saat boot', 'Hostname terlalu panjang', 'Password terlalu kuat'], a: 1, e: 'Lepas ISO dari virtual drive atau ubah urutan boot agar Hard Disk lebih dulu.' },
+            { q: 'Perintah ip a hanya menunjukkan interface "lo" dengan 127.0.0.1, sedangkan interface lain tanpa IPv4. Langkah pemeriksaan pertama yang paling tepat adalah...', o: ['Langsung instal ulang', 'Memeriksa pengaturan adapter jaringan VM dan statusnya', 'Mengganti hostname', 'Menghapus virtual disk'], a: 1, e: 'Periksa adapter jaringan VM (aktif/terhubung, mode jaringan) sebelum langkah drastis.' },
+            { q: 'Siswa bisa login lokal tetapi koneksi SSH dari laptop gagal pada VM bermode NAT. Hal yang PALING TEPAT diperiksa adalah...', o: ['Warna wallpaper VM', 'Apakah OpenSSH terpasang, alamat IP VM, dan jalur jaringan (NAT perlu pengaturan tambahan)', 'Ukuran file ISO', 'Merek laptop'], a: 1, e: 'SSH bergantung pada layanan, IP, jalur jaringan, dan firewall.' },
+            { q: 'Pada layar ringkasan storage, siswa melihat dua disk dan tidak yakin mana virtual disk latihan. Tindakan terbaik adalah...', o: ['Menekan Continue agar cepat selesai', 'Berhenti, membandingkan ukuran dengan virtual disk yang dibuat, dan bertanya kepada guru', 'Memilih disk yang paling besar', 'Mematikan laptop paksa'], a: 1, e: 'Konfirmasi storage akan menghapus disk tujuan, jadi pastikan dulu disk yang dipilih benar.' },
+            { q: 'Instalasi sangat lambat dan macet pada VM yang diberi RAM 512 MB. Perbaikan yang paling tepat adalah...', o: ['Menambah RAM VM sesuai kebutuhan dan kemampuan laptop', 'Menghapus ISO', 'Mengganti nama VM', 'Mematikan jaringan'], a: 0, e: 'Dokumentasi menyebut minimum sekitar 1,5 GB RAM untuk instalasi dari ISO; saran 3 GB atau lebih.' },
+            { q: 'Login gagal padahal password dirasa benar. Pemeriksaan sederhana yang tepat adalah...', o: ['Instal ulang segera', 'Memeriksa Caps Lock, layout keyboard, dan ketepatan username', 'Menghapus VM', 'Mengganti ISO'], a: 1, e: 'Kesalahan umum: Caps Lock, layout keyboard berbeda, atau salah ketik username.' },
+            { q: 'Seorang siswa lupa hostname servernya padahal sudah login. Cara tercepat mengetahuinya adalah...', o: ['Instal ulang', 'Membaca prompt atau menjalankan perintah hostname', 'Menghapus akun', 'Mengganti ISO'], a: 1, e: 'Hostname terlihat di prompt (setelah @) dan dari perintah hostname.' },
+            { q: 'Bagian yang TIDAK boleh dituliskan dalam laporan dokumentasi instalasi adalah...', o: ['Nama VM', 'Mode jaringan', 'Password akun', 'Hasil perintah ip a'], a: 2, e: 'Password harus dirahasiakan dan tidak boleh ada di laporan atau screenshot.' }
+        ];
+
+        // Pemerataan posisi jawaban benar (A/B/C/D) agar tidak mudah ditebak.
+        // Kunci jawaban dibuat dari data yang sama, jadi tetap konsisten.
+        (function balanceAnswers() {
+            const PATTERN = [1,0,2,3,1,2,0,3,2,0,3,1,2,1,0,3,2,0,1,3,1,2,0,3,2];
+            QUIZ.forEach((item, i) => {
+                const from = item.a, to = PATTERN[i];
+                if (from !== to) {
+                    const tmp = item.o[to];
+                    item.o[to] = item.o[from];
+                    item.o[from] = tmp;
+                    item.a = to;
+                }
+            });
+        })();
+
+        const LETTERS = ['a', 'b', 'c', 'd'];
+        (function renderQuiz() {
+            const cont = document.getElementById('quiz-container');
+            const kunci = document.getElementById('kunci-list');
+            QUIZ.forEach((item, i) => {
+                const n = i + 1;
+                const box = document.createElement('div');
+                box.className = 'bg-dark border border-gray-800 rounded-xl p-6';
+                let html = '<p class="font-semibold text-white mb-4">' + n + '. ' + item.q + '</p>' +
+                    '<div class="space-y-2" data-question="' + n + '" data-correct="' + LETTERS[item.a] + '">';
+                item.o.forEach((opt, k) => {
+                    html += '<label class="quiz-option flex items-center gap-3 p-3 rounded-lg border border-gray-700 cursor-pointer">' +
+                        '<input type="radio" name="q' + n + '" value="' + LETTERS[k] + '" class="accent-primary"> <span></span></label>';
+                });
+                html += '</div><div class="fb-box mt-4 text-sm rounded-lg p-3" id="fb-' + n + '"></div>';
+                box.innerHTML = html;
+                // isi teks opsi secara aman
+                box.querySelectorAll('label span').forEach((sp, k) => { sp.textContent = item.o[k]; });
+                cont.appendChild(box);
+
+                const li = document.createElement('li');
+                li.innerHTML = '<strong class="text-primary">' + LETTERS[item.a].toUpperCase() + '.</strong> <span></span>';
+                li.querySelector('span').textContent = item.e;
+                kunci.appendChild(li);
+            });
+        })();
+
+        /* ================= ENGINE KUIS ================= */
+        const form = document.getElementById('quiz-form');
+        const resultCard = document.getElementById('result-card');
+        let lastResultText = '';
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const namaInput = document.getElementById('nama-siswa').value.trim();
+            if (!namaInput) {
+                alert('Mohon isi nama kamu terlebih dahulu sebelum mengumpulkan jawaban.');
+                document.getElementById('nama-siswa').focus();
+                return;
+            }
+
+            const groups = document.querySelectorAll('[data-question]');
+            let unanswered = [];
+            groups.forEach(g => {
+                const qNum = g.getAttribute('data-question');
+                const checked = g.querySelector('input[type="radio"]:checked');
+                if (!checked) unanswered.push(qNum);
+            });
+            if (unanswered.length > 0) {
+                alert('Masih ada soal pilihan ganda yang belum dijawab (nomor: ' + unanswered.join(', ') + ').');
+                return;
+            }
+
+            let correctCount = 0;
+            const total = groups.length;
+
+            groups.forEach(g => {
+                const qNum = parseInt(g.getAttribute('data-question'), 10);
+                const correctVal = g.getAttribute('data-correct');
+                const checked = g.querySelector('input[type="radio"]:checked');
+                const labels = g.querySelectorAll('label.quiz-option');
+
+                labels.forEach(lbl => {
+                    lbl.classList.add('locked');
+                    const input = lbl.querySelector('input');
+                    if (input.value === correctVal) {
+                        lbl.classList.add('correct-answer');
+                    } else if (input.checked && input.value !== correctVal) {
+                        lbl.classList.add('wrong-answer');
+                    }
+                });
+
+                const isCorrect = checked && checked.value === correctVal;
+                if (isCorrect) correctCount++;
+
+                const fb = document.getElementById('fb-' + qNum);
+                if (fb) {
+                    const item = QUIZ[qNum - 1];
+                    fb.className = 'fb-box show mt-4 text-sm rounded-lg p-3 ' +
+                        (isCorrect ? 'bg-emerald-900/20 border border-emerald-700 text-emerald-200' : 'bg-red-900/20 border border-red-800 text-red-200');
+                    fb.innerHTML = '';
+                    const head = document.createElement('strong');
+                    head.textContent = isCorrect ? 'Benar! ' : 'Belum tepat. Jawaban yang benar: ' + correctVal.toUpperCase() + '. ';
+                    fb.appendChild(head);
+                    fb.appendChild(document.createTextNode(item.e));
+                }
+            });
+
+            const score = Math.round((correctCount / total) * 100);
+
+            document.getElementById('result-nama').textContent = namaInput;
+            document.getElementById('result-score').textContent = score;
+            document.getElementById('result-fraction').textContent = correctCount + '/' + total;
+            resultCard.classList.remove('hidden');
+            document.getElementById('submit-btn').disabled = true;
+            document.getElementById('submit-btn').classList.add('opacity-50', 'cursor-not-allowed');
+
+            const essay = document.getElementById('essay-jawaban').value.trim();
+            lastResultText =
+                'HASIL KUIS - BAB 4 (Instalasi Ubuntu Server)\n' +
+                'Nama: ' + namaInput + '\n' +
+                'Nilai Pilihan Ganda: ' + score + ' (' + correctCount + '/' + total + ' benar)\n' +
+                'Jawaban No.26 (Reflektif): ' + (essay || '-(kosong)-');
+
+            resultCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+
+        function ulangiKuis() {
+            document.querySelectorAll('[data-question]').forEach(g => {
+                g.querySelectorAll('label.quiz-option').forEach(lbl => {
+                    lbl.classList.remove('locked', 'correct-answer', 'wrong-answer', 'selected');
+                    lbl.querySelector('input').checked = false;
+                });
+            });
+            document.querySelectorAll('.fb-box').forEach(fb => { fb.className = 'fb-box mt-4 text-sm rounded-lg p-3'; fb.innerHTML = ''; });
+            resultCard.classList.add('hidden');
+            const btn = document.getElementById('submit-btn');
+            btn.disabled = false;
+            btn.classList.remove('opacity-50', 'cursor-not-allowed');
+            lastResultText = '';
+            document.getElementById('quiz-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // Tandai opsi terpilih (visual)
+        document.addEventListener('change', function (e) {
+            if (e.target && e.target.matches('#quiz-form input[type="radio"]')) {
+                const group = e.target.closest('[data-question]');
+                if (!group) return;
+                group.querySelectorAll('label.quiz-option').forEach(l => l.classList.remove('selected'));
+                e.target.closest('label').classList.add('selected');
+            }
+        });
+
+        function salinHasil() {
+            navigator.clipboard.writeText(lastResultText).then(() => {
+                const btn = document.getElementById('copy-btn');
+                const original = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check mr-2"></i> Tersalin!';
+                setTimeout(() => { btn.innerHTML = original; }, 2000);
+            }).catch(() => {
+                alert('Gagal menyalin otomatis. Silahkan screenshot layar hasil kuis ini.');
+            });
+        }
+    </script>
+</body>
+</html>
